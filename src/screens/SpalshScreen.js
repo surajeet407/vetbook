@@ -35,9 +35,10 @@ const SpalshScreen = ({navigation}) => {
   }
   const getData = () => {
     database()
-    .ref('/appData/splashScreenData')
+    .ref('/splashScreenData')
     .on('value', snapshot => {
       if(snapshot.val()) {
+        console.log(snapshot.val())
         setOnBoardingData(snapshot.val())
       }
     })

@@ -1,0 +1,195 @@
+Opening Avd Commands------------------------------------------------------------------
+1. cd C:\Users\Airdit\AppData\Local\Android\Sdk\emulator 
+2. emulator -avd [avd name]
+
+database().ref("/appData").set() 
+razorpay test key: rzp_test_EIvDuWAtnslSuW
+razor pay key secret: r5hlyi0Sb7n3WI7GU8NjrRNP
+
+vetbook app steps to develop-----------------------------------------------------------
+1.create project npx react-native init VetBook
+	then copy src, App.js, index.js, package.json, react-native.config.js to root folder of project
+
+2.copy mipmap-hdpi folders in android/app/main/res
+
+3.paste in android/app/build.gradle ------- apply plugin: "com.google.gms.google-services"
+
+	1.within dependency paste---- 	
+        implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta06'
+        implementation 'com.google.firebase:firebase-bom:29.2.1'
+		implementation 'com.google.firebase:firebase-analytics'
+
+4.paste in android/build.gradle -------- classpath('com.google.	gms:google-services:4.3.10')
+
+5.paste within application xml tag(path: adroid/app/main/androidmanifest.xml)
+	 <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyBBPGbYThYVRWkyWMt8-N5Y_wjtMFcEmRQ"/>
+
+6.set up firebase project
+	follow https://www.youtube.com/watch?v=_msNczBgHUE
+
+7.run this command (keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000) 
+	in android/app
+
+	if keytool is not recognized check variable path
+	1.Edit system enviironment options
+	2.cross check java bin path, it should be C:\Program Files\Java\jdk-11.0.13\bin
+	3. to check debug key run ---- keytool -list -v -keystore debug.keystore
+	4. Firebase app debug token ------ 968BD86C-6684-4FB7-8F7C-64C6CCBB0567
+
+8.copy google-services.json in android/app
+
+9.npm install --legacy-peer-deps if you have peer dependency, otherwise do ----- npm i
+
+10.npx react-native link
+
+11.change app name in string.xml path is android/app/src/main/res/values/string.xml
+
+11.npx react-native run-android
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import Realm from 'realm';
+import {UserSchema} from '../util/Database';
+
+
+ (async () => {
+      
+    const realm = await Realm.open({
+      schema: [UserSchema],
+    });
+    let newUser;
+    realm.write(() => {
+      newUser = realm.create("Users", {
+        _id: 2,
+        phoneNo: "7001676407",
+        status: true
+      });
+    });
+    const users = realm.objects("Users");
+    console.log(users);
+
+  })();
+
+
+
+
+
+
+
+
+
+https://ibb.co/yFhDGsx
+https://ibb.co/RD6VrT5
+https://ibb.co/vDzHqtk
+https://ibb.co/17hngMX
+https://ibb.co/vdpjFb8
+https://ibb.co/KDJcsfL
+https://ibb.co/5BpJLrb
+https://ibb.co/z2yk4S8
+https://ibb.co/DkvqNt9
+https://ibb.co/Z8V9ybV
+https://ibb.co/V94373S
+https://ibb.co/QNm6bJg
+https://ibb.co/CVYR0HC
+https://ibb.co/zVm96n2
+https://ibb.co/JjMrWL8
+https://ibb.co/fGDFQQh
+https://ibb.co/XDZ22vF
+https://ibb.co/qYXVgZn
+https://ibb.co/480Qptp
+https://ibb.co/6yYvqsJ
+https://ibb.co/yhcDMJP
+https://ibb.co/4ZQzs8G
+https://ibb.co/Wp0dc9t
+https://ibb.co/VvxD0jq
+https://ibb.co/w6FVcPW
+https://ibb.co/yWQ5L9n
+https://ibb.co/zGgsD79
+https://ibb.co/qRD3W8w
+https://ibb.co/tKYNtZL
+https://ibb.co/rt0SF4q
+https://ibb.co/pxBc5Rk
+https://ibb.co/8x4cBD8
+https://ibb.co/86gWJsR
+https://ibb.co/JjNrTtF
+https://ibb.co/j57hfsW
+https://ibb.co/HF9DrGb
+https://ibb.co/55LDKkz
+https://ibb.co/RzBssX6
+https://ibb.co/591XYVr
+https://ibb.co/gJpXmQZ
+https://ibb.co/gMZCgWZ
+https://ibb.co/wCd1YVL
+https://ibb.co/4VYvyLt
+https://ibb.co/LR2ptWF
+https://ibb.co/jwV24kn
+https://ibb.co/j377z59
+https://ibb.co/ypLWGH0
+https://ibb.co/BcXk7Rt
+https://ibb.co/rp0kg0N
+https://ibb.co/N2Fc85T
+https://ibb.co/CvNVfrv
+https://ibb.co/6wc40c3
+https://ibb.co/QC2D166
+https://ibb.co/z67yGNX
+https://ibb.co/DbcxSrY
+https://ibb.co/W25gghT
+https://ibb.co/M5mcGMB
+https://ibb.co/93MRWcy
+https://ibb.co/Zd4HrTY
+https://ibb.co/0n1FcHh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

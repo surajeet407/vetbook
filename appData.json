@@ -1,0 +1,602 @@
+{
+  "HomePageCarouselServices" : [ {
+    "buttonText" : "adopt",
+    "id" : "2",
+    "image" : "https://i.ibb.co/TYVyn5k/pet.jpg",
+    "navTo" : "AdoptPet",
+    "title" : "Adopt a Pet"
+  }, {
+    "buttonText" : "enter",
+    "id" : "2",
+    "image" : "https://i.ibb.co/02YWSBs/emergency.jpg",
+    "navTo" : "Emergency",
+    "title" : "Emergency Service"
+  }, {
+    "buttonText" : "report",
+    "id" : "3",
+    "image" : "https://i.ibb.co/v4sbgzM/abuse.jpg",
+    "navTo" : "PetAbuse",
+    "title" : "Report Animal Abuse"
+  } ],
+  "petCategories" : [ {
+    "id" : "1",
+    "image" : "https://i.ibb.co/rGtRddR/dog-icon.png",
+    "name" : "Dogs"
+  }, {
+    "id" : "2",
+    "image" : "https://i.ibb.co/JCX7F92/cat-icon.png",
+    "name" : "Cats"
+  }, {
+    "id" : "3",
+    "image" : "https://i.ibb.co/884QXM7/bird-icon.png",
+    "name" : "Birds"
+  }, {
+    "id" : "4",
+    "image" : "https://i.ibb.co/jwg2CfP/rabbit-icon.png",
+    "name" : "Rabbits"
+  }, {
+    "id" : "5",
+    "image" : "https://i.ibb.co/P6YK96K/cattle-icon.png",
+    "name" : "Cattles"
+  } ],
+  "petDogs" : [ {
+    "color" : "purple",
+    "cost" : "5999",
+    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+    "details" : [ {
+      "key" : "Breed",
+      "value" : "Brenese"
+    }, {
+      "key" : "Age",
+      "value" : "6 Months"
+    }, {
+      "key" : "Sex",
+      "value" : "Male"
+    } ],
+    "id" : "0",
+    "image" : "https://i.ibb.co/JH4bm8j/lucas.png",
+    "location" : "USA",
+    "name" : "Lucas"
+  }, {
+    "color" : "green",
+    "cost" : "5999",
+    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+    "details" : [ {
+      "key" : "Breed",
+      "value" : "Brenese"
+    }, {
+      "key" : "Age",
+      "value" : "1.2 Year"
+    }, {
+      "key" : "Sex",
+      "value" : "Female"
+    } ],
+    "id" : "1",
+    "image" : "https://i.ibb.co/hDmHp6R/dexter.png",
+    "location" : "USA",
+    "name" : "Dexter"
+  }, {
+    "color" : "red",
+    "cost" : "5999",
+    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+    "details" : [ {
+      "key" : "Breed",
+      "value" : "Brenese"
+    }, {
+      "key" : "Age",
+      "value" : "1 Year"
+    }, {
+      "key" : "Sex",
+      "value" : "Male"
+    } ],
+    "id" : "2",
+    "image" : "https://i.ibb.co/HY1GjJY/pomeranian.png",
+    "location" : "USA",
+    "name" : "Pomerian"
+  }, {
+    "color" : "yellow",
+    "cost" : "5999",
+    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+    "details" : [ {
+      "key" : "Breed",
+      "value" : "Brenese"
+    }, {
+      "key" : "Age",
+      "value" : "8 Months"
+    }, {
+      "key" : "Sex",
+      "value" : "Female"
+    } ],
+    "id" : "3",
+    "image" : "https://i.ibb.co/QvZYVQj/german-shepherd.png",
+    "location" : "USA",
+    "name" : "German Shepard"
+  },{
+    "color" : "green",
+    "cost" : "5999",
+    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+    "details" : [ {
+      "key" : "Breed",
+      "value" : "Brenese"
+    }, {
+      "key" : "Age",
+      "value" : "2 Year"
+    }, {
+      "key" : "Sex",
+      "value" : "FEMALE"
+    } ],
+    "id" : "4",
+    "image" : "https://i.ibb.co/tKksYYD/border-collie.png",
+    "location" : "JPN",
+    "name" : "Border Collie"
+  },{
+    "color" : "red",
+    "cost" : "5999",
+    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+    "details" : [ {
+      "key" : "Breed",
+      "value" : "Brenese"
+    }, {
+      "key" : "Age",
+      "value" : "3 Months"
+    }, {
+      "key" : "Sex",
+      "value" : "Male"
+    } ],
+    "id" : "5",
+    "image" : "https://i.ibb.co/4ZsRyDq/bulldog.png",
+    "location" : "GN",
+    "name" : "Bull Dog"
+  },{
+    "color" : "grey",
+    "cost" : "5999",
+    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+    "details" : [ {
+      "key" : "Breed",
+      "value" : "Brenese"
+    }, {
+      "key" : "Age",
+      "value" : "5 Months"
+    }, {
+      "key" : "Sex",
+      "value" : "FEMALE"
+    } ],
+    "id" : "6",
+    "image" : "https://i.ibb.co/YbTWwkX/king-charles.png",
+    "location" : "EN",
+    "name" : "King Charles"
+  } ],
+  "petStore" : {
+    "buttonText" : "Enter",
+    "image" : "https://i.ibb.co/jwfhdfs/petshop.jpg",
+    "title" : "Pet Store"
+  },
+  "quickService" : [ {
+    "backgroundColor" : "#ea7a72",
+    "desc" : "Book your doctor to keep pet healty...",
+    "id" : "1",
+    "image" : "https://i.ibb.co/VLVHkBp/book.jpg",
+    "navTo" : "Consult",
+    "title" : "Book a Doctor"
+  }, {
+    "backgroundColor" : "#ea7a72",
+    "desc" : "Make sure everything will go well for your pet...",
+    "id" : "2",
+    "image" : "https://i.ibb.co/8rQh9s9/blood-test.jpg",
+    "navTo" : "BloodTest",
+    "title" : "Do a Blood Test"
+  } ],
+  "services" : [ {
+    "backgroundColor" : "#376eb4",
+    "id" : "2",
+    "image" : "https://i.ibb.co/Pwyx09X/doctor.png",
+    "navTo" : "Consult",
+    "title" : "Veterinary"
+  }, {
+    "backgroundColor" : "#961ab3",
+    "id" : "3",
+    "image" : "https://i.ibb.co/v1ysWzQ/training.png",
+    "navTo" : "PetTraining",
+    "title" : "Training"
+  }, {
+    "backgroundColor" : "#4a8f4b",
+    "id" : "4",
+    "image" : "https://i.ibb.co/xfpFRMM/relocation.png",
+    "navTo" : "PetRelocation",
+    "title" : "Relocation"
+  }, {
+    "backgroundColor" : "#ea7a72",
+    "id" : "5",
+    "image" : "https://i.ibb.co/cgscN2Z/gromming.png",
+    "navTo" : "PetGrooming",
+    "title" : "Gromming"
+  } ],
+  "petStoreCategories": [
+    {"id": "1", "name": "Food", "image": "https://i.ibb.co/t4TgFx1/food.jpg"},
+    {"id": "2", "name": "Toys", "image": "https://i.ibb.co/qFZbp7m/toys.webp"},
+    {"id": "3", "name": "Accesorries", "image": "https://i.ibb.co/x7gR9q4/accesorries.jpg"},
+    {"id": "4", "name": "Furniture", "image": "https://i.ibb.co/V2Y7d9h/furniture.jpg"}
+  ],
+  "petFoodItems": [
+    {
+      "id": "0", 
+      "name": "Egg white Stew", 
+      "description": [
+        "These are fresh and human tested",
+        "Easy and ready to eat dog food with freshness in every bite",
+        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+        "100% Natural and Human Grade",
+        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+      ], 
+      "price": "299",
+      "image": "https://i.ibb.co/jL8PWYF/eggwhitestew.webp"
+    },
+    {
+      "id": "1",
+      "name": "Chicken Liver Stew",
+      "description": [
+        "These are fresh and human tested",
+        "Easy and ready to eat dog food with freshness in every bite",
+        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+        "100% Natural and Human Grade",
+        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+      ], 
+      "price": "299",
+      "image": "https://i.ibb.co/FBXJkxD/Chicken-Liver.webp"
+    },
+    {
+      "id": "2", 
+      "name": "Carrot Stew", 
+      "description": [
+        "These are fresh and human tested",
+        "Easy and ready to eat dog food with freshness in every bite",
+        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+        "100% Natural and Human Grade",
+        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+      ], 
+      "price": "299",
+      "image": "https://i.ibb.co/n8BVD2C/carrot.webp"
+    },
+    {
+      "id": "3", 
+      "name": "Fish Stew", 
+      "description": [
+        "These are fresh and human tested",
+        "Easy and ready to eat dog food with freshness in every bite",
+        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+        "100% Natural and Human Grade",
+        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+      ], 
+      "price": "299",
+      "image": "https://i.ibb.co/xsL0XJw/fishStew.webp"
+    },
+    {
+      "id": "4", 
+      "name": "Peanut Butter", 
+      "description": [
+        "These are fresh and human tested",
+        "Easy and ready to eat dog food with freshness in every bite",
+        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+        "100% Natural and Human Grade",
+        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+      ], 
+      "price": "299",
+      "image": "https://i.ibb.co/686gVjY/Peanut-Butter.webp"
+    }
+  ],
+  "users": {
+    "8900162177": {
+      "notifications": [{
+        "id": "1",
+        "title": "Veterinary",
+        "image": "https://i.ibb.co/Pwyx09X/doctor.png",
+        "desc": "You have an ongoing service order",
+        "time": "15 minitues ago"
+      },{
+        "id": "1",
+        "title": "Training",
+        "image": "https://i.ibb.co/v1ysWzQ/training.png",
+        "desc": "You have an ongoing training request",
+        "time": "5 minitues ago"
+      }],
+      "pastOrders": [
+        {
+          "id": "1",
+          "title": "Veterinary",
+          "image": "https://i.ibb.co/Pwyx09X/doctor.png",
+          "cost": "699",
+          "orderedOn": "06/05/2020"
+        },
+        {
+          "id": "2",
+          "title": "Medicine",
+          "image": "https://i.ibb.co/WFH1sZ3/medicine.png",
+          "cost": "355",
+          "orderedOn": "10/08/2020"
+        },
+        {
+          "id": "3",
+          "title": "Food",
+          "image": "https://i.ibb.co/GM3TJvP/food.png",
+          "cost": "799",
+          "orderedOn": "03/08/2021"
+        },
+        {
+          "id": "4",
+          "title": "Gromming",
+          "image": "https://i.ibb.co/cgscN2Z/gromming.png",
+          "cost": "1299",
+          "orderedOn": "10/12/2022"
+        }
+      ],
+      "addresses": [
+        {
+          "id": "1",
+          "title": "First Item",
+          "desc": "lorem ipsum dolor sit amet"
+        },
+        {
+          "id": "2",
+          "title": "Second Item",
+          "desc": "lorem ipsum dolor sit amet"
+        }
+      ],
+      "cartItems": [
+        {
+          "id": "0", 
+          "name": "Egg white Stew", 
+          "description": [
+            "These are fresh and human tested",
+            "Easy and ready to eat dog food with freshness in every bite",
+            "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+            "100% Natural and Human Grade",
+            "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+          ], 
+          "price": "299",
+          "image": "https://i.ibb.co/jL8PWYF/eggwhitestew.webp",
+          "quantity": "2"
+        },
+        {
+          "id": "1",
+          "name": "Chicken Liver Stew",
+          "description": [
+            "These are fresh and human tested",
+            "Easy and ready to eat dog food with freshness in every bite",
+            "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+            "100% Natural and Human Grade",
+            "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+          ], 
+          "price": "299",
+          "image": "https://i.ibb.co/FBXJkxD/Chicken-Liver.webp",
+          "quantity": "3"
+        }
+      ],
+      "Services": [{
+        "backgroundColor" : "#376eb4",
+        "id" : "9879675456HLKJFGHGDFHJH",
+        "image" : "https://i.ibb.co/Pwyx09X/doctor.png",
+        "title" : "Pet Doctor",
+        "startTime": "09:00 AM", 
+        "endTime": "11:00 PM",
+        "price": "699"
+      }]
+    }
+  },
+  "stepIndicator": [{
+    "step": "0",
+    "name": "Service Ordered",
+    "desc": "We have received your request."
+  },
+  {
+    "step": "1",
+    "name": "Confirming Your Service",
+    "desc": "We are approching to final confirmation."
+  },
+  {
+    "step": "2",
+    "name": "Service Confirmed",
+    "desc": "Service has been confirmed."
+  },
+  {
+    "step": "3",
+    "name": "Assigning to Doctor",
+    "desc": "Specialised doctor is being assigned."
+  },
+  {
+    "step": "4",
+    "name": "Doctor is on the way",
+    "desc": "Be ready with your pet medical problems."
+  },
+  {
+    "step": "5",
+    "name": "Service provided",
+    "desc": "Hope to see you again."
+  }],
+  "groomingPrice": [{
+    "headerLeftText": "Full Service",
+    "headerRightText": "Starting",
+    "actualPrice": "1999",
+    "discountPrice": "1599",
+    "showNotes": false,
+    "showTag": true,
+    "tagText": "Most Popular",
+    "details":[
+      "Full body Trimming/Styling",
+      "Bath With Shampoo & Conditioner",
+      "Teeth Cleaning/Mouth Spray",
+      "Blow Dry",
+      "Body Massage",
+      "Eye Cleaning",
+      "Nail Clipping",
+      "Paw Massage",
+      "Sanitary Clipping"
+    ]
+  }, {
+    "headerLeftText": "Basic Grooming",
+    "headerRightText": "Starting",
+    "actualPrice": "1499",
+    "discountPrice": "1199",
+    "showNotes": false,
+    "showTag": false,
+    "tagText": "",
+    "details":[
+      "Bath With Shampoo & Conditioner",
+      "Minor Haircutting",
+      "Eye Cleaning",
+      "Teeth Cleaning/Mouth Spray",
+      "Ear Cleaning",
+      "Paw Massage"
+    ]
+  }, {
+    "headerLeftText": "Spa Bath",
+    "headerRightText": "Starting",
+    "actualPrice": "999",
+    "discountPrice": "799",
+    "showNotes": false,
+    "showTag": true,
+    "tagText": "New",
+    "details":[
+      "Bath With Shampoo & Conditioner",
+      "Nail Clipping",
+      "Ear Cleaning",
+      "Blow Dry",
+      "Eyes Cleaning",
+      "Paw Massage"
+    ]
+  }],
+  "trainingPrice":[{
+    "headerLeftText": "Basic Training",
+    "headerRightText": "Starting",
+    "actualPrice": "999",
+    "discountPrice": "799",
+    "showNotes": true,
+    "showTag": false,
+    "tagText": "",
+    "notes": [
+      "* First demo session - ₹500.",
+      "* Training Completion Certificate will be provided.",
+      "Dogs must have their full round of vaccinations prior to starting these sessions."
+    ],
+    "details":[
+      "Loose leash walking",
+      "Polite greeting",
+      "Stand/Stay",
+      "Sit/No Commands",
+      "Diet Chart",
+      "Excessive barking"
+    ]
+  }, {
+    "headerLeftText": "Advanced Training",
+    "headerRightText": "Starting",
+    "actualPrice": "1299",
+    "discountPrice": "999",
+    "showNotes": true,
+    "showTag": false,
+    "tagText": "",
+    "notes": [
+      "* First demo session - ₹500.",
+      "* Training Completion Certificate will be provided.",
+      "Dogs must have their full round of vaccinations prior to starting these sessions."
+    ],
+    "details":[
+      "All Basic Commands",
+      "Heal Walk",
+      "Roll-Over",
+      "Handshake",
+      "Swimming",
+      "Take & Drop it Commands"
+    ]
+  }],
+  "doctorPrice": [{
+    "headerLeftText": "Home Visit",
+    "headerRightText": "Starting",
+    "actualPrice": "899",
+    "discountPrice": "699",
+    "showNotes": true,
+    "showTag": false,
+    "tagText": "",
+    "notes": [
+      "* Based on the situation, we will decide what needs to be done further more...",
+      "* Medications & Surgeroy  cost will be charged as per need."
+    ],
+    "details":[
+      "Home Consultation.",
+      "Full Body Health Check-up.",
+      "Nutration & Food Guidance."
+    ]
+  }],
+  "payMethods": [
+    {
+      "id": "1",
+      "title": "PayTM",
+      "desc": "lorem ipsum dolor sit amet",
+      "image": "https://i.ibb.co/gtssd7b/paytm.jpg"
+    },
+    {
+      "id": "2",
+      "title": "PhonePe",
+      "desc": "lorem ipsum dolor sit amet",
+      "image": "https://i.ibb.co/YBNHzm0/phonepe.png"
+    },
+    {
+      "id": "3",
+      "title": "GPay",
+      "desc": "lorem ipsum dolor sit amet",
+      "image": "https://i.ibb.co/g7sy9hP/gpay.png"
+    }
+  ],
+  "otherPayMethods": {
+    "name": "Pay after service",
+    "image": "https://i.ibb.co/NN1PY2c/payondelivery.jpg"
+  },
+  "splashScreenData": [
+    {
+      "key": "1",
+      "quote": "Until one has loved an animal a part of one's soul remains unawakened.",
+      "quoteBy": "Anatole France",
+      "image": "https://i.ibb.co/sPx0MWC/splash.png",
+      "backgroundColor": "#376eb4",
+      "showButton": false,
+      "buttonText": ""
+    },
+    {
+      "key": "2",
+      "quote": "The better I get to know men, the more I find myself loving dogs.",
+      "quoteBy": "Charles de Gaulle",
+      "image": "https://i.ibb.co/nLmzzGW/splash1.png",
+      "backgroundColor": "#961ab3",
+      "showButton": false,
+      "buttonText": ""
+    },
+    {
+      "key": "3",
+      "quote": "Dogs are our link to paradise. They don’t know evil or jealousy or discontent.",
+      "quoteBy": "Milan Kundera",
+      "image": "https://i.ibb.co/937bVsZ/splash2.png",
+      "backgroundColor": "#1eb091",
+      "showButton": true,
+      "buttonText": "Login"
+    }
+  ],
+  "logScreenData": {
+    "mainImage": "https://i.ibb.co/5BnSSQj/loginscreen.png",
+    "logoImage": "https://i.ibb.co/3sT5fHp/logo.png"
+  },
+  "otpScreenData": {
+    "mainImage": "https://i.ibb.co/GpbP2L6/otp.png"
+  },
+  "appBacgroundImages": [
+    "https://i.ibb.co/3B6Pcpg/background.png",
+    "https://i.ibb.co/myLxcHv/background1.png",
+    "https://i.ibb.co/zH6xNNy/background10.png",
+    "https://i.ibb.co/BGVzzST/background11.png",
+    "https://i.ibb.co/PG30WSY/background12.png",
+    "https://i.ibb.co/k0wdpx4/background2.png",
+    "https://i.ibb.co/SyCJhJn/background4.png",
+    "https://i.ibb.co/LtpCk0F/background5.png",
+    "https://i.ibb.co/7rZsy1M/background6.png",
+    "https://i.ibb.co/TMwjWv0/background7.png"
+
+  ]
+  
+}

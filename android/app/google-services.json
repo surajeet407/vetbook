@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "629706815843",
+    "firebase_url": "https://vetbook-a5c52-default-rtdb.firebaseio.com",
+    "project_id": "vetbook-a5c52",
+    "storage_bucket": "vetbook-a5c52.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629706815843:android:7c94091556b45c7194bb56",
+        "android_client_info": {
+          "package_name": "com.vetbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "629706815843-rt4bm4129ls0p5fdsjmv06rdog8l0017.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vetbook",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "629706815843-a0ekcgo9d1udvumc04cp2s3gp3r0nbqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBPGbYThYVRWkyWMt8-N5Y_wjtMFcEmRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "629706815843-a0ekcgo9d1udvumc04cp2s3gp3r0nbqd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

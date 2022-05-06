@@ -25,7 +25,9 @@ import Icon, {Icons} from '../util/Icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '../util/i18n';
 
-const CartScreen = ({navigation}) => {
+const CartScreen = ({navigation, route}) => {
+    const [status,
+        setStatus] = useState(route.params.status);
     const [cartItems,
         setCartItems] = useState([])
     const [amount,
@@ -46,13 +48,38 @@ const CartScreen = ({navigation}) => {
         const prevIndex = cartItems.findIndex(item => item.key === rowKey);
         newData.splice(prevIndex, 1);
         setCartItems(newData);
-        if (newData.length > 0) {
-            AsyncStorage.setItem('cartItems', JSON.stringify(newData));
-            AsyncStorage.setItem('cartItemCount', (newData.length).toString());
+        if (status === 'loggedOut') {
+            if (newData.length > 0) {
+                AsyncStorage.setItem('cartItems', JSON.stringify(newData));
+                AsyncStorage.setItem('cartItemCount', (newData.length).toString());
+            } else {
+                AsyncStorage.setItem('cartItems', "[]");
+                AsyncStorage.setItem('cartItemCount', "0");
+            }
         } else {
-            AsyncStorage.setItem('cartItems', "[]");
-            AsyncStorage.setItem('cartItemCount', "0");
+            if (newData.length > 0) {
+                AsyncStorage
+                    .getItem('phoneNo')
+                    .then((phoneNo, msg) => {
+                        if (phoneNo) {
+                            database()
+                                .ref('/users/' + phoneNo + "/cartItems")
+                                .set(newData)
+                        }
+                    })
+            } else {
+                AsyncStorage
+                    .getItem('phoneNo')
+                    .then((phoneNo, msg) => {
+                        if (phoneNo) {
+                            database()
+                                .ref('/users/' + phoneNo + "/cartItems")
+                                .set([])
+                        }
+                    })
+            }
         }
+
         _bindTaxWithTotal(newData);
     };
     const _bindTaxWithTotal = (val) => {
@@ -66,15 +93,31 @@ const CartScreen = ({navigation}) => {
         setTotal(parseInt(price + (parseInt(price) * 18) / 100));
     }
     const getData = () => {
-        // database() .ref('/users/8900162177/cartItems') .on("value", snapshot
-        // => {   if(snapshot.val()) {     _bindTaxWithTotal(snapshot.val())   } })
-        AsyncStorage
-            .getItem('cartItems')
-            .then((data) => {
-                if (JSON.parse(data).length > 0) {
-                    _bindTaxWithTotal(JSON.parse(data))
-                }
-            });
+        // database() .ref('/users/8900162177/cartItems') .on("value", snapshot => {
+        // if(snapshot.val()) {     _bindTaxWithTotal(snapshot.val())   } })
+        if (status === 'loggedOut') {
+            AsyncStorage
+                .getItem('cartItems')
+                .then((data) => {
+                    if (JSON.parse(data).length > 0) {
+                        _bindTaxWithTotal(JSON.parse(data))
+                    }
+                });
+        } else {
+            AsyncStorage
+                .getItem('phoneNo')
+                .then((data, msg) => {
+                    if (data) {
+                        database()
+                            .ref('/users/' + data + "/cartItems")
+                            .on('value', snapshot => {
+                                if (snapshot.val()) {
+                                    _bindTaxWithTotal(snapshot.val())
+                                }
+                            })
+                    }
+                })
+        }
 
     }
     const onPressButton = () => {
@@ -108,7 +151,7 @@ const CartScreen = ({navigation}) => {
                 rightIconSize={45}
                 rightIconColor={Colors.black}
                 rightIconBackgroundColor={Colors.appBackground}
-                onPressRight={() => navigation.goBack()}
+                onPressRight={() => {}}
                 showRightSideText={false}
                 rightSideText={''}
                 rightSideTextSize={20}
@@ -131,7 +174,7 @@ const CartScreen = ({navigation}) => {
                 leftIconSize={45}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
-                onPressLeft={() => navigation.goBack()}/>
+                onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "PetStore", status: status})}/>
             <View
                 style={{
                 marginBottom: total === 0
@@ -157,9 +200,7 @@ const CartScreen = ({navigation}) => {
                             marginBottom: 10
                         }}/>)}
                             renderItem={({item, index}) => (
-                            <Animatable.View
-                                delay={50 * index}
-                                animation={'slideInRight'}
+                            <View
                                 style={{
                                 margin: 5,
                                 paddingHorizontal: 15,
@@ -231,7 +272,7 @@ const CartScreen = ({navigation}) => {
                                             /-</Text>
                                     </View>
                                 </View>
-                            </Animatable.View>
+                            </View>
                         )}
                             renderHiddenItem={(data, rowMap) => (
                             <View style={styles.rowBack}>

@@ -28,6 +28,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '../util/i18n';
 
 const PetStoreScreen = ({navigation, route}) => {
+    console.log(route.params.status)
     const isFocused = useIsFocused();
     const [status,
         setStatus] = useState(route.params.status);
@@ -39,13 +40,6 @@ const PetStoreScreen = ({navigation, route}) => {
         setPetFoodItems] = React.useState([]);
     const [searchQuery,
         setSearchQuery] = React.useState('');
-    AsyncStorage
-        .getItem('cartItemCount')
-        .then((data, msg) => {
-            if (data) {
-                setCartItemCount(data)
-            }
-        })
     const categoryCarousel = useRef(null);
     const [selectedCategoryIndex,
         setSelectedCategoryIndex] = useState(0);
@@ -82,7 +76,7 @@ const PetStoreScreen = ({navigation, route}) => {
         Toast.show({type: 'customToast', text1: 'Item added to your cart', position: 'bottom', visibilityTime: 1000});
     }
     const onPressRightIcon = () => {
-        navigation.navigate("Cart");
+        navigation.navigate("Cart", {status: status});
     }
     const getData = () => {
         database()
@@ -103,13 +97,30 @@ const PetStoreScreen = ({navigation, route}) => {
     }
 
     const getCartItems = () => {
-        AsyncStorage
+        if(status === 'loggedOut') {
+            AsyncStorage
             .getItem('cartItemCount')
             .then((data, msg) => {
                 if (data) {
                     setCartItemCount(data)
                 }
             })
+        } else {
+            AsyncStorage.getItem('phoneNo').then((data, msg) => {
+                if (data) {
+                    database()
+                    .ref('/users/' + data + "/cartItems")
+                    .on('value', snapshot => {
+                        if (snapshot.val()) {
+                            setCartItemCount(snapshot.val().length)
+                        } else {
+                            setCartItemCount("0")
+                        }
+                    })
+                }
+            })
+        }
+        
     }
 
     useEffect(() => {
@@ -153,7 +164,7 @@ const PetStoreScreen = ({navigation, route}) => {
                             value={searchQuery}/>
                     </View>
                     <RNBounceable
-                        onPress={() => navigation.navigate("Cart")}
+                        onPress={() => navigation.navigate("Cart", {status: status})}
                         style={{
                         width: '15%',
                         padding: 10,
@@ -230,7 +241,7 @@ const PetStoreScreen = ({navigation, route}) => {
                             {petFoodItems.map((item, index) => <View key={index}>
                                 <StoreItems
                                     animationStyle="fadeInUp"
-                                    navToDetail={() => navigation.navigate("ItemDetails", {item: item})}
+                                    navToDetail={() => navigation.navigate("ItemDetails", {item: item, status: status})}
                                     name={item.name}
                                     image={item.image}
                                     price={item.price}

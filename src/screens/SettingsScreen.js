@@ -16,15 +16,24 @@ import Icon, {Icons} from '../util/Icons';
 import * as Animatable from 'react-native-animatable';
 import LandingHeader from '../reusable_elements/LandingHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import database from '@react-native-firebase/database';
 import i18n from '../util/i18n';
 
 const SettingsScreen = ({navigation, route}) => {
     const [status,
         setStatus] = useState(route.params.status);
-    // console.log(route.params.status)
     const handleAuthButton = () => {
-        console.log(status)
         if (status === 'loggedIn') {
+            AsyncStorage
+                .getItem('phoneNo')
+                .then((number, msg) => {
+                    if (number) {
+                        database()
+                            .ref('/users/' + number)
+                            .update({active: false})
+                    }
+                })
+            AsyncStorage.removeItem('phoneNo')
             AsyncStorage.setItem("userStatus", 'loggedOut');
         }
         navigation.navigate('Log')

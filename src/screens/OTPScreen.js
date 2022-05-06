@@ -70,6 +70,14 @@ import React, {useEffect, useRef, useState} from 'react';
     axios.get(VERYFY_URL)
     .then(function (response) {
       AsyncStorage.setItem('userStatus', 'loggedIn')
+      database().ref('/users/' + number).once("value").then((data) => {
+        if(data) {
+          database().ref('/users/' + number).update({active: true, phoneNo: number})
+        } else {
+          database().ref('/users/' + number).set({active: true, phoneNo: number})
+        }
+      })
+      
       AsyncStorage.setItem('phoneNo', number)
       navigation.dispatch(
         CommonActions.navigate({

@@ -22,6 +22,7 @@ import * as Animatable from 'react-native-animatable';
 import SectionBanner from '../reusable_elements/SectionBanner';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import database from '@react-native-firebase/database';
 import Label, {Orientation} from "react-native-label";
 import i18n from '../util/i18n';
 
@@ -29,6 +30,8 @@ const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ItemDetailScreen = ({navigation, route}) => {
     const isFocused = useIsFocused();
+    const [status,
+        setStatus] = useState(route.params.status);
     const width = Dimensions
         .get('window')
         .width;
@@ -69,20 +72,45 @@ const ItemDetailScreen = ({navigation, route}) => {
             })
             return;
         }
-        AsyncStorage
-            .getItem('cartItems')
-            .then((data) => {
-                if (data) {
-                    let cartItem = JSON.parse(data),
-                        count = 0;
-                    cartItem.forEach((item, index, arr) => {
-                        if (item.id === route.params.item.id) {
-                            count++;
-                            item.quantity = numericInputVal;
+        if (status === 'loggedOut') {
+            AsyncStorage
+                .getItem('cartItems')
+                .then((data) => {
+                    if (data) {
+                        let cartItem = JSON.parse(data),
+                            count = 0;
+                        cartItem.forEach((item, index, arr) => {
+                            if (item.id === route.params.item.id) {
+                                count++;
+                                item.quantity = numericInputVal;
+                                AsyncStorage.setItem('cartItems', JSON.stringify(cartItem));
+                                Toast.show({
+                                    type: 'customToast',
+                                    text1: "Quantity Updated...",
+                                    position: 'bottom',
+                                    visibilityTime: 1500,
+                                    bottomOffset: 120,
+                                    props: {
+                                        backgroundColor: Colors.deepGreen
+                                    }
+                                });
+                            }
+                        })
+                        if (count === 0) {
+                            route.params.item.quantity = numericInputVal;
+                            cartItem.push(route.params.item);
                             AsyncStorage.setItem('cartItems', JSON.stringify(cartItem));
+                            AsyncStorage
+                                .getItem('cartItemCount')
+                                .then((data, msg) => {
+                                    if (data) {
+                                        setCartItemCount((parseInt(data) + 1).toString())
+                                        AsyncStorage.setItem('cartItemCount', (parseInt(data) + 1).toString());
+                                    }
+                                })
                             Toast.show({
                                 type: 'customToast',
-                                text1: "Quantity Updated...",
+                                text1: "Item added to your cart...",
                                 position: 'bottom',
                                 visibilityTime: 1500,
                                 bottomOffset: 120,
@@ -91,19 +119,14 @@ const ItemDetailScreen = ({navigation, route}) => {
                                 }
                             });
                         }
-                    })
-                    if (count === 0) {
+
+                    } else {
+                        let data = [];
                         route.params.item.quantity = numericInputVal;
-                        cartItem.push(route.params.item);
-                        AsyncStorage.setItem('cartItems', JSON.stringify(cartItem));
-                        AsyncStorage
-                            .getItem('cartItemCount')
-                            .then((data, msg) => {
-                                if (data) {
-                                    setCartItemCount((parseInt(data) + 1).toString())
-                                    AsyncStorage.setItem('cartItemCount', (parseInt(data) + 1).toString());
-                                }
-                            })
+                        data.push(route.params.item);
+                        AsyncStorage.setItem('cartItems', JSON.stringify(data));
+                        setCartItemCount("1");
+                        AsyncStorage.setItem('cartItemCount', "1");
                         Toast.show({
                             type: 'customToast',
                             text1: "Item added to your cart...",
@@ -116,26 +139,85 @@ const ItemDetailScreen = ({navigation, route}) => {
                         });
                     }
 
-                } else {
-                    let data = [];
-                    route.params.item.quantity = numericInputVal;
-                    data.push(route.params.item);
-                    AsyncStorage.setItem('cartItems', JSON.stringify(data));
-                    setCartItemCount("1");
-                    AsyncStorage.setItem('cartItemCount', "1");
-                    Toast.show({
-                        type: 'customToast',
-                        text1: "Item added to your cart...",
-                        position: 'bottom',
-                        visibilityTime: 1500,
-                        bottomOffset: 120,
-                        props: {
-                            backgroundColor: Colors.deepGreen
-                        }
-                    });
-                }
+                })
+        } else {
+            AsyncStorage
+                .getItem('phoneNo')
+                .then((phoneNo, msg) => {
+                    if (phoneNo) {
+                        database()
+                            .ref('/users/' + phoneNo + "/cartItems")
+                            .once('value')
+                            .then(snapshot => {
+                                if (snapshot.val() && snapshot.val().length > 0) {
+                                    let cartItem = snapshot.val(),
+                                        count = 0,
+                                        indexPath;
+                                    cartItem.forEach((item, index, arr) => {
+                                        if (item.id === route.params.item.id) {
+                                            count++;
+                                            indexPath = index;
+                                        }
+                                    })
+                                    if (count === 0) {
+                                        route.params.item.quantity = numericInputVal;
+                                        cartItem.push(route.params.item);
+                                        database()
+                                            .ref('/users/' + phoneNo + "/cartItems")
+                                            .set(cartItem)
+                                        getCartItemCount();
+                                        Toast.show({
+                                            type: 'customToast',
+                                            text1: "Item added to your cart...",
+                                            position: 'bottom',
+                                            visibilityTime: 1500,
+                                            bottomOffset: 120,
+                                            props: {
+                                                backgroundColor: Colors.deepGreen
+                                            }
+                                        });
+                                    } else {
+                                        cartItem[indexPath].quantity = numericInputVal;
+                                        database()
+                                            .ref('/users/' + phoneNo + "/cartItems")
+                                            .set(cartItem)
+                                        Toast.show({
+                                            type: 'customToast',
+                                            text1: "Quantity Updated...",
+                                            position: 'bottom',
+                                            visibilityTime: 1500,
+                                            bottomOffset: 120,
+                                            props: {
+                                                backgroundColor: Colors.deepGreen
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    let data = [];
+                                    route.params.item.quantity = numericInputVal;
+                                    console.log(route.params.item.quantity)
+                                    data.push(route.params.item);
+                                    database()
+                                        .ref('/users/' + phoneNo + "/cartItems")
+                                        .set(data)
+                                    setCartItemCount("1");
+                                    Toast.show({
+                                        type: 'customToast',
+                                        text1: "Item added to your cart...",
+                                        position: 'bottom',
+                                        visibilityTime: 1500,
+                                        bottomOffset: 120,
+                                        props: {
+                                            backgroundColor: Colors.deepGreen
+                                        }
+                                    });
 
-            })
+                                }
+                            })
+                    }
+                })
+        }
+
     }
 
     const onChangeInput = (value) => {
@@ -144,13 +226,33 @@ const ItemDetailScreen = ({navigation, route}) => {
     }
 
     const getCartItemCount = () => {
-        AsyncStorage
-            .getItem('cartItemCount')
-            .then((data, msg) => {
-                if (data) {
-                    setCartItemCount(data)
-                }
-            })
+        if (status === 'loggedOut') {
+            AsyncStorage
+                .getItem('cartItemCount')
+                .then((data, msg) => {
+                    if (data) {
+                        setCartItemCount(data)
+                    }
+                })
+        } else {
+            AsyncStorage
+                .getItem('phoneNo')
+                .then((data, msg) => {
+                    if (data) {
+                        database()
+                            .ref('/users/' + data + "/cartItems")
+                            .once('value')
+                            .then(snapshot => {
+                                if (snapshot.val()) {
+                                    setCartItemCount(snapshot.val().length)
+                                } else {
+                                    setCartItemCount("0")
+                                }
+                            })
+                    }
+                })
+        }
+
     }
 
     useEffect(() => {
@@ -172,7 +274,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                 rightIconSize={30}
                 rightIconColor={Colors.appBackground}
                 rightIconBackgroundColor={Colors.secondary}
-                onPressRight={() => navigation.navigate("Cart")}
+                onPressRight={() => navigation.navigate("Cart", {status: route.params.status})}
                 showBadgeOverRightIcon={true}
                 badgeBackgroundColor={Colors.primary}
                 badgeColor={Colors.appBackground}

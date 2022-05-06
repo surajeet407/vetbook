@@ -46,6 +46,7 @@ const config = {
     animation: 'spring',
     config: {
         stiffness: 100,
+        
         damping: 100,
         mass: 1,
         overshootClamping: true,

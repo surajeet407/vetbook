@@ -57,7 +57,7 @@ import i18n from '../util/i18n';
   // }
   const getData = () => {
     database()
-    .ref('/appData/logScreenData')
+    .ref('/logScreenData')
     .on('value', snapshot => {
       if(snapshot.val()) {
         setLogScreenData(snapshot.val())

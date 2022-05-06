@@ -125,7 +125,7 @@ import React, {useEffect, useRef, useState} from 'react';
   }
   const getData = () => {
     database()
-    .ref('/appData/otpScreenData')
+    .ref('/otpScreenData')
     .on('value', snapshot => {
       if(snapshot.val()) {
         setOtpScreenData(snapshot.val())

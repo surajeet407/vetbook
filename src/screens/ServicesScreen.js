@@ -33,7 +33,7 @@ const ServicesScreen = ({navigation, route}) => {
   }
   const getData = () => {
     database()
-    .ref('/appData/users/8900162177/pastOrders')
+    .ref('/users/8900162177/pastOrders')
     .on('value', snapshot => {
       if(snapshot.val()) {
         setPastOrders(snapshot.val());

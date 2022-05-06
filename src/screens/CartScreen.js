@@ -66,7 +66,7 @@ const CartScreen = ({navigation}) => {
         setTotal(parseInt(price + (parseInt(price) * 18) / 100));
     }
     const getData = () => {
-        // database() .ref('/appData/users/8900162177/cartItems') .on("value", snapshot
+        // database() .ref('/users/8900162177/cartItems') .on("value", snapshot
         // => {   if(snapshot.val()) {     _bindTaxWithTotal(snapshot.val())   } })
         AsyncStorage
             .getItem('cartItems')

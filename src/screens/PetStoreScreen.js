@@ -62,7 +62,7 @@ const PetStoreScreen = ({navigation, route}) => {
         setSearchQuery(query)
         if (query.length > 0) {
             database()
-                .ref('/appData/petFoodItems')
+                .ref('/petFoodItems')
                 .on('value', snapshot => {
                     if (snapshot.val()) {
                         setPetFoodItems(snapshot.val().filter(item => item.name.toLowerCase().includes(query.toLowerCase())))
@@ -70,7 +70,7 @@ const PetStoreScreen = ({navigation, route}) => {
                 })
         } else {
             database()
-                .ref('/appData/petFoodItems')
+                .ref('/petFoodItems')
                 .on('value', snapshot => {
                     if (snapshot.val()) {
                         setPetFoodItems(snapshot.val())
@@ -86,14 +86,14 @@ const PetStoreScreen = ({navigation, route}) => {
     }
     const getData = () => {
         database()
-            .ref('/appData/petStoreCategories')
+            .ref('/petStoreCategories')
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     setPetStoreCategories(snapshot.val())
                 }
             })
         database()
-            .ref('/appData/petFoodItems')
+            .ref('/petFoodItems')
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     setPetFoodItems(snapshot.val())

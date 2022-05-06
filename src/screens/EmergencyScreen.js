@@ -172,7 +172,7 @@ const EmergencyScreen = ({navigation, route}) => {
                 )}
                 <FormElement onPressToken={onPressPetType} required={true} tokens={petCats}  showLabel={true} title='Species' type='token' labelColor={Colors.secondary}/>
                 <FormElement onChangeText={(val) => setPetMed(val)} inputValue={petMed} required={true} showLabel={false} labelColor={Colors.secondary} title="Pet's medical problem" type='input' multiline={true} numberOfLines={5} keyboardType='default' maxLength={100}/>
-                {status === 'loggedOut' && (
+                {status !== 'loggedIn' && (
                 <View>
                   <FormElement onChangeText={(val) => setName(val)} inputValue={name} showLabel={false} title='Your Name' type='input' labelColor={Colors.primary} maxLength={2}/>
                   <FormElement onChangeText={(val) => setAddress(val)} inputValue={address} showLabel={false} title='Address of incident' type='input' labelColor={Colors.primary} maxLength={50}/>

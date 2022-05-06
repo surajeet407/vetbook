@@ -43,14 +43,14 @@ const AdoptPetScreen = ({navigation}) => {
 
     const getData = () => {
         database()
-            .ref('/appData/petCategories')
+            .ref('/petCategories')
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     setPetCategories(snapshot.val())
                 }
             })
         database()
-            .ref('/appData/petDogs')
+            .ref('/petDogs')
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     setDogs(snapshot.val())

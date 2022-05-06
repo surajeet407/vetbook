@@ -51,7 +51,7 @@ import i18n from '../util/i18n';
   }
   const getData = () => {
     database()
-    .ref('/appData/users/8900162177/addresses')
+    .ref('/users/8900162177/addresses')
     .on('value', snapshot => {
       if(snapshot.val()) {
         setAddressess(snapshot.val())

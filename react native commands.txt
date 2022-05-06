@@ -2,7 +2,7 @@ Opening Avd Commands------------------------------------------------------------
 1. cd C:\Users\Airdit\AppData\Local\Android\Sdk\emulator 
 2. emulator -avd [avd name]
 
-database().ref("/appData").set() 
+database().ref("/").set() 
 razorpay test key: rzp_test_EIvDuWAtnslSuW
 razor pay key secret: r5hlyi0Sb7n3WI7GU8NjrRNP
 

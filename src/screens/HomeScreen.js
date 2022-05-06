@@ -55,9 +55,9 @@ import i18n from '../util/i18n';
 
   const getData = () => {
     let HomePageCarouselServices = database()
-      .ref('/appData/HomePageCarouselServices'),
+      .ref('/HomePageCarouselServices'),
       services = database()
-      .ref('/appData/services');
+      .ref('/services');
     HomePageCarouselServices.keepSynced(true)
     services.keepSynced(true)
     HomePageCarouselServices.on('value', snapshot => {
@@ -74,14 +74,14 @@ import i18n from '../util/i18n';
     })
     
     database()
-    .ref('/appData/quickService')
+    .ref('/quickService')
     .on('value', snapshot => {
       if(snapshot.val()) {
         setQuickService(snapshot.val())
       }
     })
     database()
-    .ref('/appData/petStore')
+    .ref('/petStore')
     .on('value', snapshot => {
       if(snapshot.val()) {
         setStoreData(snapshot.val())

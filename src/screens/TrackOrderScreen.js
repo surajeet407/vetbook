@@ -70,14 +70,14 @@ const TrackOrderScreen = ({navigation, route}) => {
     };
     const getData = () => {
         database()
-            .ref('/appData/stepIndicator')
+            .ref('/stepIndicator')
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     setLabels(snapshot.val())
                 }
             })
         database()
-            .ref('/appData/users/8900162177/Services')
+            .ref('/users/8900162177/Services')
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     console.log(snapshot.val())

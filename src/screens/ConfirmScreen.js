@@ -59,13 +59,13 @@ import i18n from '../util/i18n';
     let ref= "";
     switch (route.params.details.serviceType) {
       case 'Training':
-        ref = "/appData/trainingPrice"
+        ref = "/trainingPrice"
         break;
       case 'Grooming':
-        ref = "/appData/groomingPrice"
+        ref = "/groomingPrice"
         break;
       case 'Consult':
-        ref = "/appData/doctorPrice"
+        ref = "/doctorPrice"
         break;     
       default:
         break;

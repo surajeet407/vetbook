@@ -38,7 +38,6 @@ const SpalshScreen = ({navigation}) => {
     .ref('/splashScreenData')
     .on('value', snapshot => {
       if(snapshot.val()) {
-        console.log(snapshot.val())
         setOnBoardingData(snapshot.val())
       }
     })

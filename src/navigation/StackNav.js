@@ -62,7 +62,7 @@ const forFade = ({current}) => ({
 
 const StackNav = (params) => {
     database().goOnline();
-    // database().ref("/appData").set()
+    // database().ref("/").set()
     const [status,
         setStatus] = useState(params.status)
     const scheme = useColorScheme();

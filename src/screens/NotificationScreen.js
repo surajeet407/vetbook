@@ -28,7 +28,7 @@ const NotificationScreen = ({navigation}) => {
     }
     const getData = () => {
         database()
-            .ref('/appData/users/8900162177/notifications')
+            .ref('/users/8900162177/notifications')
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     setDetails(snapshot.val())

@@ -74,7 +74,7 @@ const CartScreen = ({navigation, route}) => {
                         if (phoneNo) {
                             database()
                                 .ref('/users/' + phoneNo + "/cartItems")
-                                .set([])
+                                .set(null)
                         }
                     })
             }

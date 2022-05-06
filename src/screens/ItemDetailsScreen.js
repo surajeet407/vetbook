@@ -193,13 +193,13 @@ const ItemDetailScreen = ({navigation, route}) => {
                                         });
                                     }
                                 } else {
-                                    let data = [];
-                                    route.params.item.quantity = numericInputVal;
-                                    console.log(route.params.item.quantity)
-                                    data.push(route.params.item);
+                                    let firstItem = [];
+                                    let obj = {...route.params.item};
+                                    obj.quantity = numericInputVal;
+                                    firstItem.push(obj);
                                     database()
                                         .ref('/users/' + phoneNo + "/cartItems")
-                                        .set(data)
+                                        .set(firstItem)
                                     setCartItemCount("1");
                                     Toast.show({
                                         type: 'customToast',

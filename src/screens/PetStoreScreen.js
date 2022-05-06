@@ -28,7 +28,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '../util/i18n';
 
 const PetStoreScreen = ({navigation, route}) => {
-    console.log(route.params.status)
     const isFocused = useIsFocused();
     const [status,
         setStatus] = useState(route.params.status);

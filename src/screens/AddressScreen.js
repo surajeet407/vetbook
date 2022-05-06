@@ -26,20 +26,32 @@ const AddressScreen = ({navigation, route}) => {
     const [address] = useState("106, Chaklalpur, radhamohanpur, Debra, West Bengal,721160");
     const [region,
         setRegion] = useState({latitude: 22.357908900473035, longitude: 87.6132639683783, latitudeDelta: 0.0032349810554670455, longitudeDelta: 0.0025001540780067444});
-    //   useEffect(() => {     Geolocation.getCurrentPosition(      position => {
-    //     console.log(position.coords.latitude);
-    // console.log(position.coords.longitude);       const initialPosition =
-    // JSON.stringify(position);       setRegion({         latitude:
-    // position.coords.latitude,         longitude: position.coords.longitude,
-    //   latitudeDelta: 0.025,         longitudeDelta: 0.025       })       //
-    // Geocoder.init("AIzaSyDczxLM-oDcArN8gNEn_tvckoyw_qO9YNQ", {language : "en"});
-    //      // Geocoder.from(position.coords.latitude, position.coords.longitude)
-    //    //   .then(json => {       //   var addressComponent =
-    // json.results[0].address_components[0];       //
-    // console.log(addressComponent);       //   })       //   .catch(error =>
-    // console.warn(error));     },     error => console.log('Error',
-    // JSON.stringify(error)),     {enableHighAccuracy: true, timeout: 20000,
-    // maximumAge: 1000},   );  }, []);
+    
+    useEffect(() => {    
+        // Geocoder.init("AIzaSyBBPGbYThYVRWkyWMt8-N5Y_wjtMFcEmRQ", {language : "en"});
+        //     Geocoder.from(22.357908900473035, 87.6132639683783)
+        //     .then(json => {
+        //         var addressComponent = json.results[0].address_components[0];       
+        //         console.log(addressComponent);
+        //     })
+        //     .catch(error => console.warn(error));   
+        Geolocation.getCurrentPosition((position) => {
+            console.log(position.coords.latitude);
+            console.log(position.coords.longitude);       
+            const initialPosition = JSON.stringify(position);       
+            setRegion({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                latitudeDelta: 0.025,
+                longitudeDelta: 0.025
+            })       
+               
+        },    
+        error => console.log('Error',
+            JSON.stringify(error)),     
+        {enableHighAccuracy: true, timeout: 200000, maximumAge: 10000},   );  
+    }, []);
+
     const onRegionChange = (region) => {
         // setRegion(region)
     }

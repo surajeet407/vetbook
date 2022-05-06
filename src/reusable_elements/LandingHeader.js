@@ -7,15 +7,41 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Badge} from 'react-native-paper';
 import i18n from '../util/i18n';
 import Svg, {Path} from 'react-native-svg';
+import axios from 'axios';
 
 const LandingHeader = (props) => {
     const [status,
         setStatus] = useState(props.status)
+
+    const [address,
+        setAddress] = useState('')
+
     const onPressNotification = () => {
         props
             .navigation
             .navigate('Notifications')
     }
+    useEffect(() => {
+        axios
+            .get("http://api.positionstack.com/v1/reverse?access_key=1e7810be054a872c3ed9c3b694644" +
+                    "7c7&query=22.357908900473035,87.6132639683783")
+            .then(function (response) {
+                setAddress(response.data.data[0].label)
+            })
+            .catch(function (error) {
+                console.log(error)
+                Toast.show({
+                    type: 'customToast',
+                    text1: "Unable to get your current location...",
+                    position: 'top',
+                    visibilityTime: 1500,
+                    topOffset: 20,
+                    props: {
+                        backgroundColor: Colors.error_toast_color
+                    }
+                });
+            });
+    }, [])
     return (
         <View>
             <View
@@ -87,7 +113,7 @@ const LandingHeader = (props) => {
                                     fontFamily: 'Redressed-Regular',
                                     fontSize: 18,
                                     color: Colors.secondary
-                                }}>106, Chaklalpur, Radhamohanpur, west midnapore, west bengal 721160</Text>
+                                }}>{address}</Text>
                             </RNBounceable>
                         </View>
                     </View>

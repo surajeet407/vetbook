@@ -28,14 +28,16 @@ const ToastConfig = {
         <View
             style={{
             justifyContent: 'center',
-            alignItems: 'center',
-            height: 40,
-            width: '80%',
+            height: 50,
+            width: '95%',
             backgroundColor: props.backgroundColor
                 ? props.backgroundColor
                 : Colors.primary,
             elevation: 5,
-            borderRadius: 10
+            borderRadius: 5,
+            borderLeftColor: Colors.white,
+            borderLeftWidth: 2,
+            paddingHorizontal: 10
         }}>
             <Text
                 style={{

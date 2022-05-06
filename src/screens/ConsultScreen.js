@@ -90,7 +90,7 @@ const ConsultScreen = ({navigation, route}) => {
                 visibilityTime: 1500,
                 topOffset: 15,
                 props: {
-                    backgroundColor: '#bb2423'
+                    backgroundColor: Colors.error_toast_color
                 }
             });
         }

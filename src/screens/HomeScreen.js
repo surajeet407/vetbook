@@ -72,19 +72,13 @@ import i18n from '../util/i18n';
         setMainServices(snapshot.val())
       }
     })
+
     
     database()
     .ref('/quickService')
     .on('value', snapshot => {
       if(snapshot.val()) {
         setQuickService(snapshot.val())
-      }
-    })
-    database()
-    .ref('/petStore')
-    .on('value', snapshot => {
-      if(snapshot.val()) {
-        setStoreData(snapshot.val())
       }
     })
     

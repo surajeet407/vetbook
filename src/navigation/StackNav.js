@@ -194,6 +194,10 @@ const StackNav = (params) => {
                     options={{
                     headerShown: false
                 }}
+                initialParams={{
+                    status: params.status,
+                    address: params.address
+                }}
                     name="Address"
                     component={AddressScreen}/>
                 <Stack.Screen

@@ -167,8 +167,8 @@ import i18n from '../util/i18n';
                     showsVerticalScrollIndicator={false}
                     keyExtractor={(item) => item.id}>
                     {mainServices.map((item, index) =>
-                    <Animatable.View  delay={100 * index} animation={'fadeInUp'} key={index} style={{alignItems: 'center', justifyContent: 'space-evenly', margin: 5}}>
-                      <RNBounceable onPress={() => navigation.navigate(item.navTo, {item: item})} style={{width: Dimensions.get('screen').width/2 - 20, justifyContent: 'space-evenly', borderRadius: 15, backgroundColor: item.backgroundColor, elevation: 5, height: 180,  padding: 10}}>
+                    <Animatable.View  delay={100 * index} animation={'fadeInUp'} key={index} style={{alignItems: 'center', justifyContent: 'space-evenly', margin: 5, elevation: 5}}>
+                      <RNBounceable onPress={() => navigation.navigate(item.navTo, {item: item})} style={{width: Dimensions.get('screen').width/2 - 20, justifyContent: 'space-evenly', borderRadius: 15, backgroundColor: item.backgroundColor, height: 180,  padding: 10}}>
                         <ImageBackground blurRadius={2} source={require('../assets/images/background4.png')} style={{ width: '100%', height: '100%'}}>
                             <Title label={item.title} size={18} color={'#fff'}/> 
                             <Text style={{color: Colors.gray, fontSize: 15, fontFamily: 'Oswald-Medium'}}>Lorem ipsum dolor sit amet...</Text>

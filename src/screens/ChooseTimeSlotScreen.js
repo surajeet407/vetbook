@@ -221,8 +221,8 @@ const ChooseTimeSlotScreen = ({navigation, route}) => {
                                                     size={18}
                                                     label={item.startTime + " - " + item.endTime}
                                                     bold={true}
-                                                    color={Colors.mediumDark}/>
-                                                <Title size={12} label={"Available"} bold={true} color={Colors.appBackground}/>
+                                                    color={userOption === index? Colors.white:Colors.mediumDark}/>
+                                                <Title size={12} label={"Available"} bold={true} color={userOption === index? Colors.primary:Colors.white}/>
                                             </TouchableOpacity>
                                         </Animatable.View>)}
                                     </RNMasonryScroll>

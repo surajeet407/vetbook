@@ -165,7 +165,7 @@ const PetRelocationScreen = ({navigation, route}) => {
                         <FormElement
                             onChangeText={(val) => setBreed(val)}
                             inputValue={breed}
-                            showLabel={true}
+                            showLabel={false}
                             title='Breed'
                             type='input'
                             labelColor={Colors.secondary}

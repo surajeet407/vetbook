@@ -151,9 +151,9 @@ const TrackOrderScreen = ({navigation, route}) => {
                 rightSideText={''}
                 rightSideTextSize={20}
                 rightSideTextColor={Colors.secondary}
-                subHeaderText={"Service id: #" + details.id}
+                subHeaderText={"Id: #" + details.id}
                 showSubHeaderText={true}
-                subHeaderTextSize={18}
+                subHeaderTextSize={16}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
                 headerHeight={100}
@@ -172,7 +172,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                 style={{
                 backgroundColor: Colors.appBackground,
                 marginBottom: 80,
-                marginTop: 20,
+                marginTop: 10,
                 padding: 20,
                 flex: 1,
                 width: '100%',

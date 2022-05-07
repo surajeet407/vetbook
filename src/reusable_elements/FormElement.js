@@ -37,8 +37,8 @@ const FormElement = (props) => {
                     {props.required && (
                         <Text
                             style={{
-                            marginLeft: 5,
-                            marginTop: 10,
+                            marginTop: -5,
+                            marginRight: 5,
                             color: 'red',
                             fontWeight: 'bold',
                             fontSize: 15
@@ -46,12 +46,11 @@ const FormElement = (props) => {
                     )}
                     <Text
                         style={{
-                        fontFamily: 'Oswald-Medium',
+                        fontFamily: 'Redressed-Regular',
                         color: props.labelColor,
-                        fontSize: 18
+                        fontSize: 20
                     }}>{props
-                            .title
-                            .toUpperCase()}</Text>
+                            .title}</Text>
                     <Text
                         style={{
                         marginLeft: 5,
@@ -83,7 +82,7 @@ const FormElement = (props) => {
                             : 0,
                         backgroundColor: Colors.appBackground,
                         fontSize: 20,
-                        fontFamily: 'Oswald-Medium',
+                        fontFamily: 'Redressed-Regular',
                         elevation: 2
                     }}
                         outlineColor={Colors.primary}
@@ -108,7 +107,7 @@ const FormElement = (props) => {
                         },
                         fonts: {
                             regular: {
-                                fontFamily: 'Oswald-Regular'
+                                fontFamily: 'Redressed-Regular'
                             }
                         }
                     }}/>

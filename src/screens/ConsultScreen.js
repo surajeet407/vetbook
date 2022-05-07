@@ -125,7 +125,7 @@ const ConsultScreen = ({navigation, route}) => {
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={60}
+                headerHeight={80}
                 headerText={route.params.item.title}
                 headerTextSize={25}
                 headerTextColor={route.params.item.backgroundColor}

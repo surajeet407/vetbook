@@ -82,6 +82,7 @@ const RelocationDetailsScreen = ({navigation, route}) => {
                                     .once("value")
                                     .then(snapshot => {
                                         obj.userStatus = "loggedIn"
+                                        obj.phoneNo = phoneNo
                                         if (snapshot.val() && snapshot.val().length > 0) {
                                             ar = snapshot.val()
                                             ar.push(obj)

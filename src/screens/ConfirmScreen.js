@@ -127,6 +127,7 @@ const _updateUiBasedOnServiceType = () => {
                   if(clearCart) { 
                     database().ref('/users/' + phoneNo + "/cartItems").set(null)
                   }
+                  obj.phoneNo = phoneNo
                   obj.userStatus = "loggedIn"
                   if (snapshot.val() && snapshot.val().length > 0) {
                     ar = snapshot.val()

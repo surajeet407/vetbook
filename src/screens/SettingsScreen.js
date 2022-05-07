@@ -275,42 +275,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     size={20}
                                     color={Colors.secondary}/>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                style={{
-                                paddingVertical: 8,
-                                borderColor: Colors.gray,
-                                borderBottomWidth: 1,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between'
-                            }}
-                                onPress={() => navigation.navigate("ContactUs")}>
-                                <View
-                                    style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center'
-                                }}>
-                                    <Icon
-                                        style={{
-                                        marginRight: 10,
-                                        marginTop: 2
-                                    }}
-                                        type={Icons.MaterialCommunityIcons}
-                                        name={'typewriter'}
-                                        size={20}
-                                        color={Colors.primary}/>
-                                    <Text
-                                        style={{
-                                        fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18
-                                    }}>{i18n.writeToUs}</Text>
-                                </View>
-                                <Icon
-                                    type={Icons.MaterialIcons}
-                                    name={'keyboard-arrow-right'}
-                                    size={20}
-                                    color={Colors.secondary}/>
-                            </TouchableOpacity>
+                           
                         </Animatable.View>
                     </View>
                     <View

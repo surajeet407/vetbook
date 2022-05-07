@@ -18,6 +18,7 @@ import database from '@react-native-firebase/database';
 import * as Animatable from 'react-native-animatable';
 import Icon, {Icons} from '../util/Icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Rating } from 'react-native-ratings';
 import i18n from '../util/i18n';
 
 const width = Dimensions
@@ -83,7 +84,7 @@ const ServicesScreen = ({navigation, route}) => {
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
                 headerHeight={120}
-                headerText={'Previous Services'}
+                headerText={'All Services'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}
                 showHeaderText={true}
@@ -148,10 +149,30 @@ const ServicesScreen = ({navigation, route}) => {
                       </View>
                     </View>
                     <View style={{borderTopColor: Colors.darkGray, borderTopWidth: 1, padding: 5}}>
-                      <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Title size={18} label={item.mode === 'ongoing'? 'Track':'Book Again'} bold={true} color={Colors.secondary}/>
-                        <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
-                      </TouchableOpacity>
+                        {item.mode === 'ongoing'? 
+                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Title size={18} label={'Track'} bold={true} color={Colors.secondary}/>
+                            <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
+                        </TouchableOpacity>
+                        :
+                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={18} label={'Book Again'} bold={true} color={Colors.secondary}/>
+                                <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
+                            </TouchableOpacity>
+                            <Rating
+                                type='custom'
+                                ratingColor='#3498db'
+                                ratingBackgroundColor='#c8c7c8'
+                                ratingCount={5}
+                                imageSize={20}
+                                minValue={0}
+                                startingValue={0}
+                                jumpValue={1}
+                                showRating={false}
+                            />
+                        </View>
+                        }
                     </View>
                   </Animatable.View>
                     )

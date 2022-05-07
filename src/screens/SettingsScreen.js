@@ -119,43 +119,6 @@ const SettingsScreen = ({navigation, route}) => {
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                             }}
-                                onPress={() => navigation.navigate("TrackOrder")}>
-                                <View
-                                    style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center'
-                                }}>
-                                    <Icon
-                                        style={{
-                                        marginRight: 10,
-                                        marginTop: 5
-                                    }}
-                                        type={Icons.MaterialCommunityIcons}
-                                        name={'car-traction-control'}
-                                        size={20}
-                                        color={Colors.primary}/>
-                                    <Text
-                                        style={{
-                                        fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18,
-                                        marginTop: 10
-                                    }}>{i18n.trackService}</Text>
-                                </View>
-                                <Icon
-                                    type={Icons.MaterialIcons}
-                                    name={'keyboard-arrow-right'}
-                                    size={20}
-                                    color={Colors.secondary}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={{
-                                paddingVertical: 8,
-                                borderColor: Colors.gray,
-                                borderBottomWidth: 1,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between'
-                            }}
                                 onPress={() => navigation.navigate("ServicesBottomTabBar", {screen: "Orders"})}>
                                 <View
                                     style={{

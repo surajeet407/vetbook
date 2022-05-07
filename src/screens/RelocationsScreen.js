@@ -17,6 +17,7 @@ import database from '@react-native-firebase/database';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon, {Icons} from '../util/Icons';
+import { Rating } from 'react-native-ratings';
 import i18n from '../util/i18n';
 
 const width = Dimensions
@@ -207,10 +208,30 @@ const RelocationsScreen = ({navigation, route}) => {
                      
                     </View>
                     <View style={{borderTopColor: Colors.darkGray, borderTopWidth: 1, padding: 5}}>
+                        {item.mode === 'inprocess'?
                         <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Title size={18} label={item.mode === 'inprocess'? 'Contact Us':'Rate Service'} bold={true} color={Colors.secondary}/>
+                            <Title size={18} label={'Contact Us'} bold={true} color={Colors.secondary}/>
                             <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
                         </TouchableOpacity>
+                        :
+                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={18} label={'Rate Our Service'} bold={true} color={Colors.secondary}/>
+                                <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
+                            </View>
+                            <Rating
+                                type='custom'
+                                ratingColor='#3498db'
+                                ratingBackgroundColor='#c8c7c8'
+                                ratingCount={5}
+                                imageSize={20}
+                                minValue={0}
+                                startingValue={0}
+                                jumpValue={1}
+                                showRating={false}
+                            />
+                        </View>
+                        }
                     </View>
                   </Animatable.View>
                     )

@@ -18,6 +18,7 @@ import * as Animatable from 'react-native-animatable';
 import Icon, {Icons} from '../util/Icons';
 import Accordion from 'react-native-collapsible/Accordion';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Rating } from 'react-native-ratings';
 import i18n from '../util/i18n';
 
 const width = Dimensions
@@ -41,7 +42,6 @@ const OrdersScreen = ({navigation, route}) => {
                         database()
                             .ref("/users/" + phoneNo + "/orders")
                             .on('value', snapshot => {
-                                console.log(snapshot.val())
                                 if (snapshot.val()) {
                                     setPastOrders(snapshot.val());
                                 }
@@ -91,7 +91,7 @@ const OrdersScreen = ({navigation, route}) => {
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
                 headerHeight={120}
-                headerText={'Orders'}
+                headerText={'All Orders'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}
                 showHeaderText={true}
@@ -162,10 +162,30 @@ const OrdersScreen = ({navigation, route}) => {
                     )}
                     </View>
                     <View style={{borderTopColor: Colors.darkGray, borderTopWidth: 1, padding: 5}}>
+                        {item.mode === 'inprocess'? 
                         <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Title size={18} label={item.mode === 'inprocess'? 'Track':'Book Again'} bold={true} color={Colors.secondary}/>
+                            <Title size={18} label={'Track'} bold={true} color={Colors.secondary}/>
                             <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
                         </TouchableOpacity>
+                        :
+                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={18} label={'Order Again'} bold={true} color={Colors.secondary}/>
+                                <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
+                            </TouchableOpacity>
+                            <Rating
+                                type='custom'
+                                ratingColor='#3498db'
+                                ratingBackgroundColor='#c8c7c8'
+                                ratingCount={5}
+                                imageSize={20}
+                                minValue={0}
+                                startingValue={0}
+                                jumpValue={1}
+                                showRating={false}
+                            />
+                        </View>
+                        }
                     </View>
                   </Animatable.View>
                     )

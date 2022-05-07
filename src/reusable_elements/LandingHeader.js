@@ -29,7 +29,7 @@ const LandingHeader = (props) => {
                 setAddress(response.data.data[0].label)
             })
             .catch(function (error) {
-                console.log(error)
+                // console.log(error)
                 Toast.show({
                     type: 'customToast',
                     text1: "Unable to get your current location...",

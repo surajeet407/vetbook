@@ -52,7 +52,7 @@ const App = () => {
     requestUserPermission()
     checkToken();
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log(remoteMessage);
+      // console.log(remoteMessage);
       ToastAndroid.showWithGravityAndOffset(
         "hfhgfdgfdhfhj",
         ToastAndroid.LONG,

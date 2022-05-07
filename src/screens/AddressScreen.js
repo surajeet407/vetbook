@@ -36,8 +36,8 @@ const AddressScreen = ({navigation, route}) => {
         //     })
         //     .catch(error => console.warn(error));   
         Geolocation.getCurrentPosition((position) => {
-            console.log(position.coords.latitude);
-            console.log(position.coords.longitude);       
+            // console.log(position.coords.latitude);
+            // console.log(position.coords.longitude);       
             const initialPosition = JSON.stringify(position);       
             setRegion({
                 latitude: position.coords.latitude,
@@ -47,8 +47,9 @@ const AddressScreen = ({navigation, route}) => {
             })       
                
         },    
-        error => console.log('Error',
-            JSON.stringify(error)),     
+        error = (error) => {
+            // console.log('Error', JSON.stringify(error))
+        },     
         {enableHighAccuracy: true, timeout: 200000, maximumAge: 10000},   );  
     }, []);
 

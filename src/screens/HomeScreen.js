@@ -65,7 +65,7 @@ import i18n from '../util/i18n';
                       .on('value', snapshot => {
                           if (snapshot.val()) {
                             let onGoingItems = snapshot.val().filter(item => item.mode === 'ongoing')
-                            console.log(onGoingItems)
+                            // console.log(onGoingItems)
                             if (onGoingItems.length > 0) {
                               setShowTrackComponent(true);
                               setTrackDetails(onGoingItems[0]);

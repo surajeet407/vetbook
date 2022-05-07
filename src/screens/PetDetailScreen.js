@@ -81,16 +81,16 @@ const PetDetailScreen = ({navigation, route}) => {
                 return resp.readFile("base64");
             })
             .then(base64Data => {
-                console.log(base64Data);
+                // console.log(base64Data);
                 let base64Image = "data:image/png;base64" + base64Data;
-                console.log(base64Image);
+                // console.log(base64Image);
                 Share
                     .open({message: route.params.item.name, url: base64Image})
                     .then((res) => {
-                        console.log(res);
+                        // console.log(res);
                     })
                     .catch((err) => {
-                        err && console.log(err);
+                        // console.log(err);
                     });
                 return fs.unlink(imagePath);
             });

@@ -38,7 +38,7 @@ const RelocationsScreen = ({navigation, route}) => {
                         database()
                             .ref("/users/" + phoneNo + "/relocations")
                             .on('value', snapshot => {
-                                console.log(snapshot.val())
+                                // console.log(snapshot.val())
                                 if (snapshot.val()) {
                                     setPastRelocations(snapshot.val());
                                 }

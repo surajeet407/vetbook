@@ -38,10 +38,10 @@ import i18n from '../util/i18n';
       theme: {color: Colors.primary}
     }
     RazorpayCheckout.open(options).then((data) => {
-      console.log(data);
+      // console.log(data);
       navigation.navigate("PaymentStatus", {status: "Success"})
     }).catch((error) => {
-      console.log(error.description)
+      // console.log(error.description)
       navigation.navigate("PaymentStatus", {status: "Error"})
     });
   }

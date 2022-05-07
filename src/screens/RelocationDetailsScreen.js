@@ -26,7 +26,7 @@ import Icon, {Icons} from '../util/Icons';
 import i18n from '../util/i18n';
 
 const RelocationDetailsScreen = ({navigation, route}) => {
-    console.log(route.params.details)
+    // console.log(route.params.details)
     const [address1,
         setAddress1] = useState("");
     const [address2,

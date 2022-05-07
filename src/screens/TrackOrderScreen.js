@@ -87,7 +87,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                                         var trackItemDetails = snapshot
                                             .val()
                                             .filter(item => item.id === details.id)
-                                            console.log(trackItemDetails)
+                                            // console.log(trackItemDetails)
                                         setCurrentPosition(parseInt(trackItemDetails[0].trackStep))
                                     }
                                 })

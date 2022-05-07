@@ -74,7 +74,12 @@ import moment from 'moment';
   }
 
 const _updateUiBasedOnServiceType = () => {
-  let type = "", anonymusPath = '', loggedInPath = '', clearCart = false; 
+  let type = "", anonymusPath = '', loggedInPath = '', clearCart = false, ar = [], obj = {...route.params.details}
+  obj.id = uuid.v4()
+  obj.mode = "ongoing"
+  obj.orderedOn = moment().format('yyyy-MM-DD').toString()
+  obj.userStatus = "loggedOut"
+  
   if (route.params.details.serviceType === "None" ) {
     type = 'Items';
     anonymusPath = 'anonymusOrders'
@@ -85,23 +90,19 @@ const _updateUiBasedOnServiceType = () => {
     anonymusPath = 'anonymusOrders'
     loggedInPath = 'orders'
   } else {
+    obj.total = total
     type = 'Service';
     anonymusPath = 'anonymusService'
     loggedInPath = 'services'
   } 
+  obj.type = type
   AsyncStorage.getItem('userStatus').then((status) => {
     if(status === 'loggedOut') {
       if(clearCart) { 
         AsyncStorage.setItem("cartItems", null)
       }
       AsyncStorage.getItem(anonymusPath).then((data) => {
-        let ar = []
-        let obj = {...route.params.details}
-        obj.id = uuid.v4()
-        obj.mode = "ongoing"
-        obj.orderedOn = moment().format('yyyy-MM-DD').toString()
         obj.userStatus = "loggedOut"
-        obj.type = type
         if(data && JSON.parse(data).length > 0) {
           ar = JSON.parse(data)
           ar.push(obj)
@@ -123,13 +124,7 @@ const _updateUiBasedOnServiceType = () => {
                   if(clearCart) { 
                     database().ref('/users/' + phoneNo + "/cartItems").set(null)
                   }
-                  let ar = []
-                  let obj = {...route.params.details}
-                  obj.id = uuid.v4()
-                  obj.mode = "ongoing"
-                  obj.orderedOn = moment().format('yyyy-MM-DD').toString()
                   obj.userStatus = "loggedIn"
-                  obj.type = type
                   if (snapshot.val() && snapshot.val().length > 0) {
                     ar = snapshot.val()
                     ar.push(obj)

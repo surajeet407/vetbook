@@ -85,12 +85,12 @@ const OrdersScreen = ({navigation, route}) => {
                 rightSideText={''}
                 rightSideTextSize={20}
                 rightSideTextColor={Colors.secondary}
-                subHeaderText="Swipe right to reorder..."
-                showSubHeaderText={false}
+                subHeaderText="See all your orders..."
+                showSubHeaderText={true}
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={80}
+                headerHeight={120}
                 headerText={'Orders'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}

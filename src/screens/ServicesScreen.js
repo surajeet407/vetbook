@@ -17,7 +17,6 @@ import Title from '../reusable_elements/Title';
 import database from '@react-native-firebase/database';
 import * as Animatable from 'react-native-animatable';
 import Icon, {Icons} from '../util/Icons';
-import TrackComponent from '../reusable_elements/TrackComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '../util/i18n';
 
@@ -28,8 +27,6 @@ const width = Dimensions
 const ServicesScreen = ({navigation, route}) => {
     const [status,
         setStatus] = useState(route.params.status);
-    const [showTrackComponent,
-        setShowTrackComponent] = useState(true)
     const [pastServices,
         setPastServices] = useState([])
     const reOrder = () => {}
@@ -42,10 +39,8 @@ const ServicesScreen = ({navigation, route}) => {
                         database()
                             .ref("/users/" + phoneNo + "/services")
                             .on('value', snapshot => {
-                                console.log(snapshot.val())
                                 if (snapshot.val()) {
                                     setPastServices(snapshot.val());
-                                    setShowTrackComponent(true)
                                 }
                             })
                     }
@@ -57,7 +52,6 @@ const ServicesScreen = ({navigation, route}) => {
                 .then((data) => {
                     if (data && JSON.parse(data).length > 0) {
                         setPastServices(JSON.parse(data));
-                        setShowTrackComponent(true)
                     }
                 });
         }
@@ -83,7 +77,7 @@ const ServicesScreen = ({navigation, route}) => {
                 rightSideText={''}
                 rightSideTextSize={20}
                 rightSideTextColor={Colors.secondary}
-                subHeaderText="Swipe right to reorder..."
+                subHeaderText="See all your booked services..."
                 showSubHeaderText={true}
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
@@ -100,59 +94,71 @@ const ServicesScreen = ({navigation, route}) => {
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/> 
-              {showTrackComponent && (<TrackComponent onPress={() => navigation.navigate("TrackOrder")}/>)}
-            <View
-                style={{
-                marginBottom: showTrackComponent
-                    ? 60
-                    : 0,
-                marginTop: 10,
-                flex: 1,
-                alignItems: 'center',
-                backgroundColor: Colors.appBackground,
-                width: '100%'
-            }}>
+            
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={pastServices}
                     keyExtractor={item => item.id}
                     ItemSeparatorComponent={() => (<View style={{
-                    marginBottom: 5
+                    marginBottom: 10
                 }}/>)}
-                    renderItem={({item, index}) => {
+                    renderItem={({item, rowMap}) => {
                     return (
-                        <View
-                            style={{
-                            width: Dimensions
-                                .get('screen')
-                                .width - 30
-                        }}>
-                            <View
-                                key={index}
-                                style={{
-                                borderRadius: 10,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingHorizontal: 5,
-                                paddingVertical: 10,
-                                marginVertical: 5
-                            }}>
-                                <View
-                                    style={{
-                                    padding: 5
-                                }}>
-                                    <Title
-                                        size={20}
-                                        label={(index + 1) + '. Details ()'}
-                                        bold={true}
-                                        color={Colors.primary}/>
-                                </View>
+                      <Animatable.View
+                      delay={50 * rowMap}
+                      animation={'slideInRight'}
+                      style={{
+                      backgroundColor: Colors.appBackground,
+                      marginHorizontal: 20,
+                      marginVertical: 10,
+                      padding: 20,
+                      elevation: 5,
+                  }}>
+                      <View
+                          style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                      }}> 
+                        <Title size={18} label={item.serviceType} bold={true} color={Colors.primary}/>
+                        <Title size={18} label={"Price: " + item.total + "/-"} bold={true} color={Colors.primary}/>
+                    </View>
+                    <View style={{marginTop: 5, marginBottom: 10}}>
+                      <Title size={15} label={"Details of Booking: "} bold={true} color={Colors.gray}/>
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <View>
+                          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Title size={15} label={"Booked On:"} bold={true} color={Colors.darkGray}/>
+                            <View style={{marginLeft: 5}}>
+                              <Title size={15} label={item.orderedOn} bold={true} color={item.mode === 'ongoing'? Colors.yellow:Colors.green2}/>
                             </View>
+                          </View>
+                          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Title size={15} label={"Status:"} bold={true} color={Colors.darkGray}/>
+                            <View style={{marginLeft: 5}}>
+                              <Title size={15} label={item.mode === 'ongoing'? 'On Going':'Completed'} bold={true} color={item.mode === 'ongoing'? Colors.yellow:Colors.green2}/>
+                            </View>
+                          </View>
                         </View>
+                        <Image
+                            source={{
+                              uri: item.image
+                            }}
+                            style={{
+                              width: 60,
+                              height: 60
+                          }}/>
+                      </View>
+                    </View>
+                    <View style={{borderTopColor: Colors.darkGray, borderTopWidth: 1, padding: 5}}>
+                      <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Title size={18} label={item.mode === 'ongoing'? 'Track':'Book Again'} bold={true} color={Colors.secondary}/>
+                        <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
+                      </TouchableOpacity>
+                    </View>
+                  </Animatable.View>
                     )
                 }}/>
-            </View>
         </View>
     );
 };

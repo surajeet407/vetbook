@@ -37,7 +37,6 @@ const PetRelocationScreen = ({navigation, route}) => {
         setWeight] = useState("");
 
     const onPressPetType = (index) => {
-        console.log(petCats[index])
         setPetType(petCats[index]);
     }
     const onPressPetGender = (index) => {

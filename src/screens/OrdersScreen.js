@@ -106,9 +106,6 @@ const OrdersScreen = ({navigation, route}) => {
                     showsVerticalScrollIndicator={false}
                     data={pastOrders}
                     keyExtractor={item => item.id}
-                    ItemSeparatorComponent={() => (<View style={{
-                    marginBottom: 10
-                }}/>)}
                     renderItem={({item, rowMap}) => {
                     return (
                       <Animatable.View
@@ -118,7 +115,7 @@ const OrdersScreen = ({navigation, route}) => {
                       backgroundColor: Colors.appBackground,
                       marginHorizontal: 20,
                       marginVertical: 10,
-                      padding: 20,
+                      padding: 10,
                       elevation: 5,
                   }}>
                       <View
@@ -127,8 +124,8 @@ const OrdersScreen = ({navigation, route}) => {
                           alignItems: 'center',
                           justifyContent: 'space-between'
                       }}> 
-                        <Title size={18} label={'Order Details : '} bold={true} color={Colors.primary}/>
-                        <Title size={18} label={"Price: " + item.total + "/-"} bold={true} color={Colors.primary}/>
+                        <Title size={20} label={'Order Details : '} bold={true} color={Colors.darkGray}/>
+                        <Title size={18} label={"Price: " + item.total + "/-"} bold={true} color={Colors.secondary}/>
                     </View>
                     <View style={{marginTop: 5, marginBottom: 10}}>
                       <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -150,9 +147,9 @@ const OrdersScreen = ({navigation, route}) => {
                       {item.cartItems.map((item, index) => 
                         <View key={index} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={(index + 1) + ". "} bold={true} color={Colors.darkGray}/>
+                                <Title size={15} label={(index + 1) + ". "} bold={true} color={Colors.secondary}/>
                                 <View style={{marginLeft: 5}}>
-                                    <Title size={15} label={item.name} bold={true} color={Colors.darkGray}/>
+                                    <Title size={15} label={item.name} bold={true} color={Colors.primary}/>
                                 </View>
                             </View>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>

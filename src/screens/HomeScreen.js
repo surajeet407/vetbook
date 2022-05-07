@@ -64,7 +64,6 @@ import i18n from '../util/i18n';
                   database()
                       .ref("/users/" + phoneNo + "/services")
                       .on('value', snapshot => {
-                          console.log(snapshot.val())
                           if (snapshot.val()) {
                             setShowTrackComponent(true)
                           }

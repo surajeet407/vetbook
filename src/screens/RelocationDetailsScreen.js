@@ -18,11 +18,15 @@ import GeneralHeader from '../reusable_elements/GeneralHeader';
 import Toast from 'react-native-toast-message';
 import Title from '../reusable_elements/Title';
 import SectionBanner from '../reusable_elements/SectionBanner';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import database from '@react-native-firebase/database';
+import uuid from 'react-native-uuid';
 import * as Animatable from 'react-native-animatable';
 import Icon, {Icons} from '../util/Icons';
 import i18n from '../util/i18n';
 
 const RelocationDetailsScreen = ({navigation, route}) => {
+    console.log(route.params.details)
     const [address1,
         setAddress1] = useState("");
     const [address2,
@@ -33,6 +37,70 @@ const RelocationDetailsScreen = ({navigation, route}) => {
         setState] = useState("");
     const [zip,
         setZip] = useState("");
+
+    const saveRelocationDetails = () => {
+        let ar = [],
+            obj = {
+                ...route.params.details,
+                currentLocation: "",
+                dropLocation: {
+                    address1: address1,
+                    address2: address2,
+                    city: city,
+                    state: state,
+                    zip: zip
+                }
+            }
+        obj.id = uuid.v4()
+        obj.userStatus = "loggedOut"
+        obj.type = 'Relocation'
+        obj.mode = "inprocess"
+        AsyncStorage
+            .getItem('userStatus')
+            .then((status) => {
+                if (status === 'loggedOut') {
+                    AsyncStorage
+                        .getItem("anonymusRelocation")
+                        .then((data) => {
+                            obj.userStatus = "loggedOut"
+                            if (data && JSON.parse(data).length > 0) {
+                                ar = JSON.parse(data)
+                                ar.push(obj)
+                                AsyncStorage.setItem("anonymusRelocation", JSON.stringify(ar))
+                            } else {
+                                ar.push(obj);
+                                AsyncStorage.setItem("anonymusRelocation", JSON.stringify(ar))
+                            }
+                        });
+                } else {
+                    AsyncStorage
+                        .getItem('phoneNo')
+                        .then((phoneNo, msg) => {
+                            if (phoneNo) {
+                                database()
+                                    .ref('/users/' + phoneNo + "/relocations")
+                                    .once("value")
+                                    .then(snapshot => {
+                                        obj.userStatus = "loggedIn"
+                                        if (snapshot.val() && snapshot.val().length > 0) {
+                                            ar = snapshot.val()
+                                            ar.push(obj)
+                                            database()
+                                                .ref('/users/' + phoneNo + "/relocations")
+                                                .set(ar)
+                                        } else {
+                                            ar.push(obj);
+                                            database()
+                                                .ref('/users/' + phoneNo + "/relocations")
+                                                .set(ar)
+                                        }
+                                    })
+                            }
+                        })
+                }
+            });
+    }
+
     const onPressSubmit = () => {
         let text = ""
         if (address1 === "") {
@@ -58,6 +126,7 @@ const RelocationDetailsScreen = ({navigation, route}) => {
                 }
             });
             navigation.navigate('Home')
+            saveRelocationDetails()
         } else {
             Keyboard.dismiss();
             Toast.show({

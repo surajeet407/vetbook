@@ -243,7 +243,7 @@ const _updateUiBasedOnServiceType = () => {
         <View style={{backgroundColor: Colors.appBackground, paddingHorizontal: 20, marginBottom: route.params.details.serviceType === "None"? 200:100, flex: 1, width: '100%'}}>
           
           {route.params.details.serviceType === "None"?
-            <View style={{}}>  
+            <View style={{flex: 1}}>  
               <DefaltAddressComponent onPressAddAddress={() => navigation.navigate("ManageAddress", {showSelection: true})}/>
               <View style={{marginTop: 10, marginBottom: 10}}>
                 <SectionBanner fontSize={20} title={"Items (" + cartItems.length + ")"} borderColor={Colors.primary} borderWidth={100} titleColor={Colors.mediumDark}/>

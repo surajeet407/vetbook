@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
     StyleSheet,
     Text,
@@ -46,6 +46,8 @@ const ChooseTimeSlotScreen = ({navigation, route}) => {
         setMarkedDates] = useState(date);
     const [minDate,
         setMinDate] = useState(moment().format('yyyy-MM-DD').toString());
+    const [maxDate,
+        setMaxDate] = useState(moment().add(1, 'months').calendar().toString());
     const [userOption,
         setUserOption] = useState("");
 
@@ -89,6 +91,18 @@ const ChooseTimeSlotScreen = ({navigation, route}) => {
             _validateShots(true, 'Confirm', false, "", routeParams)
         }
     }
+    useEffect(() => {
+        if (route.params.details.serviceType === 'Relocation') {
+            let date = {};
+            date[moment().add(2, 'days').format('yyyy-MM-DD')] = {
+                selected: true,
+                marked: true,
+                color: Colors.primary
+            };
+            setMarkedDates(date);
+            setMinDate(moment().add(2, 'days').format('yyyy-MM-DD').toString())
+        }
+    }, [])
     return (
         <View
             style={{
@@ -131,9 +145,7 @@ const ChooseTimeSlotScreen = ({navigation, route}) => {
                     <Animatable.View animation={'fadeInDown'}>
                         <Calendar
                             minDate={minDate}
-                            maxDate={moment()
-                            .add(1, 'months')
-                            .calendar()}
+                            maxDate={maxDate}
                             markedDates={markedDates}
                             theme={{
                             backgroundColor: Colors.appBackground,

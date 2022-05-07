@@ -99,9 +99,6 @@ const ServicesScreen = ({navigation, route}) => {
                     showsVerticalScrollIndicator={false}
                     data={pastServices}
                     keyExtractor={item => item.id}
-                    ItemSeparatorComponent={() => (<View style={{
-                    marginBottom: 10
-                }}/>)}
                     renderItem={({item, rowMap}) => {
                     return (
                       <Animatable.View
@@ -111,7 +108,7 @@ const ServicesScreen = ({navigation, route}) => {
                       backgroundColor: Colors.appBackground,
                       marginHorizontal: 20,
                       marginVertical: 10,
-                      padding: 20,
+                      padding: 10,
                       elevation: 5,
                   }}>
                       <View
@@ -120,8 +117,8 @@ const ServicesScreen = ({navigation, route}) => {
                           alignItems: 'center',
                           justifyContent: 'space-between'
                       }}> 
-                        <Title size={18} label={item.serviceType} bold={true} color={Colors.primary}/>
-                        <Title size={18} label={"Price: " + item.total + "/-"} bold={true} color={Colors.primary}/>
+                        <Title size={20} label={item.serviceType} bold={true} color={Colors.darkGray}/>
+                        <Title size={18} label={"Price: " + item.total + "/-"} bold={true} color={Colors.secondary}/>
                     </View>
                     <View style={{marginTop: 5, marginBottom: 10}}>
                       <Title size={15} label={"Details of Booking: "} bold={true} color={Colors.gray}/>

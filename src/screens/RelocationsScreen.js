@@ -15,6 +15,7 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import Title from '../reusable_elements/Title';
 import database from '@react-native-firebase/database';
 import * as Animatable from 'react-native-animatable';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon, {Icons} from '../util/Icons';
 import i18n from '../util/i18n';
 
@@ -23,16 +24,34 @@ const width = Dimensions
     .width - 50;
 
 const RelocationsScreen = ({navigation, route}) => {
-    const [pastOrders, setPastOrders] = useState([])
+    const [status, setStatus] = useState(route.params.status);
+    const [pastRelocations, setPastRelocations] = useState([])
     const reOrder = () => {}
     const getData = () => {
-        database()
-            .ref('/users/8900162177/pastOrders')
-            .on('value', snapshot => {
-                if (snapshot.val()) {
-                    setPastOrders(snapshot.val());
-                }
-            })
+        if (status === 'loggedIn') {
+            AsyncStorage
+                .getItem('phoneNo')
+                .then((phoneNo, msg) => {
+                    if (phoneNo) {
+                        database()
+                            .ref("/users/" + phoneNo + "/relocations")
+                            .on('value', snapshot => {
+                                console.log(snapshot.val())
+                                if (snapshot.val()) {
+                                    setPastRelocations(snapshot.val());
+                                }
+                            })
+                    }
+                })
+        } else {
+            AsyncStorage
+                .getItem("anonymusOrders")
+                .then((data) => {
+                    if (data && JSON.parse(data).length > 0) {
+                        setPastRelocations(JSON.parse(data));
+                    }
+                });
+        }
     }
     useEffect(() => {
         getData();
@@ -86,7 +105,7 @@ const RelocationsScreen = ({navigation, route}) => {
                     disableLeftSwipe
                     disableRightSwipe
                     showsVerticalScrollIndicator={false}
-                    data={pastOrders}
+                    data={pastRelocations}
                     keyExtractor={item => item.id}
                     leftOpenValue={60}
                     rightOpenValue={-78}
@@ -94,63 +113,47 @@ const RelocationsScreen = ({navigation, route}) => {
                     marginBottom: 5
                 }}/>)}
                     renderItem={({item, rowMap}) => (
-                    <Animatable.View
-                        delay={50 * rowMap}
-                        animation={'slideInRight'}
+                        <View
                         style={{
-                        backgroundColor: Colors.appBackground,
-                        padding: 8,
-                        marginHorizontal: 10,
-                        marginVertical: 4,
-                        borderRadius: 10,
-                        elevation: 4
+                        width: Dimensions
+                            .get('screen')
+                            .width - 30
                     }}>
                         <View
+                            key={rowMap}
                             style={{
+                            borderRadius: 10,
                             flexDirection: 'row',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            paddingHorizontal: 5,
+                            paddingVertical: 10,
+                            marginVertical: 5
                         }}>
                             <View
                                 style={{
-                                alignItems: 'center',
-                                borderRadius: 10,
+                                padding: 5
                             }}>
-                                <Image
-                                    source={{
-                                    uri: item.image
-                                }}
-                                    style={{
-                                    width: 80,
-                                    height: 80
-                                }}/>
-                            </View>
-                            <View
-                                style={{
-                                marginLeft: 10,
-                                width: '70%',
-                                alignItems: 'flex-start'
-                            }}>
-                                <Title size={18} label={item.title} bold={true} color={Colors.primary}/>
-                                <View
-                                    style={{
-                                    flexDirection: 'row'
-                                }}>
-                                    <Title size={16} label='Price:' bold={true} color='#999'/>
-                                    <View
-                                        style={{
-                                        marginLeft: 5
-                                    }}>
-                                        <Title size={16} label={item.cost + " /-"} bold={true} color='#555'/>
-                                    </View>
-                                </View>
                                 <Title
-                                    size={15}
+                                    size={20}
+                                    label={(rowMap + 1) + '. Details (' + item.mode + ')'}
+                                    bold={true}
+                                    color={Colors.primary}/>
+                            </View>
+                            <View>
+                                <Title
+                                    size={14}
+                                    label={"Price: " + item.total + " /-"}
+                                    bold={true}
+                                    color={Colors.white}/>
+                                <Title
+                                    size={12}
                                     label={"Ordered On: " + item.orderedOn}
                                     bold={true}
-                                    color='grey'/>
+                                    color={Colors.white}/>
                             </View>
                         </View>
-                    </Animatable.View>
+                    </View>
                 )}/>
             </View>
         </View>

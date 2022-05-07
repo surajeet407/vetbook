@@ -120,6 +120,9 @@ const ServicesBottomTabBarScreen = ({navigation, route}) => {
             {TabArr.map((item, index) => {
                 return (
                     <Tabs.Screen
+                        initialParams={{
+                        status: route.params.status
+                    }}
                         key={index}
                         name={item.route}
                         component={item.component}

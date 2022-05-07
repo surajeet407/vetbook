@@ -46,7 +46,7 @@ const config = {
     animation: 'spring',
     config: {
         stiffness: 100,
-        
+
         damping: 100,
         mass: 1,
         overshootClamping: true,
@@ -194,7 +194,7 @@ const StackNav = (params) => {
                     options={{
                     headerShown: false
                 }}
-                initialParams={{
+                    initialParams={{
                     status: params.status,
                     address: params.address
                 }}
@@ -255,6 +255,9 @@ const StackNav = (params) => {
                 <Stack.Screen
                     options={{
                     headerShown: false
+                }}
+                    initialParams={{
+                    status: params.status
                 }}
                     name="ServicesBottomTabBar"
                     component={ServicesBottomTabBarScreen}/>

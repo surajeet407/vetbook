@@ -57,20 +57,21 @@ const SettingsScreen = ({navigation, route}) => {
                 alignItems: 'flex-start'
             }}>
                 <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-                    {status === "loggedIn" && (
-                        <View >
-                            <SectionBanner
-                                fontSize={20}
-                                title={i18n.firstSectionTitle}
-                                borderColor={Colors.appBackground}
-                                borderWidth={100}
-                                titleColor={Colors.mediumDark}/>
-                            <Animatable.View
-                                delay={100}
-                                animation={'fadeInLeft'}
-                                style={{
-                                marginTop: 5
-                            }}>
+
+                    <View >
+                        <SectionBanner
+                            fontSize={20}
+                            title={i18n.firstSectionTitle}
+                            borderColor={Colors.appBackground}
+                            borderWidth={100}
+                            titleColor={Colors.mediumDark}/>
+                        <Animatable.View
+                            delay={100}
+                            animation={'fadeInLeft'}
+                            style={{
+                            marginTop: 5
+                        }}>
+                            {status === "loggedIn" && (
                                 <TouchableOpacity
                                     style={{
                                     paddingVertical: 8,
@@ -108,161 +109,157 @@ const SettingsScreen = ({navigation, route}) => {
                                         color={Colors.secondary}/>
 
                                 </TouchableOpacity>
-                                <TouchableOpacity
+                            )}
+                            <TouchableOpacity
+                                style={{
+                                paddingVertical: 8,
+                                borderColor: Colors.gray,
+                                borderBottomWidth: 1,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}
+                                onPress={() => navigation.navigate("TrackOrder")}>
+                                <View
                                     style={{
-                                    paddingVertical: 8,
-                                    borderColor: Colors.gray,
-                                    borderBottomWidth: 1,
                                     flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between'
-                                }}
-                                    onPress={() => navigation.navigate("TrackOrder")}>
-                                    <View
-                                        style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center'
-                                    }}>
-                                        <Icon
-                                            style={{
-                                            marginRight: 10,
-                                            marginTop: 5
-                                        }}
-                                            type={Icons.MaterialCommunityIcons}
-                                            name={'car-traction-control'}
-                                            size={20}
-                                            color={Colors.primary}/>
-                                        <Text
-                                            style={{
-                                            fontFamily: 'PTSerif-Bold',
-                                            fontSize: 18,
-                                            marginTop: 10
-                                        }}>{i18n.trackService}
-                                            (1)</Text>
-                                    </View>
+                                    alignItems: 'center'
+                                }}>
                                     <Icon
-                                        type={Icons.MaterialIcons}
-                                        name={'keyboard-arrow-right'}
+                                        style={{
+                                        marginRight: 10,
+                                        marginTop: 5
+                                    }}
+                                        type={Icons.MaterialCommunityIcons}
+                                        name={'car-traction-control'}
                                         size={20}
-                                        color={Colors.secondary}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity
+                                        color={Colors.primary}/>
+                                    <Text
+                                        style={{
+                                        fontFamily: 'PTSerif-Bold',
+                                        fontSize: 18,
+                                        marginTop: 10
+                                    }}>{i18n.trackService}</Text>
+                                </View>
+                                <Icon
+                                    type={Icons.MaterialIcons}
+                                    name={'keyboard-arrow-right'}
+                                    size={20}
+                                    color={Colors.secondary}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                paddingVertical: 8,
+                                borderColor: Colors.gray,
+                                borderBottomWidth: 1,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}
+                                onPress={() => navigation.navigate("ServicesBottomTabBar", {screen: "Orders"})}>
+                                <View
                                     style={{
-                                    paddingVertical: 8,
-                                    borderColor: Colors.gray,
-                                    borderBottomWidth: 1,
                                     flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between'
-                                }}
-                                    onPress={() => navigation.navigate("ServicesBottomTabBar", {screen: "Orders"})}>
-                                    <View
-                                        style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center'
-                                    }}>
-                                        <Icon
-                                            style={{
-                                            marginRight: 10,
-                                            marginTop: 5
-                                        }}
-                                            type={Icons.Octicons}
-                                            name={'list-ordered'}
-                                            size={20}
-                                            color={Colors.primary}/>
-                                        <Text
-                                            style={{
-                                            fontFamily: 'PTSerif-Bold',
-                                            fontSize: 18,
-                                            marginTop: 10
-                                        }}>{i18n.orders}
-                                            (4)</Text>
-                                    </View>
+                                    alignItems: 'center'
+                                }}>
                                     <Icon
-                                        type={Icons.MaterialIcons}
-                                        name={'keyboard-arrow-right'}
+                                        style={{
+                                        marginRight: 10,
+                                        marginTop: 5
+                                    }}
+                                        type={Icons.Octicons}
+                                        name={'list-ordered'}
                                         size={20}
-                                        color={Colors.secondary}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity
+                                        color={Colors.primary}/>
+                                    <Text
+                                        style={{
+                                        fontFamily: 'PTSerif-Bold',
+                                        fontSize: 18,
+                                        marginTop: 10
+                                    }}>{i18n.orders}</Text>
+                                </View>
+                                <Icon
+                                    type={Icons.MaterialIcons}
+                                    name={'keyboard-arrow-right'}
+                                    size={20}
+                                    color={Colors.secondary}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                paddingVertical: 8,
+                                borderColor: Colors.gray,
+                                borderBottomWidth: 1,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}
+                                onPress={() => navigation.navigate("ServicesBottomTabBar", {screen: "Services"})}>
+                                <View
                                     style={{
-                                    paddingVertical: 8,
-                                    borderColor: Colors.gray,
-                                    borderBottomWidth: 1,
                                     flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between'
-                                }}
-                                    onPress={() => navigation.navigate("ServicesBottomTabBar", {screen: "Services"})}>
-                                    <View
-                                        style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center'
-                                    }}>
-                                        <Icon
-                                            style={{
-                                            marginRight: 10,
-                                            marginTop: 5
-                                        }}
-                                            type={Icons.Ionicons}
-                                            name={'bicycle'}
-                                            size={20}
-                                            color={Colors.primary}/>
-                                        <Text
-                                            style={{
-                                            fontFamily: 'PTSerif-Bold',
-                                            fontSize: 18,
-                                            marginTop: 10
-                                        }}>{i18n.services}
-                                            (4)</Text>
-                                    </View>
+                                    alignItems: 'center'
+                                }}>
                                     <Icon
-                                        type={Icons.MaterialIcons}
-                                        name={'keyboard-arrow-right'}
+                                        style={{
+                                        marginRight: 10,
+                                        marginTop: 5
+                                    }}
+                                        type={Icons.Ionicons}
+                                        name={'bicycle'}
                                         size={20}
-                                        color={Colors.secondary}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity
+                                        color={Colors.primary}/>
+                                    <Text
+                                        style={{
+                                        fontFamily: 'PTSerif-Bold',
+                                        fontSize: 18,
+                                        marginTop: 10
+                                    }}>{i18n.services}</Text>
+                                </View>
+                                <Icon
+                                    type={Icons.MaterialIcons}
+                                    name={'keyboard-arrow-right'}
+                                    size={20}
+                                    color={Colors.secondary}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                paddingVertical: 8,
+                                borderColor: Colors.gray,
+                                borderBottomWidth: 1,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}
+                                onPress={() => navigation.navigate("ServicesBottomTabBar", {screen: "Relocations"})}>
+                                <View
                                     style={{
-                                    paddingVertical: 8,
-                                    borderColor: Colors.gray,
-                                    borderBottomWidth: 1,
                                     flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between'
-                                }}
-                                    onPress={() => navigation.navigate("ServicesBottomTabBar", {screen: "Relocations"})}>
-                                    <View
-                                        style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center'
-                                    }}>
-                                        <Icon
-                                            style={{
-                                            marginRight: 10,
-                                            marginTop: 5
-                                        }}
-                                            type={Icons.Ionicons}
-                                            name={'location-sharp'}
-                                            size={20}
-                                            color={Colors.primary}/>
-                                        <Text
-                                            style={{
-                                            fontFamily: 'PTSerif-Bold',
-                                            fontSize: 18,
-                                            marginTop: 10
-                                        }}>{i18n.relocations}
-                                            (4)</Text>
-                                    </View>
+                                    alignItems: 'center'
+                                }}>
                                     <Icon
-                                        type={Icons.MaterialIcons}
-                                        name={'keyboard-arrow-right'}
+                                        style={{
+                                        marginRight: 10,
+                                        marginTop: 5
+                                    }}
+                                        type={Icons.Ionicons}
+                                        name={'location-sharp'}
                                         size={20}
-                                        color={Colors.secondary}/>
-                                </TouchableOpacity>
-                            </Animatable.View>
-                        </View>
-                    )}
+                                        color={Colors.primary}/>
+                                    <Text
+                                        style={{
+                                        fontFamily: 'PTSerif-Bold',
+                                        fontSize: 18,
+                                        marginTop: 10
+                                    }}>{i18n.relocations}</Text>
+                                </View>
+                                <Icon
+                                    type={Icons.MaterialIcons}
+                                    name={'keyboard-arrow-right'}
+                                    size={20}
+                                    color={Colors.secondary}/>
+                            </TouchableOpacity>
+                        </Animatable.View>
+                    </View>
 
                     <View style={{
                         marginTop: 20

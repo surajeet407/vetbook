@@ -26,7 +26,9 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Label, {Orientation} from "react-native-label";
 import SectionBanner from '../reusable_elements/SectionBanner';
+import uuid from 'react-native-uuid';
 import i18n from '../util/i18n';
+import moment from 'moment';
 
 
 
@@ -35,18 +37,7 @@ import i18n from '../util/i18n';
   const [cartItems, setCartItems] = useState([])
   const [priceDetails, setPriceDetails] = useState([]);
   const [total, setTotal] = useState("");
-  const animation = useRef(new Animated.Value(0)).current;
   const [activeSections, setActiveSections] = useState([0]);
-  const opacity = animation.interpolate({
-    inputRange: [0, 80],
-    outputRange: [1, 0],
-    extrapolate: 'clamp'
-  })
-  const height = animation.interpolate({
-      inputRange: [0, 120],
-      outputRange: [120, 80],
-      extrapolate: 'clamp'
-  }) 
   const updateSections = (section) => {
     setActiveSections(section);
     if (priceDetails[section]) {
@@ -81,26 +72,102 @@ import i18n from '../util/i18n';
     })
     
   }
-  const _initializePayment = (desc, image, name) => {
-    var options = {
-      description: desc,
-      image: image,
-      currency: 'INR',
-      key: "rzp_test_EIvDuWAtnslSuW",
-      amount: 100 * parseInt(total),
-      name: name,
-      theme: {color: Colors.primary}
-    }
-    RazorpayCheckout.open(options).then((data) => {
-      console.log(data);
-      navigation.navigate("PaymentStatus", {status: "Success"})
-    }).catch((error) => {
-      console.log(error.description)
-      if(error.description.error.reason !== "payment_cancelled") {
-        navigation.navigate("PaymentStatus", {status: "Error"})
+
+const _updateUiBasedOnServiceType = () => {
+  let type = "", anonymusPath = '', loggedInPath = '', clearCart = false; 
+  if (route.params.details.serviceType === "None" ) {
+    type = 'Items';
+    anonymusPath = 'anonymusOrders'
+    loggedInPath = 'orders'
+    clearCart = true
+  }  else if(route.params.details.serviceType === "Adopt") {
+    type = 'Adopt';
+    anonymusPath = 'anonymusOrders'
+    loggedInPath = 'orders'
+  } else {
+    type = 'Service';
+    anonymusPath = 'anonymusService'
+    loggedInPath = 'services'
+  } 
+  AsyncStorage.getItem('userStatus').then((status) => {
+    if(status === 'loggedOut') {
+      if(clearCart) { 
+        AsyncStorage.setItem("cartItems", null)
       }
+      AsyncStorage.getItem(anonymusPath).then((data) => {
+        let ar = []
+        let obj = {...route.params.details}
+        obj.id = uuid.v4()
+        obj.mode = "ongoing"
+        obj.orderedOn = moment().format('yyyy-MM-DD').toString()
+        obj.userStatus = "loggedOut"
+        obj.type = type
+        if(data && JSON.parse(data).length > 0) {
+          ar = JSON.parse(data)
+          ar.push(obj)
+          AsyncStorage.setItem(anonymusPath, JSON.stringify(ar))
+        } else {
+          ar.push(obj);
+          AsyncStorage.setItem(anonymusPath, JSON.stringify(ar))
+        }
+      });
+    } else {
+      AsyncStorage
+        .getItem('phoneNo')
+        .then((phoneNo, msg) => {
+          if (phoneNo) {
+            database()
+              .ref('/users/' + phoneNo + "/" + loggedInPath)
+              .once("value")
+              .then(snapshot => {
+                  if(clearCart) { 
+                    database().ref('/users/' + phoneNo + "/cartItems").set(null)
+                  }
+                  let ar = []
+                  let obj = {...route.params.details}
+                  obj.id = uuid.v4()
+                  obj.mode = "ongoing"
+                  obj.orderedOn = moment().format('yyyy-MM-DD').toString()
+                  obj.userStatus = "loggedIn"
+                  obj.type = type
+                  if (snapshot.val() && snapshot.val().length > 0) {
+                    ar = snapshot.val()
+                    ar.push(obj)
+                    database().ref('/users/' + phoneNo + "/" + loggedInPath).set(ar)
+                  } else {
+                    ar.push(obj);
+                    database().ref('/users/' + phoneNo + "/" + loggedInPath).set(ar)
+                  }
+              })
+          }
+      })
+    }
+  });
+}
+
+  const _initializePayment = (desc, image, name) => {
+    // var options = {
+    //   description: desc,
+    //   image: image,
+    //   currency: 'INR',
+    //   key: "rzp_test_EIvDuWAtnslSuW",
+    //   amount: 100 * parseInt(total),
+    //   name: name,
+    //   theme: {color: Colors.primary}
+    // }
+    // RazorpayCheckout.open(options).then((data) => {
+    //   console.log(data);
+    //   _updateUiBasedOnServiceType()
+    //   navigation.navigate("PaymentStatus", {status: "Success"})
+    // }).catch((error) => {
+    //   console.log(error.description)
+    //   if(error.description.error.reason !== "payment_cancelled") {
+    //     navigation.navigate("PaymentStatus", {status: "Error"})
+    //   }
       
-    });
+    // });
+    _updateUiBasedOnServiceType()
+    
   }
 
   const onPressMakePayment = () => {
@@ -129,11 +196,7 @@ import i18n from '../util/i18n';
 
   useEffect(() => {
     if (route.params.details.serviceType === "None" ) {
-      AsyncStorage.getItem('cartItems').then((data) => {
-        if(JSON.parse(data).length > 0) {
-          setCartItems(JSON.parse(data));
-        }
-      });
+      setCartItems(route.params.details.cartItems);
       setTotal(route.params.details.total);
     } else if(route.params.details.serviceType === "BloodTest") {
       setTotal("299");
@@ -192,7 +255,6 @@ import i18n from '../util/i18n';
                 disableLeftSwipe
                 scrollEventThrottle={16}
                 disableRightSwipe
-                onScroll={Animated.event([{nativeEvent: {contentOffset: {y: animation}}}], {useNativeDriver: false})}
                 width="100%"
                 showsVerticalScrollIndicator={false}
                 data={cartItems}
@@ -221,7 +283,6 @@ import i18n from '../util/i18n';
           </View>
           :
           <ScrollView scrollEventThrottle={16}
-              onScroll={Animated.event([{nativeEvent: {contentOffset: {y: animation}}}], {useNativeDriver: false})}
               showsVerticalScrollIndicator={false}>
             <DefaltAddressComponent onPressAddAddress={() => navigation.navigate("ManageAddress")}/>
             {route.params.details.serviceType === "BloodTest" && (
@@ -257,7 +318,7 @@ import i18n from '../util/i18n';
                       <View style={{flexDirection: 'row', alignItems: 'center'}}>
                           <Title color={Colors.darkGray} size={18} bold={true} label={"Time"}/>
                           <View style={{marginLeft: 10}}>
-                            <Title color={Colors.Bg6} size={18} bold={true} label={route.params.details.timeSlot}/>
+                            <Title color={Colors.Bg6} size={18} bold={true} label={"Between " + route.params.details.timeSlot.startTime + " to " + route.params.details.timeSlot.endTime}/>
                           </View>
                         </View>
                     </View>

@@ -32,7 +32,7 @@ import i18n from '../util/i18n';
  
  const HomeScreen = ({navigation, route}) => {
   const [status, setStatus] = useState(route.params.status);
-  const [showTrackComponent, setShowTrackComponent] = useState(true)
+  const [showTrackComponent, setShowTrackComponent] = useState(false)
   const [homePageCarouselServices, setHomePageCarouselServices] = useState([]);
   const [mainServices, setMainServices] = useState([]);
   const [quickService, setQuickService] = useState([]);
@@ -54,6 +54,35 @@ import i18n from '../util/i18n';
   }) 
 
   const getData = () => {
+
+
+    if (status === 'loggedIn') {
+      AsyncStorage
+          .getItem('phoneNo')
+          .then((phoneNo, msg) => {
+              if (phoneNo) {
+                  database()
+                      .ref("/users/" + phoneNo + "/services")
+                      .on('value', snapshot => {
+                          console.log(snapshot.val())
+                          if (snapshot.val()) {
+                            setShowTrackComponent(true)
+                          }
+                      })
+              }
+          })
+
+  } else {
+      AsyncStorage
+          .getItem("anonymusService")
+          .then((data) => {
+              if (data && JSON.parse(data).length > 0) {
+                setShowTrackComponent(true)
+              }
+          });
+  }
+
+
     let HomePageCarouselServices = database()
       .ref('/HomePageCarouselServices'),
       services = database()

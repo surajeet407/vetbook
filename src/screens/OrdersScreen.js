@@ -163,13 +163,13 @@ const OrdersScreen = ({navigation, route}) => {
                     </View>
                     <View style={{borderTopColor: Colors.darkGray, borderTopWidth: 1, padding: 5}}>
                         {item.mode === 'inprocess'? 
-                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <TouchableOpacity onPress={() => navigation.navigate("TrackOrder" , {details: item})} style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Title size={18} label={'Track'} bold={true} color={Colors.secondary}/>
                             <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
                         </TouchableOpacity>
                         :
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <TouchableOpacity onPress={() => navigation.navigate("Confirm" , {details: item})} style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Title size={18} label={'Order Again'} bold={true} color={Colors.secondary}/>
                                 <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
                             </TouchableOpacity>

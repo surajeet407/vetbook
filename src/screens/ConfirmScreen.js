@@ -78,7 +78,7 @@ const _updateUiBasedOnServiceType = () => {
   obj.id = uuid.v4()
   obj.orderedOn = moment().format('yyyy-MM-DD').toString()
   obj.userStatus = "loggedOut"
-  
+  obj.trackStep = "0"
   if (route.params.details.serviceType === "None" ) {
     obj.mode = "inprocess"
     type = 'Items';
@@ -96,6 +96,7 @@ const _updateUiBasedOnServiceType = () => {
     type = 'Service';
     anonymusPath = 'anonymusService'
     loggedInPath = 'services'
+    
   } 
   obj.type = type
   AsyncStorage.getItem('userStatus').then((status) => {

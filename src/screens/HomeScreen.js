@@ -31,6 +31,7 @@ import i18n from '../util/i18n';
 
  
  const HomeScreen = ({navigation, route}) => {
+  const [trackDetails, setTrackDetails] = useState(null)
   const [status, setStatus] = useState(route.params.status);
   const [showTrackComponent, setShowTrackComponent] = useState(false)
   const [homePageCarouselServices, setHomePageCarouselServices] = useState([]);
@@ -54,8 +55,6 @@ import i18n from '../util/i18n';
   }) 
 
   const getData = () => {
-
-
     if (status === 'loggedIn') {
       AsyncStorage
           .getItem('phoneNo')
@@ -65,7 +64,12 @@ import i18n from '../util/i18n';
                       .ref("/users/" + phoneNo + "/services")
                       .on('value', snapshot => {
                           if (snapshot.val()) {
-                            setShowTrackComponent(true)
+                            let onGoingItems = snapshot.val().filter(item => item.mode === 'ongoing')
+                            console.log(onGoingItems)
+                            if (onGoingItems.length > 0) {
+                              setShowTrackComponent(true);
+                              setTrackDetails(onGoingItems[0]);
+                            }
                           }
                       })
               }
@@ -119,7 +123,7 @@ import i18n from '../util/i18n';
     <View  style={{ flex: 1, backgroundColor: Colors.appBackground}} >
       <LandingHeader status={status} navigation={navigation}/>
       {showTrackComponent && (
-        <TrackComponent onPress={() => navigation.navigate("TrackOrder")}/>
+        <TrackComponent onPress={() => navigation.navigate("TrackOrder" , {details: trackDetails})}/>
       )}
       <View style={{ paddingHorizontal: 10, marginTop: 65, marginBottom: showTrackComponent? 60:0, flex: 1}}>
         <View style={{}}>

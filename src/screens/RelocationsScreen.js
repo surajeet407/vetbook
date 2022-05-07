@@ -45,7 +45,7 @@ const RelocationsScreen = ({navigation, route}) => {
                 })
         } else {
             AsyncStorage
-                .getItem("anonymusOrders")
+                .getItem("anonymusRelocation")
                 .then((data) => {
                     if (data && JSON.parse(data).length > 0) {
                         setPastRelocations(JSON.parse(data));
@@ -91,71 +91,130 @@ const RelocationsScreen = ({navigation, route}) => {
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/>
-            <View
-                style={{
-                marginBottom: 0,
-                marginTop: 10,
-                flex: 1,
-                alignItems: 'center',
-                backgroundColor: Colors.appBackground,
-                width: '100%'
-            }}>
-                <SwipeListView
-                    style={{}}
-                    disableLeftSwipe
-                    disableRightSwipe
+            
+            <FlatList
                     showsVerticalScrollIndicator={false}
                     data={pastRelocations}
                     keyExtractor={item => item.id}
-                    leftOpenValue={60}
-                    rightOpenValue={-78}
-                    ItemSeparatorComponent={() => (<View style={{
-                    marginBottom: 5
-                }}/>)}
-                    renderItem={({item, rowMap}) => (
-                        <View
-                        style={{
-                        width: Dimensions
-                            .get('screen')
-                            .width - 30
-                    }}>
-                        <View
-                            key={rowMap}
-                            style={{
-                            borderRadius: 10,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            paddingHorizontal: 5,
-                            paddingVertical: 10,
-                            marginVertical: 5
-                        }}>
-                            <View
-                                style={{
-                                padding: 5
-                            }}>
-                                <Title
-                                    size={20}
-                                    label={(rowMap + 1) + '. Details (' + item.mode + ')'}
-                                    bold={true}
-                                    color={Colors.primary}/>
-                            </View>
-                            <View>
-                                <Title
-                                    size={14}
-                                    label={"Price: " + item.total + " /-"}
-                                    bold={true}
-                                    color={Colors.white}/>
-                                <Title
-                                    size={12}
-                                    label={"Ordered On: " + item.orderedOn}
-                                    bold={true}
-                                    color={Colors.white}/>
+                    renderItem={({item, rowMap}) => {
+                    return (
+                      <Animatable.View
+                      delay={50 * rowMap}
+                      animation={'slideInRight'}
+                      style={{
+                      backgroundColor: Colors.appBackground,
+                      marginHorizontal: 20,
+                      marginVertical: 10,
+                      padding: 10,
+                      elevation: 5,
+                  }}>
+                      <View
+                          style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                      }}> 
+                        <Title size={20} label={'Relocation Details : '} bold={true} color={Colors.darkGray}/>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Title size={15} label={"Status:"} bold={true} color={Colors.gray}/>
+                            <View style={{marginLeft: 5}}>
+                              <Title size={15} label={item.mode === 'inprocess'? 'In Process':'Delivered'} bold={true} color={item.mode === 'inprocess'? Colors.yellow:Colors.green2}/>
                             </View>
                         </View>
                     </View>
-                )}/>
-            </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Title size={15} label={"Booked On:"} bold={true} color={Colors.gray}/>
+                        <View style={{marginLeft: 5}}>
+                              <Title size={15} label={item.selectedDate} bold={true} color={item.mode === 'inprocess'? Colors.yellow:Colors.green2}/>
+                        </View>
+                    </View>
+                    <View style={{marginTop: 5, marginBottom: 10}}>
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <View>
+                            <View style={{borderBottomWidth: 1, width: 120}}>
+                                <Title size={18} label={'Current Location'} bold={true} color={Colors.darkGray}/>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+                                <Title size={15} label={"Address1:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                    <Title size={15} label={'106'} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={15} label={"Address2:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                <Title size={15} label={'RDU'} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={15} label={"City:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                <Title size={15} label={'Midnapore'} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={15} label={"State:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                <Title size={15} label={'WB'} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={15} label={"Zip:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                <Title size={15} label={'721160'} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
+                                </View>
+                            </View>
+                        </View>
+                        <View>
+                          <Icon type={Icons.Entypo} name={'arrow-with-circle-right'} color={Colors.primary} size={35}/>
+                        </View>
+                        <View>
+                            <View style={{borderBottomWidth: 1, width: 100}}>
+                                <Title size={18} label={'Drop Location'} bold={true} color={Colors.darkGray}/>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+                                <Title size={15} label={"Address1:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                    <Title size={15} label={item.dropLocation.address1} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={15} label={"Address2:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                <Title size={15} label={item.dropLocation.address2} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={15} label={"City:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                <Title size={15} label={item.dropLocation.city} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={15} label={"State:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                <Title size={15} label={item.dropLocation.state} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={15} label={"Zip:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                <Title size={15} label={item.dropLocation.zip} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
+                                </View>
+                            </View>
+                        </View>
+                      </View>
+                     
+                    </View>
+                    <View style={{borderTopColor: Colors.darkGray, borderTopWidth: 1, padding: 5}}>
+                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Title size={18} label={item.mode === 'inprocess'? 'Contact Us':'Rate Service'} bold={true} color={Colors.secondary}/>
+                            <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
+                        </TouchableOpacity>
+                    </View>
+                  </Animatable.View>
+                    )
+                }}/>
         </View>
     );
 };

@@ -102,115 +102,77 @@ const OrdersScreen = ({navigation, route}) => {
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/>
-            <View
-                style={{
-                alignItems: 'center',
-                backgroundColor: Colors.appBackground
-            }}>
-                <Accordion
-                    underlayColor={Colors.appBackground}
-                    activeSections={activeSections}
-                    sections={pastOrders}
-                    renderHeader={(item, index, isActive) => <View
-                    style={{
-                    width: Dimensions
-                        .get('screen')
-                        .width - 30
-                }}>
-                    <View
-                        key={index}
-                        style={{
-                        borderRadius: 10,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        paddingHorizontal: 5,
-                        paddingVertical: 10,
-                        marginVertical: 5,
-                        backgroundColor: isActive
-                            ? Colors.darkOverlayColor2
-                            : Colors.appBackground
-                    }}>
-                        <View
-                            style={{
-                            padding: 5
-                        }}>
-                            <Title
-                                size={20}
-                                label={(index + 1) + '. Details (' + item.mode + ')'}
-                                bold={true}
-                                color={Colors.primary}/>
-                        </View>
-                        <View>
-                            <Title
-                                size={14}
-                                label={"Price: " + item.total + " /-"}
-                                bold={true}
-                                color={Colors.white}/>
-                            <Title
-                                size={12}
-                                label={"Ordered On: " + item.orderedOn}
-                                bold={true}
-                                color={Colors.white}/>
-                        </View>
+            <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={pastOrders}
+                    keyExtractor={item => item.id}
+                    ItemSeparatorComponent={() => (<View style={{
+                    marginBottom: 10
+                }}/>)}
+                    renderItem={({item, rowMap}) => {
+                    return (
+                      <Animatable.View
+                      delay={50 * rowMap}
+                      animation={'slideInRight'}
+                      style={{
+                      backgroundColor: Colors.appBackground,
+                      marginHorizontal: 20,
+                      marginVertical: 10,
+                      padding: 20,
+                      elevation: 5,
+                  }}>
+                      <View
+                          style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                      }}> 
+                        <Title size={18} label={'Order Details : '} bold={true} color={Colors.primary}/>
+                        <Title size={18} label={"Price: " + item.total + "/-"} bold={true} color={Colors.primary}/>
                     </View>
-                </View>}
-                    renderContent={(item, index,) => <View>
-                    {item
-                        .cartItems
-                        .map((item, index) => <View
-                            key={index}
-                            style={{
-                            backgroundColor: Colors.appBackground,
-                            padding: 8,
-                            marginHorizontal: 10,
-                            marginVertical: 4,
-                            borderRadius: 10,
-                            elevation: 4
-                        }}>
-                            <View
-                                style={{
-                                flexDirection: 'row'
-                            }}>
-                                <View
-                                    style={{
-                                    alignItems: 'center'
-                                }}>
-                                    <Image
-                                        source={{
-                                        uri: item.image
-                                    }}
-                                        style={{
-                                        width: 80,
-                                        height: 80
-                                    }}/>
-                                </View>
-                                <View
-                                    style={{
-                                    marginLeft: 10,
-                                    alignItems: 'flex-start'
-                                }}>
-                                    <Title size={18} label={item.name} bold={true} color={Colors.primary}/>
-                                    <View
-                                        style={{
-                                        flexDirection: 'row'
-                                    }}>
-                                        <Title size={16} label='Price:' bold={true} color='#999'/>
-                                        <View
-                                            style={{
-                                            marginLeft: 5
-                                        }}>
-                                            <Title size={16} label={item.price + " /-"} bold={true} color='#555'/>
-                                        </View>
-                                    </View>
-                                    <Title size={15} label={"Quantity: " + item.quantity} bold={true} color='grey'/>
+                    <View style={{marginTop: 5, marginBottom: 10}}>
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <View>
+                          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Title size={15} label={"Booked On:"} bold={true} color={Colors.gray}/>
+                            <View style={{marginLeft: 5}}>
+                              <Title size={15} label={item.orderedOn} bold={true} color={item.mode === 'inprocess'? Colors.yellow:Colors.green2}/>
+                            </View>
+                          </View>
+                          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Title size={15} label={"Status:"} bold={true} color={Colors.gray}/>
+                            <View style={{marginLeft: 5}}>
+                              <Title size={15} label={item.mode === 'inprocess'? 'In Process':'Delivered'} bold={true} color={item.mode === 'inprocess'? Colors.yellow:Colors.green2}/>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                      {item.cartItems.map((item, index) => 
+                        <View key={index} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={15} label={(index + 1) + ". "} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                    <Title size={15} label={item.name} bold={true} color={Colors.darkGray}/>
                                 </View>
                             </View>
-                        </View>)}
-                </View>}
-                    onChange={updateSections}/>
-
-            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={15} label={"Quantity:"} bold={true} color={Colors.darkGray}/>
+                                <View style={{marginLeft: 5}}>
+                                    <Title size={15} label={item.quantity} bold={true} color={Colors.green2}/>
+                                </View>
+                            </View>
+                        </View>
+                    )}
+                    </View>
+                    <View style={{borderTopColor: Colors.darkGray, borderTopWidth: 1, padding: 5}}>
+                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Title size={18} label={item.mode === 'inprocess'? 'Track':'Book Again'} bold={true} color={Colors.secondary}/>
+                            <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
+                        </TouchableOpacity>
+                    </View>
+                  </Animatable.View>
+                    )
+                }}/>
         </View>
     );
 };

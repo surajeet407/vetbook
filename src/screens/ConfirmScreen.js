@@ -76,20 +76,22 @@ import moment from 'moment';
 const _updateUiBasedOnServiceType = () => {
   let type = "", anonymusPath = '', loggedInPath = '', clearCart = false, ar = [], obj = {...route.params.details}
   obj.id = uuid.v4()
-  obj.mode = "ongoing"
   obj.orderedOn = moment().format('yyyy-MM-DD').toString()
   obj.userStatus = "loggedOut"
   
   if (route.params.details.serviceType === "None" ) {
+    obj.mode = "inprocess"
     type = 'Items';
     anonymusPath = 'anonymusOrders'
     loggedInPath = 'orders'
     clearCart = true
   }  else if(route.params.details.serviceType === "Adopt") {
+    obj.mode = "inprocess"
     type = 'Adopt';
     anonymusPath = 'anonymusOrders'
     loggedInPath = 'orders'
   } else {
+    obj.mode = "ongoing"
     obj.total = total
     type = 'Service';
     anonymusPath = 'anonymusService'

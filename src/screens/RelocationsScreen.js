@@ -17,8 +17,9 @@ import Title from '../reusable_elements/Title';
 import database from '@react-native-firebase/database';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 import Icon, {Icons} from '../util/Icons';
-import { Rating } from 'react-native-ratings';
+import {Rating} from 'react-native-ratings';
 import {Button} from 'react-native-paper'
 import i18n from '../util/i18n';
 
@@ -27,8 +28,10 @@ const width = Dimensions
     .width - 50;
 
 const RelocationsScreen = ({navigation, route}) => {
-    const [status, setStatus] = useState(route.params.status);
-    const [pastRelocations, setPastRelocations] = useState([])
+    const [status,
+        setStatus] = useState(route.params.status);
+    const [pastRelocations,
+        setPastRelocations] = useState([])
     const reOrder = () => {}
     const getData = () => {
         if (status === 'loggedIn') {
@@ -56,6 +59,71 @@ const RelocationsScreen = ({navigation, route}) => {
                 });
         }
     }
+    const onPressCancel = (id) => {
+        if (status === 'loggedIn') {
+            AsyncStorage
+                .getItem('phoneNo')
+                .then((phoneNo, msg) => {
+                    if (phoneNo) {
+                        database()
+                            .ref("/users/" + phoneNo + "/relocations")
+                            .once('value')
+                            .then(snapshot => {
+                                let path;
+                                snapshot
+                                    .val()
+                                    .forEach((dbItem, index) => {
+                                        if (dbItem.id === id) {
+                                            path = index
+                                        }
+
+                                    })
+                                database()
+                                    .ref("/users/" + phoneNo + "/relocations/" + path)
+                                    .update({mode: 'cancelled'})
+                                Toast.show({
+                                    type: 'customToast',
+                                    text1: "Relocation request has been cancelled...",
+                                    position: 'bottom',
+                                    visibilityTime: 1500,
+                                    bottomOffset: 80,
+                                    props: {
+                                        backgroundColor: Colors.error_toast_color
+                                    }
+                                });
+                            })
+                    }
+                })
+        } else {
+            AsyncStorage
+                .getItem("anonymusRelocation")
+                .then((data) => {
+                    if (data && JSON.parse(data).length > 0) {
+                        let path,
+                            data = JSON.parse(data);
+                        data.forEach((dbItem, index) => {
+                            if (dbItem.id === id) {
+                                path = index
+                            }
+                        })
+                        data[path].mode = 'cancelled'
+                        AsyncStorage.setItem("anonymusRelocation", JSON.stringify(data))
+                        getData();
+                        Toast.show({
+                            type: 'customToast',
+                            text1: "Relocation request has been cancelled...",
+                            position: 'bottom',
+                            visibilityTime: 1500,
+                            bottomOffset: 80,
+                            props: {
+                                backgroundColor: Colors.error_toast_color
+                            }
+                        });
+                    }
+                });
+        }
+    }
+
     useEffect(() => {
         getData();
     }, []);
@@ -94,164 +162,390 @@ const RelocationsScreen = ({navigation, route}) => {
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/>
-            
+
             <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={pastRelocations}
-                    keyExtractor={item => item.id}
-                    renderItem={({item, rowMap}) => {
-                    return (
-                      <Animatable.View
-                      delay={50 * rowMap}
-                      animation={'slideInRight'}
-                      style={{
-                      backgroundColor: Colors.appBackground,
-                      marginHorizontal: 20,
-                      marginVertical: 10,
-                      padding: 10,
-                      elevation: 5,
-                  }}>
-                      <View
-                          style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'space-between'
-                      }}> 
-                        <Title size={20} label={'Relocation Details : '} bold={true} color={Colors.darkGray}/>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                showsVerticalScrollIndicator={false}
+                data={pastRelocations}
+                keyExtractor={item => item.id}
+                renderItem={({item, rowMap}) => {
+                return (
+                    <Animatable.View
+                        delay={50 * rowMap}
+                        animation={'slideInRight'}
+                        style={{
+                        backgroundColor: Colors.appBackground,
+                        marginHorizontal: 20,
+                        marginVertical: 10,
+                        padding: 10,
+                        elevation: 5
+                    }}>
+                        <View
+                            style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                        }}>
+                            <Title
+                                size={20}
+                                label={'Relocation Details : '}
+                                bold={true}
+                                color={Colors.darkGray}/>
+                        </View>
+                        <View
+                            style={{
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                        }}>
+                            <Title size={15} label={"Booked On:"} bold={true} color={Colors.gray}/>
+                            <View
+                                style={{
+                                marginLeft: 5
+                            }}>
+                                <Title
+                                    size={15}
+                                    label={item.selectedDate}
+                                    bold={true}
+                                    color={Colors.secondary}/>
+                            </View>
+                        </View>
+                        <View
+                            style={{
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                        }}>
                             <Title size={15} label={"Status:"} bold={true} color={Colors.gray}/>
-                            <View style={{marginLeft: 5}}>
+                            <View
+                                style={{
+                                marginLeft: 5
+                            }}>
+                                {item.mode === 'inprocess' && (<Title size={15} label={'In Process'} bold={true} color={Colors.yellow}/>)}
+                                {item.mode === 'completed' && (<Title size={15} label={'Completed'} bold={true} color={Colors.green2}/>)}
+                                {item.mode === 'cancelled' && (<Title
+                                    size={15}
+                                    label={'Cancelled'}
+                                    bold={true}
+                                    color={Colors.error_toast_color}/>)}
+                            </View>
+                        </View>
+                        <View
+                            style={{
+                            marginTop: 5,
+                            marginBottom: 10
+                        }}>
+                            <View
+                                style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <View>
+                                    <View
+                                        style={{
+                                        borderBottomWidth: 1,
+                                        width: 120
+                                    }}>
+                                        <Title
+                                            size={18}
+                                            label={'Current Location'}
+                                            bold={true}
+                                            color={Colors.darkGray}/>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        marginTop: 5
+                                    }}>
+                                        <Title size={15} label={"Address1:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title
+                                                size={15}
+                                                label={'106'}
+                                                bold={true}
+                                                color={item.mode === 'inprocess'
+                                                ? Colors.secondary
+                                                : Colors.green2}/>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"Address2:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title
+                                                size={15}
+                                                label={'RDU'}
+                                                bold={true}
+                                                color={item.mode === 'inprocess'
+                                                ? Colors.secondary
+                                                : Colors.green2}/>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"City:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title
+                                                size={15}
+                                                label={'Midnapore'}
+                                                bold={true}
+                                                color={item.mode === 'inprocess'
+                                                ? Colors.secondary
+                                                : Colors.green2}/>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"State:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title
+                                                size={15}
+                                                label={'WB'}
+                                                bold={true}
+                                                color={item.mode === 'inprocess'
+                                                ? Colors.secondary
+                                                : Colors.green2}/>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"Zip:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title
+                                                size={15}
+                                                label={'721160'}
+                                                bold={true}
+                                                color={item.mode === 'inprocess'
+                                                ? Colors.secondary
+                                                : Colors.green2}/>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View>
+                                    <Icon
+                                        type={Icons.Entypo}
+                                        name={'arrow-with-circle-right'}
+                                        color={Colors.primary}
+                                        size={35}/>
+                                </View>
+                                <View>
+                                    <View
+                                        style={{
+                                        borderBottomWidth: 1,
+                                        width: 100
+                                    }}>
+                                        <Title size={18} label={'Drop Location'} bold={true} color={Colors.darkGray}/>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        marginTop: 5
+                                    }}>
+                                        <Title size={15} label={"Address1:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title
+                                                size={15}
+                                                label={item.dropLocation.address1}
+                                                bold={true}
+                                                color={item.mode === 'inprocess'
+                                                ? Colors.secondary
+                                                : Colors.green2}/>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"Address2:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title
+                                                size={15}
+                                                label={item.dropLocation.address2}
+                                                bold={true}
+                                                color={item.mode === 'inprocess'
+                                                ? Colors.secondary
+                                                : Colors.green2}/>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"City:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title
+                                                size={15}
+                                                label={item.dropLocation.city}
+                                                bold={true}
+                                                color={item.mode === 'inprocess'
+                                                ? Colors.secondary
+                                                : Colors.green2}/>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"State:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title
+                                                size={15}
+                                                label={item.dropLocation.state}
+                                                bold={true}
+                                                color={item.mode === 'inprocess'
+                                                ? Colors.secondary
+                                                : Colors.green2}/>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"Zip:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title
+                                                size={15}
+                                                label={item.dropLocation.zip}
+                                                bold={true}
+                                                color={item.mode === 'inprocess'
+                                                ? Colors.secondary
+                                                : Colors.green2}/>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                        {item.mode !== 'cancelled' && (
+                            <View
+                                style={{
+                                borderTopColor: Colors.darkGray,
+                                borderTopWidth: 1,
+                                padding: 5
+                            }}>
                                 {item.mode === 'inprocess' && (
-                                    <Title size={15} label={'In Process'} bold={true} color={Colors.yellow}/>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between'
+                                    }}>
+                                        <TouchableOpacity
+                                            onPress={() => Linking.openURL('tel:7550841824')}
+                                            style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center'
+                                        }}>
+                                            <Title size={18} label={'Contact Us'} bold={true} color={Colors.secondary}/>
+                                            <Icon
+                                                type={Icons.AntDesign}
+                                                style={{
+                                                marginTop: 5,
+                                                marginLeft: 5
+                                            }}
+                                                name={'arrowright'}
+                                                size={20}
+                                                color={Colors.secondary}/>
+                                        </TouchableOpacity>
+                                        <Button
+                                            labelStyle={{
+                                            color: Colors.white,
+                                            fontFamily: 'PTSerif-Bold'
+                                        }}
+                                            color={Colors.error_toast_color}
+                                            mode="contained"
+                                            onPress={() => onPressCancel(item.id)}>Cancel</Button>
+                                    </View>
                                 )}
                                 {item.mode === 'completed' && (
-                                    <Title size={15} label={'Completed'} bold={true} color={Colors.green2}/>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between'
+                                    }}>
+                                        <View
+                                            style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center'
+                                        }}>
+                                            <Title
+                                                size={18}
+                                                label={'Rate Our Service'}
+                                                bold={true}
+                                                color={Colors.secondary}/>
+                                            <Icon
+                                                type={Icons.AntDesign}
+                                                style={{
+                                                marginTop: 5,
+                                                marginLeft: 5
+                                            }}
+                                                name={'arrowright'}
+                                                size={20}
+                                                color={Colors.secondary}/>
+                                        </View>
+                                        <Rating
+                                            type='custom'
+                                            ratingColor='#3498db'
+                                            ratingBackgroundColor='#c8c7c8'
+                                            ratingCount={5}
+                                            imageSize={20}
+                                            minValue={0}
+                                            startingValue={0}
+                                            jumpValue={1}
+                                            showRating={false}/>
+                                    </View>
                                 )}
-                                {item.mode === 'cancelled' && (
-                                    <Title size={15} label={'Cancelled'} bold={true} color={Colors.error_toast_color}/>
-                                )}
                             </View>
-                        </View>
-                    </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Title size={15} label={"Booked On:"} bold={true} color={Colors.gray}/>
-                        <View style={{marginLeft: 5}}>
-                              <Title size={15} label={item.selectedDate} bold={true} color={item.mode === 'inprocess'? Colors.yellow:Colors.green2}/>
-                        </View>
-                    </View>
-                    <View style={{marginTop: 5, marginBottom: 10}}>
-                      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <View>
-                            <View style={{borderBottomWidth: 1, width: 120}}>
-                                <Title size={18} label={'Current Location'} bold={true} color={Colors.darkGray}/>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
-                                <Title size={15} label={"Address1:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                    <Title size={15} label={'106'} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
-                                </View>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={"Address2:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                <Title size={15} label={'RDU'} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
-                                </View>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={"City:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                <Title size={15} label={'Midnapore'} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
-                                </View>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={"State:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                <Title size={15} label={'WB'} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
-                                </View>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={"Zip:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                <Title size={15} label={'721160'} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
-                                </View>
-                            </View>
-                        </View>
-                        <View>
-                          <Icon type={Icons.Entypo} name={'arrow-with-circle-right'} color={Colors.primary} size={35}/>
-                        </View>
-                        <View>
-                            <View style={{borderBottomWidth: 1, width: 100}}>
-                                <Title size={18} label={'Drop Location'} bold={true} color={Colors.darkGray}/>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
-                                <Title size={15} label={"Address1:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                    <Title size={15} label={item.dropLocation.address1} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
-                                </View>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={"Address2:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                <Title size={15} label={item.dropLocation.address2} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
-                                </View>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={"City:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                <Title size={15} label={item.dropLocation.city} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
-                                </View>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={"State:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                <Title size={15} label={item.dropLocation.state} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
-                                </View>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={"Zip:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                <Title size={15} label={item.dropLocation.zip} bold={true} color={item.mode === 'inprocess'? Colors.secondary:Colors.green2}/>
-                                </View>
-                            </View>
-                        </View>
-                      </View>
-                     
-                    </View>
-                    {item.mode !== 'cancelled' && (
-                    <View style={{borderTopColor: Colors.darkGray, borderTopWidth: 1, padding: 5}}>
-                        {item.mode === 'inprocess' && ( 
-                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <TouchableOpacity onPress={() => Linking.openURL('tel:7550841824')} style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={18} label={'Contact Us'} bold={true} color={Colors.secondary}/>
-                                <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
-                            </TouchableOpacity>
-                            <Button labelStyle={{color: Colors.white, fontFamily: 'PTSerif-Bold'}} color={Colors.error_toast_color} mode="contained" onPress={() => console.log('Pressed')}>Cancel</Button>
-                        </View>
                         )}
-                        {item.mode === 'completed' && ( 
-                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={18} label={'Rate Our Service'} bold={true} color={Colors.secondary}/>
-                                <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
-                            </View>
-                            <Rating
-                                type='custom'
-                                ratingColor='#3498db'
-                                ratingBackgroundColor='#c8c7c8'
-                                ratingCount={5}
-                                imageSize={20}
-                                minValue={0}
-                                startingValue={0}
-                                jumpValue={1}
-                                showRating={false}
-                            />
-                        </View>
-                        )}
-                    </View>
-                    )}
-                  </Animatable.View>
-                    )
-                }}/>
+                    </Animatable.View>
+                )
+            }}/>
         </View>
     );
 };

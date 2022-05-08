@@ -18,7 +18,8 @@ import * as Animatable from 'react-native-animatable';
 import Icon, {Icons} from '../util/Icons';
 import Accordion from 'react-native-collapsible/Accordion';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Rating } from 'react-native-ratings';
+import Toast from 'react-native-toast-message';
+import {Rating} from 'react-native-ratings';
 import {Button} from 'react-native-paper'
 import i18n from '../util/i18n';
 
@@ -65,6 +66,71 @@ const OrdersScreen = ({navigation, route}) => {
         setActiveSections(section);
     }
 
+    const onPressCancel = (id) => {
+        if (status === 'loggedIn') {
+            AsyncStorage
+                .getItem('phoneNo')
+                .then((phoneNo, msg) => {
+                    if (phoneNo) {
+                        database()
+                            .ref("/users/" + phoneNo + "/orders")
+                            .once('value')
+                            .then(snapshot => {
+                                let path;
+                                snapshot
+                                    .val()
+                                    .forEach((dbItem, index) => {
+                                        if (dbItem.id === id) {
+                                            path = index
+                                        }
+
+                                    })
+                                database()
+                                    .ref("/users/" + phoneNo + "/orders/" + path)
+                                    .update({mode: 'cancelled'})
+                                Toast.show({
+                                    type: 'customToast',
+                                    text1: "This order has been cancelled...",
+                                    position: 'bottom',
+                                    visibilityTime: 1500,
+                                    bottomOffset: 80,
+                                    props: {
+                                        backgroundColor: Colors.error_toast_color
+                                    }
+                                });
+                            })
+                    }
+                })
+        } else {
+            AsyncStorage
+                .getItem("anonymusOrders")
+                .then((data) => {
+                    if (data && JSON.parse(data).length > 0) {
+                        let path,
+                            data = JSON.parse(data);
+                        data.forEach((dbItem, index) => {
+                            if (dbItem.id === id) {
+                                path = index
+                            }
+                        })
+                        data[path].mode = 'cancelled'
+                        AsyncStorage.getItem("anonymusOrders", JSON.stringify(data))
+                        getData();
+                        Toast.show({
+                            type: 'customToast',
+                            text1: "This order has been cancelled...",
+                            position: 'bottom',
+                            visibilityTime: 1500,
+                            bottomOffset: 80,
+                            props: {
+                                backgroundColor: Colors.error_toast_color
+                            }
+                        });
+                    }
+                });
+        }
+    }
+
     useEffect(() => {
         getData();
     }, []);
@@ -104,107 +170,207 @@ const OrdersScreen = ({navigation, route}) => {
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/>
             <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={pastOrders}
-                    keyExtractor={item => item.id}
-                    renderItem={({item, rowMap}) => {
-                    return (
-                      <Animatable.View
-                      delay={50 * rowMap}
-                      animation={'slideInRight'}
-                      style={{
-                      backgroundColor: Colors.appBackground,
-                      marginHorizontal: 20,
-                      marginVertical: 10,
-                      padding: 10,
-                      elevation: 5,
-                  }}>
-                      <View
-                          style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'space-between'
-                      }}> 
-                        <Title size={20} label={'Order Details : '} bold={true} color={Colors.darkGray}/>
-                        <Title size={18} label={"Price: " + item.total + "/-"} bold={true} color={Colors.secondary}/>
-                    </View>
-                    <View style={{marginTop: 5, marginBottom: 10}}>
-                      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <View>
-                          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Title size={15} label={"Booked On:"} bold={true} color={Colors.gray}/>
-                            <View style={{marginLeft: 5}}>
-                              <Title size={15} label={item.orderedOn} bold={true} color={Colors.secondary}/>
+                showsVerticalScrollIndicator={false}
+                data={pastOrders}
+                keyExtractor={item => item.id}
+                renderItem={({item, rowMap}) => {
+                return (
+                    <Animatable.View
+                        delay={50 * rowMap}
+                        animation={'slideInRight'}
+                        style={{
+                        backgroundColor: Colors.appBackground,
+                        marginHorizontal: 20,
+                        marginVertical: 10,
+                        padding: 10,
+                        elevation: 5
+                    }}>
+                        <View
+                            style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                        }}>
+                            <Title
+                                size={20}
+                                label={'Order Details : '}
+                                bold={true}
+                                color={Colors.darkGray}/>
+                            <Title
+                                size={18}
+                                label={"Price: " + item.total + "/-"}
+                                bold={true}
+                                color={Colors.secondary}/>
+                        </View>
+                        <View
+                            style={{
+                            marginTop: 5,
+                            marginBottom: 10
+                        }}>
+                            <View
+                                style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"Booked On:"} bold={true} color={Colors.gray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title size={15} label={item.orderedOn} bold={true} color={Colors.secondary}/>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"Status:"} bold={true} color={Colors.gray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            {item.mode === 'inprocess' && (<Title size={15} label={'In Process'} bold={true} color={Colors.yellow}/>)}
+                                            {item.mode === 'delivered' && (<Title size={15} label={'Delivered'} bold={true} color={Colors.green2}/>)}
+                                            {item.mode === 'cancelled' && (<Title
+                                                size={15}
+                                                label={'Cancelled'}
+                                                bold={true}
+                                                color={Colors.error_toast_color}/>)}
+                                        </View>
+                                    </View>
+                                </View>
                             </View>
-                          </View>
-                          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Title size={15} label={"Status:"} bold={true} color={Colors.gray}/>
-                            <View style={{marginLeft: 5}}>
+                            {item
+                                .cartItems
+                                .map((item, index) => <View
+                                    key={index}
+                                    style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center'
+                                }}>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title
+                                            size={15}
+                                            label={(index + 1) + ". "}
+                                            bold={true}
+                                            color={Colors.secondary}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title size={15} label={item.name} bold={true} color={Colors.darkOverlayColor}/>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={15} label={"Quantity:"} bold={true} color={Colors.darkGray}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 5
+                                        }}>
+                                            <Title size={15} label={item.quantity} bold={true} color={Colors.green2}/>
+                                        </View>
+                                    </View>
+                                </View>)}
+                        </View>
+                        {item.mode !== 'cancelled' && (
+                            <View
+                                style={{
+                                borderTopColor: Colors.darkGray,
+                                borderTopWidth: 1,
+                                padding: 5
+                            }}>
                                 {item.mode === 'inprocess' && (
-                                    <Title size={15} label={'In Process'} bold={true} color={Colors.yellow}/>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between'
+                                    }}>
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate("TrackOrder", {details: item})}
+                                            style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center'
+                                        }}>
+                                            <Title size={18} label={'Track'} bold={true} color={Colors.secondary}/>
+                                            <Icon
+                                                type={Icons.AntDesign}
+                                                style={{
+                                                marginTop: 5,
+                                                marginLeft: 5
+                                            }}
+                                                name={'arrowright'}
+                                                size={20}
+                                                color={Colors.secondary}/>
+                                        </TouchableOpacity>
+                                        <Button
+                                            labelStyle={{
+                                            color: Colors.white,
+                                            fontFamily: 'PTSerif-Bold'
+                                        }}
+                                            color={Colors.error_toast_color}
+                                            mode="contained"
+                                            onPress={() => onPressCancel(item.id)}>Cancel</Button>
+                                    </View>
                                 )}
                                 {item.mode === 'delivered' && (
-                                    <Title size={15} label={'Delivered'} bold={true} color={Colors.green2}/>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between'
+                                    }}>
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate("Confirm", {details: item})}
+                                            style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center'
+                                        }}>
+                                            <Title size={18} label={'Order Again'} bold={true} color={Colors.secondary}/>
+                                            <Icon
+                                                type={Icons.AntDesign}
+                                                style={{
+                                                marginTop: 5,
+                                                marginLeft: 5
+                                            }}
+                                                name={'arrowright'}
+                                                size={20}
+                                                color={Colors.secondary}/>
+                                        </TouchableOpacity>
+                                        <Rating
+                                            type='custom'
+                                            ratingColor='#3498db'
+                                            ratingBackgroundColor='#c8c7c8'
+                                            ratingCount={5}
+                                            imageSize={20}
+                                            minValue={0}
+                                            startingValue={0}
+                                            jumpValue={1}
+                                            showRating={false}/>
+                                    </View>
                                 )}
-                                {item.mode === 'cancelled' && (
-                                    <Title size={15} label={'Cancelled'} bold={true} color={Colors.error_toast_color}/>
-                                )}
                             </View>
-                          </View>
-                        </View>
-                      </View>
-                      {item.cartItems.map((item, index) => 
-                        <View key={index} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={(index + 1) + ". "} bold={true} color={Colors.secondary}/>
-                                <View style={{marginLeft: 5}}>
-                                    <Title size={15} label={item.name} bold={true} color={Colors.darkOverlayColor}/>
-                                </View>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={15} label={"Quantity:"} bold={true} color={Colors.darkGray}/>
-                                <View style={{marginLeft: 5}}>
-                                    <Title size={15} label={item.quantity} bold={true} color={Colors.green2}/>
-                                </View>
-                            </View>
-                        </View>
-                    )}
-                    </View>
-                    {item.mode !== 'cancelled' && (
-                    <View style={{borderTopColor: Colors.darkGray, borderTopWidth: 1, padding: 5}}>
-                        {item.mode === 'inprocess' && (
-                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <TouchableOpacity onPress={() => navigation.navigate("TrackOrder" , {details: item})} style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={18} label={'Track'} bold={true} color={Colors.secondary}/>
-                                <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
-                            </TouchableOpacity>
-                            <Button labelStyle={{color: Colors.white, fontFamily: 'PTSerif-Bold'}} color={Colors.error_toast_color}  mode="contained" onPress={() => console.log('Pressed')}>Cancel</Button>
-                        </View>
                         )}
-                        {item.mode === 'delivered' && (
-                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <TouchableOpacity onPress={() => navigation.navigate("Confirm" , {details: item})} style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={18} label={'Order Again'} bold={true} color={Colors.secondary}/>
-                                <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
-                            </TouchableOpacity>
-                            <Rating
-                                type='custom'
-                                ratingColor='#3498db'
-                                ratingBackgroundColor='#c8c7c8'
-                                ratingCount={5}
-                                imageSize={20}
-                                minValue={0}
-                                startingValue={0}
-                                jumpValue={1}
-                                showRating={false}
-                            />
-                        </View>
-                        )}
-                    </View>
-                    )}
-                  </Animatable.View>
-                    )
-                }}/>
+                    </Animatable.View>
+                )
+            }}/>
         </View>
     );
 };

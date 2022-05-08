@@ -20,12 +20,14 @@ import Title from '../reusable_elements/Title';
 import * as Animatable from 'react-native-animatable';
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import GeneralHeader from '../reusable_elements/GeneralHeader';
+import axios from 'axios';
+import Toast from 'react-native-toast-message';
 import i18n from '../util/i18n';
 
 const AddressScreen = ({navigation, route}) => {
-    const [address] = useState("106, Chaklalpur, radhamohanpur, Debra, West Bengal,721160");
+    const [address, setAddress] = useState("");
     const [region,
-        setRegion] = useState({latitude: 22.357908900473035, longitude: 87.6132639683783, latitudeDelta: 0.0032349810554670455, longitudeDelta: 0.0025001540780067444});
+        setRegion] = useState(null);
     
     useEffect(() => {    
         // Geocoder.init("AIzaSyBBPGbYThYVRWkyWMt8-N5Y_wjtMFcEmRQ", {language : "en"});
@@ -35,26 +37,53 @@ const AddressScreen = ({navigation, route}) => {
         //         console.log(addressComponent);
         //     })
         //     .catch(error => console.warn(error));   
-        Geolocation.getCurrentPosition((position) => {
-            // console.log(position.coords.latitude);
-            // console.log(position.coords.longitude);       
+        Geolocation.getCurrentPosition((position) => {      
             const initialPosition = JSON.stringify(position);       
             setRegion({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
-                latitudeDelta: 0.025,
-                longitudeDelta: 0.025
-            })       
+                latitudeDelta: 0.0032349810554670455,
+                longitudeDelta: 0.0025001540780067444
+            })   
+            let positionStackApi = "http://api.positionstack.com/v1/reverse?access_key=1e7810be054a872c3ed9c3b694644" +
+                "7c7&query=22.357908900473035,87.6132639683783"
+                let url = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude + "&localityLanguage=en"
+                axios
+                .get(url)
+                .then(function (response) {
+                    // setAddress(response.data.data[0].label)
+                    let address = ""
+                    for(let i = response.data.localityInfo.administrative.length - 1; i >= 0; i--) {
+                        address = address + response.data.localityInfo.administrative[i].name + ", "
+                    }
+                    setAddress(address)
+                })
+                .catch(function (error) {
+                    // console.log(error)
+                    Toast.show({
+                        type: 'customToast',
+                        text1: "Unable to get your current location...",
+                        position: 'top',
+                        visibilityTime: 1500,
+                        topOffset: 20,
+                        props: {
+                            backgroundColor: Colors.error_toast_color
+                        }
+                    });
+                });    
                
         },    
-        error = (error) => {
-            // console.log('Error', JSON.stringify(error))
-        },     
+        error => console.log('Error',
+            JSON.stringify(error)),     
         {enableHighAccuracy: true, timeout: 200000, maximumAge: 10000},   );  
     }, []);
 
     const onRegionChange = (region) => {
         // setRegion(region)
+    }
+
+    const onPressGoToSaveAddress = () => {
+        navigation.navigate('SaveCurrentAddress', {region: region, addressText: address})
     }
 
     return (
@@ -151,7 +180,7 @@ const AddressScreen = ({navigation, route}) => {
                             useIcon={true}
                             icon="question"
                             title="Confirm Location"
-                            onPress={() => navigation.navigate('SaveCurrentAddress')}/>
+                            onPress={onPressGoToSaveAddress}/>
                     </Animatable.View>
                 </ImageBackground>
             </View>

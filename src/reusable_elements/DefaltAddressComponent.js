@@ -1,12 +1,26 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import Colors from '../util/Colors';
 import Button from '../reusable_elements/Button';
 import * as Animatable from 'react-native-animatable';
 import Title from '../reusable_elements/Title';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import database from '@react-native-firebase/database';
 import i18n from '../util/i18n';
 
 const DefaltAddressComponent = (props) => {
+    const [status, setStatus]  = useState();
+    const onPressAddAddress = () => { 
+        props
+            .navigation
+            .navigate("ManageAddress", {details: {...props.params}, status: status, showSelection: true})
+    }
+    useEffect(() => {
+        AsyncStorage.getItem('userStatus').then((status) => {
+            setStatus(status)
+        })
+    }, [])
+
     return (
         <Animatable.View
             delay={100}
@@ -49,7 +63,7 @@ const DefaltAddressComponent = (props) => {
                     useIcon={true}
                     icon="plus"
                     title="Change / Add address"
-                    onPress={props.onPressAddAddress}/>
+                    onPress={onPressAddAddress}/>
             </View>
         </Animatable.View>
     );

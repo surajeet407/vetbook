@@ -81,7 +81,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     alignItems: 'center',
                                     justifyContent: 'space-between'
                                 }}
-                                    onPress={() => navigation.navigate("ManageAddress", {showSelection: false})}>
+                                    onPress={() => navigation.navigate("ManageAddress", {showSelection: false, status: status})}>
                                     <View
                                         style={{
                                         flexDirection: 'row',

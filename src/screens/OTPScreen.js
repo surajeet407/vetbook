@@ -72,9 +72,9 @@ import React, {useEffect, useRef, useState} from 'react';
       AsyncStorage.setItem('userStatus', 'loggedIn')
       database().ref('/users/' + number).once("value").then((data) => {
         if(data) {
-          database().ref('/users/' + number).update({active: true, phoneNo: number})
+          database().ref('/users/' + number).update({active: true})
         } else {
-          database().ref('/users/' + number).set({active: true, phoneNo: number})
+          database().ref('/users/' + number).set({active: true})
         }
       })
       

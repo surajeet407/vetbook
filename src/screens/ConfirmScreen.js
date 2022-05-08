@@ -246,7 +246,7 @@ const _updateUiBasedOnServiceType = () => {
           
           {route.params.details.serviceType === "None"?
             <View style={{flex: 1}}>  
-              <DefaltAddressComponent onPressAddAddress={() => navigation.navigate("ManageAddress", {showSelection: true})}/>
+              <DefaltAddressComponent navigation={navigation} params={route.params} />
               <View style={{marginTop: 10, marginBottom: 10}}>
                 <SectionBanner fontSize={20} title={"Items (" + cartItems.length + ")"} borderColor={Colors.primary} borderWidth={100} titleColor={Colors.mediumDark}/>
               </View>
@@ -283,7 +283,7 @@ const _updateUiBasedOnServiceType = () => {
           :
           <ScrollView scrollEventThrottle={16}
               showsVerticalScrollIndicator={false}>
-            <DefaltAddressComponent onPressAddAddress={() => navigation.navigate("ManageAddress")}/>
+            <DefaltAddressComponent navigation={navigation} params={route.params.details} />
             {route.params.details.serviceType === "BloodTest" && (
             <View style={{marginTop: 20,  alignItems: 'center', height: 320, padding: 5}}>
                 <Label

@@ -25,23 +25,19 @@ import React, {useEffect, useState, useRef} from 'react';
  import Toast from 'react-native-toast-message';
  import GeneralHeader from '../reusable_elements/GeneralHeader';
  import AsyncStorage from '@react-native-async-storage/async-storage';
+ import database from '@react-native-firebase/database';
+ import uuid from 'react-native-uuid';
  import i18n from '../util/i18n';
  
  const AddressScreen = ({navigation, route}) => {
+   const region = route.params.region
   const [status, setStatus] = useState('')
    const tags = ['Home', 'Work', 'Other'];
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(route.params.addressText);
   const [phoneNo, setPhoneNo] = useState("");
   const [floor, setFloor] = useState("");
   const [nearby, setNearby] = useState("");
   const [tag, setTag] = useState("");
-  
-  const [region, setRegion] = useState({
-    latitude: 22.357908900473035,
-    longitude: 87.6132639683783,
-    latitudeDelta: 0.0032349810554670455,
-    longitudeDelta: 0.0025001540780067444
-  });
     
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     useEffect(() => {
@@ -88,11 +84,51 @@ import React, {useEffect, useState, useRef} from 'react';
         } 
         
         if(address !== "" && floor !== "" && nearby !== "" && tag !== ""){
-          if (route.params.from === 'Home') {
-            navigation.navigate("HomeBottomTabBar", {screen: "Home"});
-          } else {
-            navigation.navigate("Confirm");
-          }
+          if (status === 'loggedOut') {
+            AsyncStorage
+                .getItem('cartItems')
+                .then((data) => {
+                    if (JSON.parse(data).length > 0) {
+                        let data = JSON.parse(data)
+                        for(let i = 0; i < data.length; i++) {
+                            if(data[i].id === item.id) {
+                                path = i;
+                                itemQuan = parseInt(data[i].quantity)
+                            }
+                        }
+                        data[path].quantity = val.toString()
+                        AsyncStorage.setItem('cartItems', JSON.stringify(data))
+                    }
+                });
+        } else {
+            AsyncStorage
+                .getItem('phoneNo')
+                .then((phoneNo, msg) => {
+                    if (phoneNo) {
+                        database()
+                            .ref('/users/' + phoneNo + "/addresses")
+                            .once('value')
+                            .then(snapshot => {
+                                let data = {
+                                  ...region, 
+                                  id: uuid.v4(),
+                                  tag: tag,
+                                  address: address,
+                                  floor: floor,
+                                  nearby: nearby
+                                }, ar = [];
+                                if (snapshot.val()) {
+                                    ar = snapshot.val();
+                                    ar.push(data)
+                                } else {
+                                  ar.push(data)
+                                }
+                                database()
+                                    .ref('/users/' + phoneNo + "/addresses").set(ar)
+                            })
+                    }
+                })
+            }
         } else {
           Keyboard.dismiss();
           Toast.show({
@@ -112,15 +148,15 @@ import React, {useEffect, useState, useRef} from 'react';
    return (
     <KeyboardAvoidingView behavior='height' style={{flex: 1, backgroundColor: Colors.appBackground}}>
           <GeneralHeader 
-              showRigtIcon={false}
+              showRigtIcon={true}
               rightIconType={Icons.MaterialIcons}
-              rightIconName={'navigate-before'} 
-              rightIconSize={45} 
-              rightIconColor={Colors.black}
-              rightIconBackgroundColor={Colors.appBackground}
+              rightIconName={'close'} 
+              rightIconSize={30} 
+              rightIconColor={Colors.white}
+              rightIconBackgroundColor={Colors.error_toast_color}
               onPressRight={() => navigation.goBack()} 
 
-              subHeaderText="A Quick brown fox jumps over the lazy dog... A Quick brown fox jumps over the lazy dog..." 
+              subHeaderText="" 
               showSubHeaderText={false} 
               subHeaderTextSize={20} 
               subHeaderTextColor={Colors.secondary}
@@ -133,7 +169,7 @@ import React, {useEffect, useState, useRef} from 'react';
               headerTextColor={Colors.primary} 
               showHeaderText={true}
 
-              showLeftIcon={true}
+              showLeftIcon={false}
               leftIconType={Icons.MaterialIcons} 
               leftIconName={'navigate-before'} 
               leftIconSize={45} 
@@ -154,12 +190,12 @@ import React, {useEffect, useState, useRef} from 'react';
                     <View style={{marginTop: 20, marginBottom: 10}}>
                         <SectionBanner fontSize={20} title='Enter Address Details' borderColor={Colors.primary} borderWidth={100} titleColor={Colors.mediumDark}/>
                     </View>
-                    <FormElement onChangeText={(val) => setAddress(val)} inputValue={address} showLabel={false} title='Complete Address' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={10}/>
-                    <FormElement onChangeText={(val) => setFloor(val)} inputValue={floor} showLabel={false} title='Floor /Apartment' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={10}/>
-                    <FormElement onChangeText={(val) => setNearby(val)} inputValue={nearby} showLabel={false} title='Nearby' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={10}/>
+                    <FormElement inputEditable={false} onChangeText={(val) => setAddress(val)} inputValue={address} showLabel={false} title='Complete Address' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100} multiline={true} numberOfLines={3}/>
+                    <FormElement onChangeText={(val) => setFloor(val)} inputValue={floor} showLabel={false} title='Floor /Apartment' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
+                    <FormElement onChangeText={(val) => setNearby(val)} inputValue={nearby} showLabel={false} title='Nearby' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
                     <FormElement onPressToken={onPressTag} tokens={tags}  showLabel={true} title='Select Tag' type='token' labelColor={Colors.secondary}/>
                     {status === "loggedOut" && (
-                      <FormElement onChangeText={(val) => setPhoneNo(val)} inputValue={phoneNo} showLabel={false} title='Phone No' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={10}/>
+                      <FormElement onChangeText={(val) => setPhoneNo(val)} inputValue={phoneNo} showLabel={false} title='Phone No' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
                     )}
                 </View>
             </ScrollView>

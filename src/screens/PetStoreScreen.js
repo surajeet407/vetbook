@@ -44,7 +44,6 @@ const PetStoreScreen = ({navigation, route}) => {
         setSelectedCategoryIndex] = useState(0);
 
     const onPressCaraousel = (orgs) => {
-        console.log(orgs.index)
         setSelectedCategoryIndex(orgs.index);
         categoryCarousel
             .current

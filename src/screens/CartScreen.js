@@ -23,6 +23,9 @@ import database from '@react-native-firebase/database';
 import RazorpayCheckout from 'react-native-razorpay';
 import Icon, {Icons} from '../util/Icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
+import NumericInput from 'react-native-numeric-input'
+import Label, {Orientation} from "react-native-label";
 import i18n from '../util/i18n';
 
 const CartScreen = ({navigation, route}) => {
@@ -135,6 +138,53 @@ const CartScreen = ({navigation, route}) => {
             });
         }
     }
+
+    const onChangeInput = (val, item, index) => {
+        if (status === 'loggedOut') {
+            AsyncStorage
+                .getItem('cartItems')
+                .then((data) => {
+                    if (JSON.parse(data).length > 0) {
+                        let data = JSON.parse(data)
+                        for(let i = 0; i < data.length; i++) {
+                            if(data[i].id === item.id) {
+                                path = i;
+                                itemQuan = parseInt(data[i].quantity)
+                            }
+                        }
+                        data[path].quantity = val.toString()
+                        AsyncStorage.setItem('cartItems', JSON.stringify(data))
+                    }
+                });
+        } else {
+            AsyncStorage
+                .getItem('phoneNo')
+                .then((data, msg) => {
+                    if (data) {
+                        database()
+                            .ref('/users/' + data + "/cartItems")
+                            .once('value')
+                            .then(snapshot => {
+                                let path, itemQuan;
+                                if (snapshot.val()) {
+                                    for(let i = 0; i < snapshot.val().length; i++) {
+                                        if(snapshot.val()[i].id === item.id) {
+                                            path = i;
+                                            itemQuan = parseInt(snapshot.val()[i].quantity)
+                                        }
+                                    }
+                                    database()
+                                        .ref('/users/' + data + "/cartItems/" + path).update({
+                                            quantity: val.toString()
+                                        })
+                                }
+                            })
+                    }
+                })
+        }
+        
+    }
+
     useEffect(() => {
         getData();
     }, []);
@@ -174,7 +224,10 @@ const CartScreen = ({navigation, route}) => {
                 leftIconSize={45}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
-                onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "PetStore", status: status})}/>
+                onPressLeft={() => navigation.navigate("HomeBottomTabBar", {
+                screen: "PetStore",
+                status: status
+            })}/>
             <View
                 style={{
                 marginBottom: total === 0
@@ -199,7 +252,8 @@ const CartScreen = ({navigation, route}) => {
                             style={{
                             marginBottom: 10
                         }}/>)}
-                            renderItem={({item, index}) => (
+                            renderItem={({item, index}) => {
+                            return (
                             <View
                                 style={{
                                 margin: 5,
@@ -216,17 +270,31 @@ const CartScreen = ({navigation, route}) => {
                                     style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <Image
-                                        source={{
-                                        uri: item.image
-                                    }}
-                                        style={{
-                                        borderRadius: 15,
-                                        borderColor: Colors.appBackground,
-                                        borderWidth: 5,
+                                    <Label
+                                        orientation={Orientation.TOP_RIGHT}
+                                        containerStyle={{
                                         width: 80,
                                         height: 80
-                                    }}/>
+                                    }}
+                                        style={{
+                                        fontSize: 12,
+                                        fontFamily: 'Oswald-Regular'
+                                    }}
+                                        title={"₹ " + item.price + " /-"}
+                                        color={Colors.secondary}
+                                        ratio={0.2}
+                                        distance={50}
+                                        extent={0}>
+                                            <Image
+                                                source={{
+                                                uri: item.image
+                                            }}
+                                                style={{
+                                                borderRadius: 15,
+                                                width: 80,
+                                                height: 80
+                                            }}/>
+                                    </Label>
                                     <View
                                         style={{
                                         marginLeft: 10,
@@ -243,8 +311,8 @@ const CartScreen = ({navigation, route}) => {
                                             <Text
                                                 style={{
                                                 fontFamily: 'Oswald-Medium',
-                                                fontSize: 20,
-                                                color: Colors.primary
+                                                fontSize: 16,
+                                                color: Colors.darkGray
                                             }}>{item.name}</Text>
                                             <Icon
                                                 type={Icons.Ionicons}
@@ -253,27 +321,39 @@ const CartScreen = ({navigation, route}) => {
                                                 marginLeft: 2
                                             }}
                                                 name={'close'}
-                                                size={20}
+                                                size={15}
                                                 color={Colors.primary}/>
                                             <Text
                                                 style={{
                                                 marginLeft: 2,
                                                 fontFamily: 'Oswald-Medium',
                                                 fontSize: 20,
-                                                color: Colors.primary
+                                                color: Colors.darkGray
                                             }}>{item.quantity}</Text>
                                         </View>
-                                        <Text
-                                            style={{
-                                            fontFamily: 'PTSerif-Bold',
-                                            fontSize: 18,
-                                            color: 'grey'
-                                        }}>Price: {item.price}
-                                            /-</Text>
+                                        <NumericInput
+                                            totalWidth={100}
+                                            totalHeight={30}
+                                            iconSize={25}
+                                            initValue={parseInt(item.quantity)}
+                                            value={parseInt(item.quantity)}
+                                            onChange={(val) => onChangeInput(val, item, index)}
+                                            rounded
+                                            minValue={1}
+                                            validateOnBlur
+                                            maxValue={5}
+                                            textColor={Colors.black}
+                                            iconStyle={{
+                                            color: Colors.primary,
+                                            fontSize: 20
+                                        }}
+                                            rightButtonBackgroundColor={Colors.appBackground}
+                                            leftButtonBackgroundColor={Colors.appBackground}/> 
+                                        {/* <Text style={{ fontFamily: 'PTSerif-Bold', fontSize: 18, color: 'grey' }}>Price: {item.price} /-</Text> */}
                                     </View>
                                 </View>
                             </View>
-                        )}
+                        )}}
                             renderHiddenItem={(data, rowMap) => (
                             <View style={styles.rowBack}>
                                 <TouchableOpacity

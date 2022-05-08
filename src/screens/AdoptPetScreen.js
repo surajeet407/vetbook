@@ -25,8 +25,8 @@ const AdoptPetScreen = ({navigation}) => {
         setSelectedCategoryIndex] = useState(0);
     const [petCategories,
         setPetCategories] = useState([]);
-    const [dogs,
-        setDogs] = useState([]);
+    const [pets,
+        setPets] = useState([]);
     const categoryCarousel = useRef(null);
     const onPressCaraousel = (orgs) => {
         setSelectedCategoryIndex(orgs.index);
@@ -35,6 +35,27 @@ const AdoptPetScreen = ({navigation}) => {
             .scrollToIndex(orgs, {
                 animated: true,
                 viewPosition: 2
+            })
+        let path = ""
+        if (petCategories[orgs.index].name === 'Dogs') {
+            path = "/petDogs"
+        } else if (petCategories[orgs.index].name === 'Cats') {
+            path = "/petCats"
+        } else if (petCategories[orgs.index].name === 'Birds') {
+            path = "/petBirds"
+        } else if (petCategories[orgs.index].name === 'Rabbits') {
+            path = "/petRabbits"
+        } else {
+            path = "/petCattles"
+        }
+        database()
+            .ref(path)
+            .on('value', snapshot => {
+                if (snapshot.val()) {
+                    setPets(snapshot.val())
+                } else {
+                    setPets([])
+                }
             })
     }
     const ITEM_SIZE = Dimensions
@@ -53,7 +74,7 @@ const AdoptPetScreen = ({navigation}) => {
             .ref('/petDogs')
             .on('value', snapshot => {
                 if (snapshot.val()) {
-                    setDogs(snapshot.val())
+                    setPets(snapshot.val())
                 }
             })
 
@@ -154,7 +175,7 @@ const AdoptPetScreen = ({navigation}) => {
                     }}
                         horizontal={false}
                         showsVerticalScrollIndicator={false}>
-                        {dogs.map((item, index) => <Animatable.View
+                        {pets.map((item, index) => <Animatable.View
                             delay={100 * index}
                             animation={'fadeInUp'}
                             key={index}

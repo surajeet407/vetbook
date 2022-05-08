@@ -34,6 +34,7 @@ import moment from 'moment';
 
 
  const ConfirmScreen = ({navigation, route}) => {
+  //  console.log(route.params.details)
   const [cartItems, setCartItems] = useState([])
   const [priceDetails, setPriceDetails] = useState([]);
   const [total, setTotal] = useState("");
@@ -246,7 +247,7 @@ const _updateUiBasedOnServiceType = () => {
           
           {route.params.details.serviceType === "None"?
             <View style={{flex: 1}}>  
-              <DefaltAddressComponent navigation={navigation} params={route.params} />
+              <DefaltAddressComponent navigation={navigation} params={route.params.details} />
               <View style={{marginTop: 10, marginBottom: 10}}>
                 <SectionBanner fontSize={20} title={"Items (" + cartItems.length + ")"} borderColor={Colors.primary} borderWidth={100} titleColor={Colors.mediumDark}/>
               </View>

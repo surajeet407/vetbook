@@ -4,19 +4,25 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../util/Colors';
 import {Picker} from '@react-native-picker/picker';
 import RadioGroup from 'react-native-radio-buttons-group';
-import {TextInput, Chip, TouchableRipple} from 'react-native-paper';
+import {TextInput, Chip, TouchableRipple, Checkbox} from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import i18n from '../util/i18n';
 
 const FormElement = (props) => {
+    const [checked,
+        setChecked] = useState(props.checked);
     const [date,
         setDate] = useState(new Date());
     const [catIndex,
-        setCatIndex] = useState(-1);
+        setCatIndex] = useState(props.defaultSelection);
     const onPressToken = (org) => {
         props.onPressToken(org.index)
         setCatIndex(org.index);
+    }
+    const onSelectCheck = (cond) => {
+        props.onSelectCheck(cond)
+        setChecked(cond);
     }
     return (
         <View
@@ -49,8 +55,7 @@ const FormElement = (props) => {
                         fontFamily: 'Redressed-Regular',
                         color: props.labelColor,
                         fontSize: 20
-                    }}>{props
-                            .title}</Text>
+                    }}>{props.title}</Text>
                     <Text
                         style={{
                         marginLeft: 5,

@@ -21,6 +21,7 @@ import Toast from 'react-native-toast-message';
 import i18n from '../util/i18n';
  
  const ManageAddressScreen = ({navigation, route}) => {
+  // console.log(route.params.details)
   const [status,
     setStatus] = useState(route.params.status);
   const [addressess, setAddressess] = useState([]);
@@ -44,7 +45,7 @@ import i18n from '../util/i18n';
         .then((phoneNo, msg) => {
           if (phoneNo) {
             if (newAddressess.length > 0) {
-              console.log(newAddressess)
+              // console.log(newAddressess)
               database()
               .ref('/users/' + phoneNo + "/addresses")
               .set(newAddressess)
@@ -92,20 +93,36 @@ import i18n from '../util/i18n';
         }
       });
     } else {
-      
-      for (let i = 0; i < addressess.length; i++) {
-        if(addressess[i].id === checked) {
-          let obj = {
-            ...route.params.details,
-            ...addressess[i]
-          }
-          console.log(obj)
-          navigation.navigate("Confirm", {details: {
-            ...route.params.details,
-            ...addressess[i]
-          }})
-          break;
-        }
+      if(status === 'loggedIn') {
+        AsyncStorage
+          .getItem('phoneNo')
+          .then((phoneNo, msg) => {
+            if (phoneNo) {
+              database()
+              .ref('/users/' + phoneNo + "/addresses")
+              .once("value")
+              .then(snapshot => {
+                if(snapshot.val()) {
+                  console.log(snapshot.val())
+                  let path, ar = snapshot.val();
+                  for (let i = 0; i < ar.length; i++) {
+                    if(ar[i].id === checked) {
+                        path = i
+                        ar[i].default = true
+                    } else {
+                      ar[i].default = false
+                    }
+                  }
+                  database()
+                  .ref('/users/' + phoneNo + "/addresses").set(ar)
+                  navigation.navigate("Confirm", {details: {
+                    ...route.params.details,
+                    address: ar[path]
+                  }})
+                }
+              })
+            }
+        })
       }
     }
     
@@ -117,13 +134,13 @@ import i18n from '../util/i18n';
    return (
     <View style={{ flex: 1, backgroundColor: Colors.appBackground}} >
         <GeneralHeader 
-            showRigtIcon={!showSelection}
+            showRigtIcon={true}
             rightIconType={Icons.MaterialIcons}
             rightIconName={'add'} 
             rightIconSize={40} 
             rightIconColor={Colors.appBackground}
             rightIconBackgroundColor={Colors.primary}
-            onPressRight={() => navigation.goBack()} 
+            onPressRight={() => navigation.navigate("Address")} 
 
             showRightSideText={false}
             rightSideText={''} 
@@ -131,12 +148,12 @@ import i18n from '../util/i18n';
             rightSideTextColor={Colors.secondary}
 
             subHeaderText={showSelection? "Select an address to proceed...":"Swipe right to delete address..."}
-            showSubHeaderText={true} 
+            showSubHeaderText={addressess.length === 0? false:true} 
             subHeaderTextSize={20} 
             subHeaderTextColor={Colors.secondary}
 
             position={'relative'} 
-            headerHeight={120}
+            headerHeight={addressess.length === 0? 80:120}
 
             headerText={showSelection? "Addresses":"My Addresses"} 
             headerTextSize={25} 

@@ -31,7 +31,9 @@ import React, {useEffect, useState, useRef} from 'react';
  
  const AddressScreen = ({navigation, route}) => {
    const region = route.params.region
+   const [checked, setChecked] = useState('0');
   const [status, setStatus] = useState('')
+  const defaultOptions = ["true", "false"]
    const tags = ['Home', 'Work', 'Other'];
   const [address, setAddress] = useState(route.params.addressText);
   const [phoneNo, setPhoneNo] = useState("");
@@ -63,6 +65,7 @@ import React, {useEffect, useState, useRef} from 'react';
     //   error => Alert.alert('Error', JSON.stringify(error)),
     //   {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     // );
+    setChecked((defaultOptions[0]));
     AsyncStorage.getItem('userStatus', (error, result) => {
       setStatus(result)
     })
@@ -71,6 +74,10 @@ import React, {useEffect, useState, useRef} from 'react';
    const onPressTag = (index) => {
     setTag(tags[index]);
   }
+  const onPressDefault = (index) => {
+    setChecked((defaultOptions[index]));
+  }
+  
   const onPressSaveAddress = () => {
       let text = ""
         if(address === "") {
@@ -81,24 +88,38 @@ import React, {useEffect, useState, useRef} from 'react';
           text = "Please enter nearby"
         } else if(tag === "") {
           text = "Please select tag";
-        } 
+        } else if(tag === "") {
+          text = "Please select tag";
+        } else if(checked === "") {
+          text = "Please select default";
+        }
         
         if(address !== "" && floor !== "" && nearby !== "" && tag !== ""){
           if (status === 'loggedOut') {
             AsyncStorage
-                .getItem('cartItems')
+                .getItem('AsynchronousAddresses')
                 .then((data) => {
-                    if (JSON.parse(data).length > 0) {
-                        let data = JSON.parse(data)
-                        for(let i = 0; i < data.length; i++) {
-                            if(data[i].id === item.id) {
-                                path = i;
-                                itemQuan = parseInt(data[i].quantity)
-                            }
-                        }
-                        data[path].quantity = val.toString()
-                        AsyncStorage.setItem('cartItems', JSON.stringify(data))
+                    let obj = {
+                      ...region, 
+                      id: uuid.v4(),
+                      tag: tag,
+                      default: checked === "true"? true:false,
+                      address: address,
+                      floor: floor,
+                      nearby: nearby
+                    }, ar = [];
+                    if (data && JSON.parse(data).length > 0) {
+                      let actData = JSON.parse(data)
+                      for(var i = 0; i < actData.length; i++) {
+                        actData[i].default = false
+                      }
+                      ar = actData
+                      ar.push(obj)
+                    } else {
+                      ar.push(obj)
                     }
+                    AsyncStorage
+                    .setItem('AsynchronousAddresses', JSON.stringify(ar))
                 });
         } else {
             AsyncStorage
@@ -113,18 +134,36 @@ import React, {useEffect, useState, useRef} from 'react';
                                   ...region, 
                                   id: uuid.v4(),
                                   tag: tag,
+                                  default: checked === "true"? true:false,
                                   address: address,
                                   floor: floor,
                                   nearby: nearby
                                 }, ar = [];
                                 if (snapshot.val()) {
-                                    ar = snapshot.val();
+                                    let actData = snapshot.val()
+                                    for(var i = 0; i < actData.length; i++) {
+                                      actData[i].default = false
+                                    }
+                                    ar = actData;
                                     ar.push(data)
                                 } else {
                                   ar.push(data)
                                 }
+                                // console.log(data)
                                 database()
                                     .ref('/users/' + phoneNo + "/addresses").set(ar)
+                                Toast.show({
+                                    type: 'customToast',
+                                    text1: "Address saved...",
+                                    position: 'top',
+                                    visibilityTime: 1500,
+                                    topOffset: 15,
+                                    props: {
+                                          backgroundColor: Colors.green2
+                                    }
+                                    
+                                });
+                                navigation.goBack()
                             })
                     }
                 })
@@ -194,6 +233,7 @@ import React, {useEffect, useState, useRef} from 'react';
                     <FormElement onChangeText={(val) => setFloor(val)} inputValue={floor} showLabel={false} title='Floor /Apartment' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
                     <FormElement onChangeText={(val) => setNearby(val)} inputValue={nearby} showLabel={false} title='Nearby' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
                     <FormElement onPressToken={onPressTag} tokens={tags}  showLabel={true} title='Select Tag' type='token' labelColor={Colors.secondary}/>
+                    <FormElement defaultSelection={0} onPressToken={onPressDefault} tokens={defaultOptions}  showLabel={true} title='Make it as default' type='token' labelColor={Colors.secondary}/>
                     {status === "loggedOut" && (
                       <FormElement onChangeText={(val) => setPhoneNo(val)} inputValue={phoneNo} showLabel={false} title='Phone No' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
                     )}

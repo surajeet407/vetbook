@@ -33,8 +33,7 @@ const StoreItems = (props) => {
                 <TouchableOpacity
                     onPress={props.navToDetail}
                     style={{
-                    elevation: 5,
-                    borderRadius: 15
+                    borderRadius: 15,
                 }}>
                     <Image
                         style={{

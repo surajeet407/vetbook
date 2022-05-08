@@ -35,14 +35,16 @@ const PetStoreScreen = ({navigation, route}) => {
         setCartItemCount] = useState('0');
     const [petStoreCategories,
         setPetStoreCategories] = useState([]);
-    const [petFoodItems,
-        setPetFoodItems] = React.useState([]);
+    const [petStoreItems,
+        setPetStoreItems] = React.useState([]);
     const [searchQuery,
         setSearchQuery] = React.useState('');
     const categoryCarousel = useRef(null);
     const [selectedCategoryIndex,
         setSelectedCategoryIndex] = useState(0);
+
     const onPressCaraousel = (orgs) => {
+        console.log(orgs.index)
         setSelectedCategoryIndex(orgs.index);
         categoryCarousel
             .current
@@ -50,23 +52,52 @@ const PetStoreScreen = ({navigation, route}) => {
                 animated: true,
                 viewPosition: 0.5
             })
+        let path = ""
+        if (petStoreCategories[orgs.index].name === 'Food') {
+            path = "/petFoodItems"
+        } else if (petStoreCategories[orgs.index].name === 'Toys') {
+            path = "/petToysItems"
+        } else if (petStoreCategories[orgs.index].name === 'Accesorries') {
+            path = "/petAccItems"
+        } else {
+            path = "/petFurItems"
+        }
+        database()
+            .ref(path)
+            .on('value', snapshot => {
+                if (snapshot.val()) {
+                    setPetStoreItems(snapshot.val())
+                } else {
+                    setPetStoreItems([])
+                }
+            })
     }
     const onChangeSearch = query => {
         setSearchQuery(query)
+        let path = ""
+        if (petStoreCategories[selectedCategoryIndex].name === 'Food') {
+            path = "/petFoodItems"
+        } else if (petStoreCategories[selectedCategoryIndex].name === 'Toys') {
+            path = "/petToysItems"
+        } else if (petStoreCategories[selectedCategoryIndex].name === 'Accesorries') {
+            path = "/petAccItems"
+        } else {
+            path = "/petFurItems"
+        }
         if (query.length > 0) {
             database()
-                .ref('/petFoodItems')
+                .ref(path)
                 .on('value', snapshot => {
                     if (snapshot.val()) {
-                        setPetFoodItems(snapshot.val().filter(item => item.name.toLowerCase().includes(query.toLowerCase())))
+                        setPetStoreItems(snapshot.val().filter(item => item.name.toLowerCase().includes(query.toLowerCase())))
                     }
                 })
         } else {
             database()
-                .ref('/petFoodItems')
+                .ref(path)
                 .on('value', snapshot => {
                     if (snapshot.val()) {
-                        setPetFoodItems(snapshot.val())
+                        setPetStoreItems(snapshot.val())
                     }
                 })
         }
@@ -89,37 +120,39 @@ const PetStoreScreen = ({navigation, route}) => {
             .ref('/petFoodItems')
             .on('value', snapshot => {
                 if (snapshot.val()) {
-                    setPetFoodItems(snapshot.val())
+                    setPetStoreItems(snapshot.val())
                 }
             })
 
     }
 
     const getCartItems = () => {
-        if(status === 'loggedOut') {
+        if (status === 'loggedOut') {
             AsyncStorage
-            .getItem('cartItemCount')
-            .then((data, msg) => {
-                if (data) {
-                    setCartItemCount(data)
-                }
-            })
+                .getItem('cartItemCount')
+                .then((data, msg) => {
+                    if (data) {
+                        setCartItemCount(data)
+                    }
+                })
         } else {
-            AsyncStorage.getItem('phoneNo').then((data, msg) => {
-                if (data) {
-                    database()
-                    .ref('/users/' + data + "/cartItems")
-                    .on('value', snapshot => {
-                        if (snapshot.val()) {
-                            setCartItemCount(snapshot.val().length)
-                        } else {
-                            setCartItemCount("0")
-                        }
-                    })
-                }
-            })
+            AsyncStorage
+                .getItem('phoneNo')
+                .then((data, msg) => {
+                    if (data) {
+                        database()
+                            .ref('/users/' + data + "/cartItems")
+                            .on('value', snapshot => {
+                                if (snapshot.val()) {
+                                    setCartItemCount(snapshot.val().length)
+                                } else {
+                                    setCartItemCount("0")
+                                }
+                            })
+                    }
+                })
         }
-        
+
     }
 
     useEffect(() => {
@@ -237,10 +270,13 @@ const PetStoreScreen = ({navigation, route}) => {
                             horizontal={false}
                             showsVerticalScrollIndicator={false}
                             keyExtractor={(item) => item.id}>
-                            {petFoodItems.map((item, index) => <View key={index}>
+                            {petStoreItems.map((item, index) => <View key={index}>
                                 <StoreItems
                                     animationStyle="fadeInUp"
-                                    navToDetail={() => navigation.navigate("ItemDetails", {item: item, status: status})}
+                                    navToDetail={() => navigation.navigate("ItemDetails", {
+                                    item: item,
+                                    status: status
+                                })}
                                     name={item.name}
                                     image={item.image}
                                     price={item.price}

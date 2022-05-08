@@ -11,6 +11,7 @@ import React, {useState, useRef, useEffect} from 'react';
    Animated,
  } from 'react-native';
  import { useTheme } from '@react-navigation/native';
+ import Toast from 'react-native-toast-message';
  import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../util/Colors';
  import Icon from 'react-native-vector-icons/FontAwesome';
@@ -31,6 +32,10 @@ import i18n from '../util/i18n';
 
  
  const HomeScreen = ({navigation, route}) => {
+  const [vetServiceCount, setVetServiceCount] = useState(0)
+  const [groomingServiceCount, setGroomingServiceCount] = useState(0)
+  const [trainingServiceCount, setTrainingServiceCount] = useState(0)
+
   const [trackDetails, setTrackDetails] = useState(null)
   const [status, setStatus] = useState(route.params.status);
   const [showTrackComponent, setShowTrackComponent] = useState(false)
@@ -65,10 +70,21 @@ import i18n from '../util/i18n';
                       .on('value', snapshot => {
                           if (snapshot.val()) {
                             let onGoingItems = snapshot.val().filter(item => item.mode === 'ongoing')
-                            // console.log(onGoingItems)
+                            // console.log(onGoingItems)r
                             if (onGoingItems.length > 0) {
                               setShowTrackComponent(true);
                               setTrackDetails(onGoingItems[0]);
+                            }
+                            for(let i = 0; i < snapshot.val().length; i++) {
+                                if((snapshot.val()[i].serviceType  === 'Consult' || snapshot.val()[i].serviceType  === 'Veterinary' || snapshot.val()[i].serviceType  === 'BloodTest') && snapshot.val()[i].mode === 'ongoing') {
+                                  setVetServiceCount(1)
+                                }
+                                if(snapshot.val()[i].serviceType === 'Training' && snapshot.val()[i].mode === 'ongoing') {
+                                  setTrainingServiceCount(1)
+                                }
+                                if(snapshot.val()[i].serviceType === 'Grooming' && snapshot.val()[i].mode === 'ongoing') {
+                                  setGroomingServiceCount(1)
+                                }
                             }
                           }
                       })
@@ -80,7 +96,24 @@ import i18n from '../util/i18n';
           .getItem("anonymusService")
           .then((data) => {
               if (data && JSON.parse(data).length > 0) {
-                setShowTrackComponent(true)
+                let data = JSON.parse(data)
+                let onGoingItems = data.filter(item => item.mode === 'ongoing')
+                // console.log(onGoingItems)r
+                if (onGoingItems.length > 0) {
+                  setShowTrackComponent(true);
+                  setTrackDetails(onGoingItems[0]);
+                }
+                for(let i = 0; i < data.length; i++) {
+                  if((data[i].serviceType  === 'Consult' || data[i].serviceType  === 'Veterinary' || data[i].serviceType  === 'BloodTest') && snapshot.val()[i].mode === 'ongoing') {
+                    setVetServiceCount(1)
+                  }
+                  if(data[i].serviceType === 'Training' && data[i].mode === 'ongoing') {
+                    setTrainingServiceCount(1)
+                  }
+                  if(data[i].serviceType === 'Grooming' && data[i].mode === 'ongoing') {
+                    setGroomingServiceCount(1)
+                  }
+                }
               }
           });
   }
@@ -115,7 +148,56 @@ import i18n from '../util/i18n';
     })
     
   }
-
+  const onPressNavToService = (item) => {
+    if(item.title === 'Veterinary' || item.title === 'Consult' || item.title === 'Blood Test') {
+      if(vetServiceCount > 0) {
+          Toast.show({
+            type: 'customToast',
+            text1: "You have an active ongoing service...",
+            position: 'bottom',
+            visibilityTime: 1500,
+            bottomOffset: 80,
+            props: {
+                backgroundColor: Colors.error_toast_color
+            }
+        });
+      } else {
+        navigation.navigate(item.navTo, {item: item})
+      }
+    } else if (item.title === 'Relocation') {
+      navigation.navigate(item.navTo, {item: item})
+    } else if(item.title === 'Training') {
+      if(trainingServiceCount > 0) {
+        Toast.show({
+          type: 'customToast',
+          text1: "You have an active training request...",
+          position: 'bottom',
+          visibilityTime: 1500,
+          bottomOffset: 80,
+          props: {
+              backgroundColor: Colors.error_toast_color
+          }
+      });
+    } else {
+      navigation.navigate(item.navTo, {item: item})
+    }
+    } else if(item.title === 'Grooming') {
+      if(groomingServiceCount > 0) {
+        Toast.show({
+          type: 'customToast',
+          text1: "You have an active grooming request...",
+          position: 'bottom',
+          visibilityTime: 1500,
+          bottomOffset: 80,
+          props: {
+              backgroundColor: Colors.error_toast_color
+          }
+      });
+      } else {
+        navigation.navigate(item.navTo, {item: item})
+      }
+    }
+  }
   useEffect(() => {
     getData();
   }, [])
@@ -168,7 +250,7 @@ import i18n from '../util/i18n';
                     keyExtractor={(item) => item.id}>
                     {mainServices.map((item, index) =>
                     <Animatable.View  delay={100 * index} animation={'fadeInUp'} key={index} style={{alignItems: 'center', justifyContent: 'space-evenly', margin: 5, elevation: 5}}>
-                      <RNBounceable onPress={() => navigation.navigate(item.navTo, {item: item})} style={{width: Dimensions.get('screen').width/2 - 20, justifyContent: 'space-evenly', borderRadius: 15, backgroundColor: item.backgroundColor, height: 180,  padding: 10}}>
+                      <RNBounceable onPress={() => onPressNavToService(item)} style={{width: Dimensions.get('screen').width/2 - 20, justifyContent: 'space-evenly', borderRadius: 15, backgroundColor: item.backgroundColor, height: 180,  padding: 10}}>
                         <ImageBackground blurRadius={2} source={require('../assets/images/background4.png')} style={{ width: '100%', height: '100%'}}>
                             <Title label={item.title} size={18} color={'#fff'}/> 
                             <Text style={{color: Colors.gray, fontSize: 15, fontFamily: 'Oswald-Medium'}}>Lorem ipsum dolor sit amet...</Text>
@@ -185,7 +267,7 @@ import i18n from '../util/i18n';
             <View style={{paddingHorizontal: 5}}>
               {quickService.map((item, index) => 
               <View key={index} style={{marginTop: 20, marginBottom: 5, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: Colors.appBackground, borderRadius: 10, elevation: 2}}>
-                <TouchableRipple key={index} style={{width: '100%'}} onPress={() => navigation.navigate(item.navTo, {item: item})}>
+                <TouchableRipple key={index} style={{width: '100%'}} onPress={() => onPressNavToService(item)}>
                   <ImageBackground blurRadius={5} source={require('../assets/images/background3.png')} style={{ width: '100%', height: 100, padding: 10}}>
                     <View style={{flexDirection: 'row'}}>
                       <Image source={{uri: item.image}} style={{borderRadius: 15, borderColor: Colors.darkGray, borderWidth: 2,  width: 80, height: 80}}/>

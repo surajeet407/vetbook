@@ -121,7 +121,15 @@ const RelocationsScreen = ({navigation, route}) => {
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Title size={15} label={"Status:"} bold={true} color={Colors.gray}/>
                             <View style={{marginLeft: 5}}>
-                              <Title size={15} label={item.mode === 'inprocess'? 'In Process':'Delivered'} bold={true} color={item.mode === 'inprocess'? Colors.yellow:Colors.green2}/>
+                                {item.mode === 'inprocess' && (
+                                    <Title size={15} label={'In Process'} bold={true} color={Colors.yellow}/>
+                                )}
+                                {item.mode === 'completed' && (
+                                    <Title size={15} label={'Completed'} bold={true} color={Colors.green2}/>
+                                )}
+                                {item.mode === 'cancelled' && (
+                                    <Title size={15} label={'Cancelled'} bold={true} color={Colors.error_toast_color}/>
+                                )}
                             </View>
                         </View>
                     </View>
@@ -209,16 +217,18 @@ const RelocationsScreen = ({navigation, route}) => {
                       </View>
                      
                     </View>
+                    {item.mode !== 'cancelled' && (
                     <View style={{borderTopColor: Colors.darkGray, borderTopWidth: 1, padding: 5}}>
-                        {item.mode === 'inprocess'?
+                        {item.mode === 'inprocess' && ( 
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                             <TouchableOpacity onPress={() => Linking.openURL('tel:7550841824')} style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Title size={18} label={'Contact Us'} bold={true} color={Colors.secondary}/>
                                 <Icon type={Icons.AntDesign} style={{marginTop: 5, marginLeft: 5}} name={'arrowright'} size={20} color={Colors.secondary}/>
                             </TouchableOpacity>
-                            <Button labelStyle={{color: Colors.white, fontFamily: 'PTSerif-Bold'}} color={Colors.error_toast_color} icon="close" mode="contained" onPress={() => console.log('Pressed')}>Cancel</Button>
+                            <Button labelStyle={{color: Colors.white, fontFamily: 'PTSerif-Bold'}} color={Colors.error_toast_color} mode="contained" onPress={() => console.log('Pressed')}>Cancel</Button>
                         </View>
-                        :
+                        )}
+                        {item.mode === 'completed' && ( 
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Title size={18} label={'Rate Our Service'} bold={true} color={Colors.secondary}/>
@@ -236,8 +246,9 @@ const RelocationsScreen = ({navigation, route}) => {
                                 showRating={false}
                             />
                         </View>
-                        }
+                        )}
                     </View>
+                    )}
                   </Animatable.View>
                     )
                 }}/>

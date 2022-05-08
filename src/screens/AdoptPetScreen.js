@@ -43,10 +43,8 @@ const AdoptPetScreen = ({navigation}) => {
             path = "/petCats"
         } else if (petCategories[orgs.index].name === 'Birds') {
             path = "/petBirds"
-        } else if (petCategories[orgs.index].name === 'Rabbits') {
-            path = "/petRabbits"
         } else {
-            path = "/petCattles"
+            path = "/petRabbits"
         }
         database()
             .ref(path)

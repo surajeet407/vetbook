@@ -20,8 +20,10 @@ import * as Animatable from 'react-native-animatable';
 import Icon, {Icons} from '../util/Icons';
 import i18n from '../util/i18n';
 import database from '@react-native-firebase/database';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 const TrackOrderScreen = ({navigation, route}) => {
+    console.log(route.params)
     let images = []
     if (route.params.details.type === 'Items') {
         images = [require('../assets/lottie/serviceOrdered.json'), require('../assets/lottie/confirmed.json'), require('../assets/lottie/smiley.json')];
@@ -205,7 +207,33 @@ const TrackOrderScreen = ({navigation, route}) => {
                         style={{
                         padding: 10,
                         height: stepIndicatorHeight
-                    }}>
+                    }}> 
+                        {/* <View
+                            style={{
+                            flex: 2,
+                            marginBottom: 250
+                        }}>
+                            <MapView
+                                provider={PROVIDER_GOOGLE}
+                                style={styles.map}
+                                region={region}
+                                onRegionChange={(region) => onRegionChange(region)}></MapView>
+                            <View
+                                style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '40%'
+                            }}>
+                                <LottieView
+                                    style={{
+                                    width: 80,
+                                    height: 80
+                                }}
+                                    source={require('../assets/lottie/marker.json')}
+                                    autoPlay={true}
+                                    loop/>
+                            </View>
+                        </View> */}
                         <StepIndicator
                             direction='vertical'
                             stepCount={stepCount}

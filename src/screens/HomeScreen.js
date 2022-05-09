@@ -58,12 +58,17 @@ import LottieView from 'lottie-react-native';
                   database()
                       .ref("/users/" + phoneNo + "/services")
                       .on('value', snapshot => {
+                          setVetServiceCount(0)
+                          setGroomingServiceCount(0)
+                          setTrainingServiceCount(0)
                           if (snapshot.val()) {
                             let onGoingItems = snapshot.val().filter(item => item.mode === 'ongoing')
-                            // console.log(onGoingItems)r
+                            // console.log(onGoingItems)
                             if (onGoingItems.length > 0) {
                               setShowTrackComponent(true);
                               setTrackDetails(onGoingItems[0]);
+                            } else {
+                              setShowTrackComponent(false);
                             }
                             for(let i = 0; i < snapshot.val().length; i++) {
                                 if((snapshot.val()[i].serviceType  === 'Consult' || snapshot.val()[i].serviceType  === 'Veterinary' || snapshot.val()[i].serviceType  === 'BloodTest') && snapshot.val()[i].mode === 'ongoing') {
@@ -76,6 +81,8 @@ import LottieView from 'lottie-react-native';
                                   setGroomingServiceCount(1)
                                 }
                             }
+                          } else {
+                            setShowTrackComponent(false);
                           }
                       })
               }
@@ -179,7 +186,7 @@ import LottieView from 'lottie-react-native';
       navigation.navigate(item.navTo, {item: item})
     }
     } else if(item.title === 'Grooming') {
-      console.log(groomingServiceCount)
+      // console.log(groomingServiceCount)
       if(groomingServiceCount > 0) {
         Toast.show({
           type: 'customToast',
@@ -246,7 +253,7 @@ import LottieView from 'lottie-react-native';
                       )}   
                   </Swiper>
       
-                  <SectionBanner fontSize={20} title={i18n.homeScreenServiceBannerTitle} borderColor={Colors.primary} borderWidth={100} titleColor={Colors.mediumDark}/>
+                  <SectionBanner fontSize={18} title={i18n.homeScreenServiceBannerTitle} borderColor={Colors.darkGray} borderWidth={80} titleColor={Colors.secondary}/>
                   <View style={{marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', width: "100%"}}>
                       <RNMasonryScroll
                           columns={2}

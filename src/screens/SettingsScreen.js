@@ -25,7 +25,7 @@ const SettingsScreen = ({navigation, route}) => {
     const [status,
         setStatus] = useState(route.params.status);
     const handleAuthButton = () => {
-        console.log(status)
+        // console.log(status)
         if (status === 'loggedIn') {
             AsyncStorage
                 .getItem('phoneNo')

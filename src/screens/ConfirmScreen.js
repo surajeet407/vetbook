@@ -36,6 +36,7 @@ import moment from 'moment';
  const ConfirmScreen = ({navigation, route}) => {
   //  console.log(route.params.details)
   const [cartItems, setCartItems] = useState([])
+  const [defaltAddress, setDefaltAddress] = useState({})
   const [priceDetails, setPriceDetails] = useState([]);
   const [total, setTotal] = useState("");
   const [activeSections, setActiveSections] = useState([0]);
@@ -83,6 +84,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
   obj.txnId = txnId,
   obj.paymentStatus = "Success"
   obj.fromScreen = "Confirm"
+  obj.address = defaltAddress
   if (route.params.details.serviceType === "None" ) {
     obj.mode = "inprocess"
     type = 'Items';
@@ -160,10 +162,10 @@ const _updateUiBasedOnServiceType = (txnId) => {
       theme: {color: Colors.primary}
     }
     RazorpayCheckout.open(options).then((data) => {
-      console.log(data);
+      // console.log(data);
       _updateUiBasedOnServiceType(data.razorpay_payment_id)
     }).catch((error) => {
-      console.log(error.description)
+      // console.log(error.description)
       if(error.description.error.reason !== "payment_cancelled") {
         let obj = {...route.params.details}
         obj.paymentStatus = "Error"
@@ -196,6 +198,9 @@ const _updateUiBasedOnServiceType = (txnId) => {
       }
     }
     
+  }
+  const updateDefaltAddress = (address) => {
+    setDefaltAddress(address)
   }
 
   useEffect(() => {
@@ -251,7 +256,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
           
           {route.params.details.serviceType === "None"?
             <View style={{flex: 1}}>  
-              <DefaltAddressComponent navigation={navigation} params={route.params.details} />
+              <DefaltAddressComponent updateDefaltAddress={updateDefaltAddress} navigation={navigation} params={route.params.details} />
               <View style={{marginTop: 10, marginBottom: 10}}>
                 <SectionBanner fontSize={20} title={"Items (" + cartItems.length + ")"} borderColor={Colors.primary} borderWidth={100} titleColor={Colors.mediumDark}/>
               </View>
@@ -288,7 +293,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
           :
           <ScrollView scrollEventThrottle={16}
               showsVerticalScrollIndicator={false}>
-            <DefaltAddressComponent navigation={navigation} params={route.params.details} />
+            <DefaltAddressComponent updateDefaltAddress={updateDefaltAddress}  navigation={navigation} params={route.params.details} />
             {route.params.details.serviceType === "BloodTest" && (
             <View style={{marginTop: 20,  alignItems: 'center', height: 320, padding: 5}}>
                 <Label

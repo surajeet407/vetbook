@@ -38,6 +38,7 @@ const DefaltAddressComponent = (props) => {
                                 for(let i = 0; i < snapshot.val().length; i++) {
                                     if(snapshot.val()[i].default) {
                                         setAddress(snapshot.val()[i])
+                                        props.updateDefaltAddress(snapshot.val()[i])
                                         count++
                                     } 
                                 } 

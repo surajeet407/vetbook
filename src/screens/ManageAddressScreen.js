@@ -134,10 +134,7 @@ import i18n from '../util/i18n';
                   }
                   database()
                   .ref('/users/' + phoneNo + "/addresses").set(ar)
-                  navigation.navigate("Confirm", {details: {
-                    ...route.params.details,
-                    address: ar[path]
-                  }})
+                  navigation.navigate("Confirm", {details: route.params.details})
                 }
               })
             }

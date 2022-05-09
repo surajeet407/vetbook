@@ -29,13 +29,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNMasonryScroll from "react-native-masonry-scrollview";
 import RNBounceable from '@freakycoder/react-native-bounceable';
 import i18n from '../util/i18n';
+import LottieView from 'lottie-react-native';
 
  
  const HomeScreen = ({navigation, route}) => {
+  const [homeAddress, setHomeAddress] = useState("")
   const [vetServiceCount, setVetServiceCount] = useState(0)
   const [groomingServiceCount, setGroomingServiceCount] = useState(0)
   const [trainingServiceCount, setTrainingServiceCount] = useState(0)
-
   const [trackDetails, setTrackDetails] = useState(null)
   const [status, setStatus] = useState(route.params.status);
   const [showTrackComponent, setShowTrackComponent] = useState(false)
@@ -98,7 +99,7 @@ import i18n from '../util/i18n';
               if (data && JSON.parse(data).length > 0) {
                 let data = JSON.parse(data)
                 let onGoingItems = data.filter(item => item.mode === 'ongoing')
-                // console.log(onGoingItems)r
+                // console.log(onGoingItems)
                 if (onGoingItems.length > 0) {
                   setShowTrackComponent(true);
                   setTrackDetails(onGoingItems[0]);
@@ -199,11 +200,16 @@ import i18n from '../util/i18n';
     }
   }
   useEffect(() => {
+      AsyncStorage
+        .getItem("homeAddress")
+        .then((homeAddress, msg) => {
+          setHomeAddress(JSON.parse(homeAddress))
+      })
     getData();
   }, [])
    return (
     <View  style={{ flex: 1, backgroundColor: Colors.appBackground}} >
-      <LandingHeader status={status} navigation={navigation}/>
+      <LandingHeader homeAddress={homeAddress} status={status} navigation={navigation}/>
       {showTrackComponent && (
         <TrackComponent onPress={() => navigation.navigate("TrackOrder" , {details: trackDetails})}/>
       )}
@@ -212,77 +218,94 @@ import i18n from '../util/i18n';
           <ScrollView scrollEventThrottle={16}
           onScroll={Animated.event([{nativeEvent: {contentOffset: {y: animation}}}], {useNativeDriver: false})}
           showsVerticalScrollIndicator={false}>
-          {loadind ? 
-          <Animatable.View animation={'fadeIn'} >
-            <SkeletonPlaceholder style={{padding: 20}}>
-                <View style={{  height: 120, borderRadius: 30 }} />
-                <View style={{marginTop: 20, width: '100%', height: 50, borderRadius: 10 }}/>
-                <View style={{ marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <View style={{ width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
-                  <View style={{marginLeft: 5, width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
-                </View>
-                <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <View style={{ width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
-                  <View style={{marginLeft: 5, width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
-                </View>
-                <View style={{marginTop: 20, width: '100%', height: 100, borderRadius: 10 }}/>
-                <View style={{marginTop: 10, width: '100%', height: 100, borderRadius: 10 }}/>
-            </SkeletonPlaceholder>
-          </Animatable.View>
-          :
-          <View style={{flex: 1}}>
-            <Swiper showsPagination={true} autoplayTimeout={5} autoplay={true} dotColor={Colors.darkGray} activeDotColor={Colors.primary} activeDotStyle={{paddingHorizontal: 10}} style={{height: 165}}>
-                {homePageCarouselServices.map((item, index) =>
-                <ImageBackground key={index} source={{uri: item.image}} style={styles.itemContainer}  blurRadius={5}>
-                    <Text style={{fontFamily: 'Oswald-SemiBold', fontSize: 20, marginBottom: 10, color: Colors.appBackground}}>{item.title}</Text>
-                    <Button labelStyle={{fontFamily: 'PTSerif-Regular', fontSize: 15, color: Colors.appBackground}} color={Colors.secondary} onPress={() => navigation.navigate(item.navTo)} mode="contained">{item.buttonText}</Button>
-                </ImageBackground>
-                )}   
-            </Swiper>
-
-            <SectionBanner fontSize={20} title={i18n.homeScreenServiceBannerTitle} borderColor={Colors.primary} borderWidth={100} titleColor={Colors.mediumDark}/>
-            <View style={{marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', width: "100%"}}>
-                <RNMasonryScroll
-                    columns={2}
-                    oddColumnStyle={{marginTop: 30 }}
-                    horizontal={false}
-                    showsVerticalScrollIndicator={false}
-                    keyExtractor={(item) => item.id}>
-                    {mainServices.map((item, index) =>
-                    <Animatable.View  delay={100 * index} animation={'fadeInUp'} key={index} style={{alignItems: 'center', justifyContent: 'space-evenly', margin: 5, elevation: 5}}>
-                      <RNBounceable onPress={() => onPressNavToService(item)} style={{width: Dimensions.get('screen').width/2 - 20, justifyContent: 'space-evenly', borderRadius: 15, backgroundColor: item.backgroundColor, height: 180,  padding: 10}}>
-                        <ImageBackground blurRadius={2} source={require('../assets/images/background4.png')} style={{ width: '100%', height: '100%'}}>
-                            <Title label={item.title} size={18} color={'#fff'}/> 
-                            <Text style={{color: Colors.gray, fontSize: 15, fontFamily: 'Oswald-Medium'}}>Lorem ipsum dolor sit amet...</Text>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: '100%', height: '100%'}}>
-                              <Icon name={'arrow-right'} color={'#fff'} size={15}/> 
-                              <Image style={{height: '40%', width: '60%'}} source={{uri: item.image}}/>
-                            </View>
-                        </ImageBackground>
-                      </RNBounceable>
-                    </Animatable.View>
-                    )}
-                </RNMasonryScroll>
-            </View> 
-            <View style={{paddingHorizontal: 5}}>
-              {quickService.map((item, index) => 
-              <View key={index} style={{marginTop: 20, marginBottom: 5, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: Colors.appBackground, borderRadius: 10, elevation: 2}}>
-                <TouchableRipple key={index} style={{width: '100%'}} onPress={() => onPressNavToService(item)}>
-                  <ImageBackground blurRadius={5} source={require('../assets/images/background3.png')} style={{ width: '100%', height: 100, padding: 10}}>
-                    <View style={{flexDirection: 'row'}}>
-                      <Image source={{uri: item.image}} style={{borderRadius: 15, borderColor: Colors.darkGray, borderWidth: 2,  width: 80, height: 80}}/>
-                      <View style={{marginLeft: 10, width: '70%', alignItems: 'flex-start', justifyContent: 'space-between'}}>
-                        <Text style={{fontFamily: 'Oswald-Medium', fontSize: 20, color: Colors.primary}}>{item.title}</Text>
-                        <Text style={{fontFamily: 'PTSerif-Bold', fontSize: 15, color: Colors.darkGray}}>{item.desc}</Text>
+            {homeAddress.serviceAvailable?
+              <View>
+                {loadind ? 
+                <Animatable.View animation={'fadeIn'} >
+                  <SkeletonPlaceholder style={{padding: 20}}>
+                      <View style={{  height: 120, borderRadius: 30 }} />
+                      <View style={{marginTop: 20, width: '100%', height: 50, borderRadius: 10 }}/>
+                      <View style={{ marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
+                        <View style={{marginLeft: 5, width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
                       </View>
+                      <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
+                        <View style={{marginLeft: 5, width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
+                      </View>
+                      <View style={{marginTop: 20, width: '100%', height: 100, borderRadius: 10 }}/>
+                      <View style={{marginTop: 10, width: '100%', height: 100, borderRadius: 10 }}/>
+                  </SkeletonPlaceholder>
+                </Animatable.View>
+                :
+                <View style={{flex: 1}}>
+                  <Swiper showsPagination={true} autoplayTimeout={5} autoplay={true} dotColor={Colors.darkGray} activeDotColor={Colors.primary} activeDotStyle={{paddingHorizontal: 10}} style={{height: 165}}>
+                      {homePageCarouselServices.map((item, index) =>
+                      <ImageBackground key={index} source={{uri: item.image}} style={styles.itemContainer}  blurRadius={5}>
+                          <Text style={{fontFamily: 'Oswald-SemiBold', fontSize: 20, marginBottom: 10, color: Colors.appBackground}}>{item.title}</Text>
+                          <Button labelStyle={{fontFamily: 'PTSerif-Regular', fontSize: 15, color: Colors.appBackground}} color={Colors.secondary} onPress={() => navigation.navigate(item.navTo)} mode="contained">{item.buttonText}</Button>
+                      </ImageBackground>
+                      )}   
+                  </Swiper>
+      
+                  <SectionBanner fontSize={20} title={i18n.homeScreenServiceBannerTitle} borderColor={Colors.primary} borderWidth={100} titleColor={Colors.mediumDark}/>
+                  <View style={{marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', width: "100%"}}>
+                      <RNMasonryScroll
+                          columns={2}
+                          oddColumnStyle={{marginTop: 30 }}
+                          horizontal={false}
+                          showsVerticalScrollIndicator={false}
+                          keyExtractor={(item) => item.id}>
+                          {mainServices.map((item, index) =>
+                          <Animatable.View  delay={100 * index} animation={'fadeInUp'} key={index} style={{alignItems: 'center', justifyContent: 'space-evenly', margin: 5, elevation: 5}}>
+                            <RNBounceable onPress={() => onPressNavToService(item)} style={{width: Dimensions.get('screen').width/2 - 20, justifyContent: 'space-evenly', borderRadius: 15, backgroundColor: item.backgroundColor, height: 180,  padding: 10}}>
+                              <ImageBackground blurRadius={2} source={require('../assets/images/background4.png')} style={{ width: '100%', height: '100%'}}>
+                                  <Title label={item.title} size={18} color={'#fff'}/> 
+                                  <Text style={{color: Colors.gray, fontSize: 15, fontFamily: 'Oswald-Medium'}}>Lorem ipsum dolor sit amet...</Text>
+                                  <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: '100%', height: '100%'}}>
+                                    <Icon name={'arrow-right'} color={'#fff'} size={15}/> 
+                                    <Image style={{height: '40%', width: '60%'}} source={{uri: item.image}}/>
+                                  </View>
+                              </ImageBackground>
+                            </RNBounceable>
+                          </Animatable.View>
+                          )}
+                      </RNMasonryScroll>
+                  </View> 
+                  <View style={{paddingHorizontal: 5}}>
+                    {quickService.map((item, index) => 
+                    <View key={index} style={{marginTop: 20, marginBottom: 5, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: Colors.appBackground, borderRadius: 10, elevation: 2}}>
+                      <TouchableRipple key={index} style={{width: '100%'}} onPress={() => onPressNavToService(item)}>
+                        <ImageBackground blurRadius={5} source={require('../assets/images/background3.png')} style={{ width: '100%', height: 100, padding: 10}}>
+                          <View style={{flexDirection: 'row'}}>
+                            <Image source={{uri: item.image}} style={{borderRadius: 15, borderColor: Colors.darkGray, borderWidth: 2,  width: 80, height: 80}}/>
+                            <View style={{marginLeft: 10, width: '70%', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+                              <Text style={{fontFamily: 'Oswald-Medium', fontSize: 20, color: Colors.primary}}>{item.title}</Text>
+                              <Text style={{fontFamily: 'PTSerif-Bold', fontSize: 15, color: Colors.darkGray}}>{item.desc}</Text>
+                            </View>
+                          </View>
+                        </ImageBackground>
+                      </TouchableRipple>
                     </View>
-                  </ImageBackground>
-                </TouchableRipple>
+                    )}
+                  </View> 
+                </View>
+                } 
+              </View>  
+              :
+              <View style={{ alignItems: 'center'}}>
+                <Animatable.View animation={'fadeIn'} style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <LottieView style={{width: Dimensions.get("screen").height / 2.5, height: Dimensions.get("screen").height / 2.5}}  source={status === 'Success'? require('../assets/lottie/payment-successfull.json') : require('../assets/lottie/serviceUnavailable.json')} autoPlay={true} />
+                </Animatable.View>
+                <View style={{width: '90%', alignItems: 'center'}}>
+                  <View style={{marginBottom: 10}}>
+                    <Title label="Oh, snap," color={Colors.secondary} bold={true} size={25}/>
+                  </View>  
+                  <Title label="Service Unavialable at your region, we will try to provide here soon..." color={Colors.darkGray} bold={true} size={20}/>
+                </View>
               </View>
-              )}
-            </View> 
-          </View>
-          }  
+            }
+           
           </ScrollView>
         </View>
       </View>

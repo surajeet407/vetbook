@@ -29,6 +29,7 @@ import i18n from '../util/i18n';
 
 const PetStoreScreen = ({navigation, route}) => {
     const isFocused = useIsFocused();
+    const [homeAddress, setHomeAddress] = useState("")
     const [status,
         setStatus] = useState(route.params.status);
     const [cartItemCount,
@@ -156,6 +157,11 @@ const PetStoreScreen = ({navigation, route}) => {
 
     useEffect(() => {
         if (isFocused) {
+            AsyncStorage
+                .getItem("homeAddress")
+                .then((homeAddress, msg) => {
+                setHomeAddress(JSON.parse(homeAddress))
+            })
             getCartItems()
         }
         getData();
@@ -167,7 +173,7 @@ const PetStoreScreen = ({navigation, route}) => {
             flex: 1,
             backgroundColor: Colors.appBackground
         }}>
-            <LandingHeader status={status} navigation={navigation}/>
+            <LandingHeader homeAddress={homeAddress} status={status} navigation={navigation}/>
             <View
                 style={{
                 borderTopLeftRadius: 50,

@@ -20,6 +20,7 @@ import database from '@react-native-firebase/database';
 import i18n from '../util/i18n';
 
 const SettingsScreen = ({navigation, route}) => {
+    const [homeAddress, setHomeAddress] = useState("")
     const [status,
         setStatus] = useState(route.params.status);
     const handleAuthButton = () => {
@@ -38,13 +39,20 @@ const SettingsScreen = ({navigation, route}) => {
         }
         navigation.navigate('Log')
     }
+    useEffect(() => {
+        AsyncStorage
+            .getItem("homeAddress")
+            .then((homeAddress, msg) => {
+            setHomeAddress(JSON.parse(homeAddress))
+        })
+    }, [])
     return (
         <View
             style={{
             flex: 1,
             backgroundColor: Colors.appBackground
         }}>
-            <LandingHeader status={status} navigation={navigation}/>
+            <LandingHeader homeAddress={homeAddress} status={status} navigation={navigation}/>
             <View
                 style={{
                 marginTop: 80,

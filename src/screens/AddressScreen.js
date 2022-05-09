@@ -29,6 +29,35 @@ const AddressScreen = ({navigation, route}) => {
     const [region,
         setRegion] = useState(null);
     
+    const _getAddress = (lat, lan) => {
+        // let positionStackApi = "http://api.positionstack.com/v1/reverse?access_key=1e7810be054a872c3ed9c3b694644" +
+        // "7c7&query=22.357908900473035,87.6132639683783"
+        let url = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" + lat + "&longitude=" + lan + "&localityLanguage=en"
+        axios
+        .get(url)
+        .then(function (response) {
+            // setAddress(response.data.data[0].label)
+            let address = ""
+            for(let i = response.data.localityInfo.administrative.length - 1; i >= 0; i--) {
+                address = address + response.data.localityInfo.administrative[i].name + ", "
+            }
+            setAddress(address)
+        })
+        .catch(function (error) {
+            // console.log(error)
+            Toast.show({
+                type: 'customToast',
+                text1: "Unable to get your current location...",
+                position: 'top',
+                visibilityTime: 1500,
+                topOffset: 20,
+                props: {
+                    backgroundColor: Colors.error_toast_color
+                }
+            });
+        });   
+    }
+
     useEffect(() => {    
         // Geocoder.init("AIzaSyBBPGbYThYVRWkyWMt8-N5Y_wjtMFcEmRQ", {language : "en"});
         //     Geocoder.from(22.357908900473035, 87.6132639683783)
@@ -45,32 +74,8 @@ const AddressScreen = ({navigation, route}) => {
                 latitudeDelta: 0.0032349810554670455,
                 longitudeDelta: 0.0025001540780067444
             })   
-            let positionStackApi = "http://api.positionstack.com/v1/reverse?access_key=1e7810be054a872c3ed9c3b694644" +
-                "7c7&query=22.357908900473035,87.6132639683783"
-                let url = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude + "&localityLanguage=en"
-                axios
-                .get(url)
-                .then(function (response) {
-                    // setAddress(response.data.data[0].label)
-                    let address = ""
-                    for(let i = response.data.localityInfo.administrative.length - 1; i >= 0; i--) {
-                        address = address + response.data.localityInfo.administrative[i].name + ", "
-                    }
-                    setAddress(address)
-                })
-                .catch(function (error) {
-                    // console.log(error)
-                    Toast.show({
-                        type: 'customToast',
-                        text1: "Unable to get your current location...",
-                        position: 'top',
-                        visibilityTime: 1500,
-                        topOffset: 20,
-                        props: {
-                            backgroundColor: Colors.error_toast_color
-                        }
-                    });
-                });    
+            // console.log(position.coords.latitude, position.coords.longitude)
+            _getAddress(position.coords.latitude, position.coords.longitude)
                
         },    
         error => console.log('Error',
@@ -79,7 +84,9 @@ const AddressScreen = ({navigation, route}) => {
     }, []);
 
     const onRegionChange = (region) => {
-        // setRegion(region)
+        // console.log(region)
+        setRegion(region)
+        _getAddress(region.latitude, region.longitude)
     }
 
     const onPressGoToSaveAddress = () => {

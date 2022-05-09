@@ -99,9 +99,7 @@ const LogScreen = ({navigation, route}) => {
                         <RNBounceable
                             onPress={() => navigation.navigate('HomeBottomTabBar', {
                             screen: 'Home',
-                            params: {
-                                status: "loggedOut"
-                            }
+                            status: "loggedOut"
                         })}
                             style={{
                             flexDirection: 'row',

@@ -97,7 +97,7 @@ const LandingHeader = (props) => {
                                     style={{
                                     fontFamily: 'Redressed-Regular',
                                     fontSize: 18,
-                                    color: Colors.secondary
+                                    color: Colors.gray
                                 }}>{props.homeAddress.address}</Text>
                             </RNBounceable>
                         </View>

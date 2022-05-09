@@ -259,7 +259,7 @@ const ItemDetailScreen = ({navigation, route}) => {
         if (isFocused) {
             getCartItemCount()
         }
-    }, []);
+    }, [isFocused]);
 
     return (
         <View

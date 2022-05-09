@@ -50,6 +50,7 @@ import LottieView from 'lottie-react-native';
 
 
   const getData = () => {
+    debugger;
     if (status === 'loggedIn') {
       AsyncStorage
           .getItem('phoneNo')
@@ -85,6 +86,7 @@ import LottieView from 'lottie-react-native';
       AsyncStorage
           .getItem("anonymusService")
           .then((data) => {
+            console.log(data)
               if (data && JSON.parse(data).length > 0) {
                 let data = JSON.parse(data)
                 let onGoingItems = data.filter(item => item.mode === 'ongoing')
@@ -197,7 +199,7 @@ import LottieView from 'lottie-react-native';
       })
       getData();
     }
-  }, [])
+  }, [isFocused])
    return (
     <View  style={{ flex: 1, backgroundColor: Colors.appBackground}} >
       <LandingHeader homeAddress={homeAddress} status={status} navigation={navigation}/>

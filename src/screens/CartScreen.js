@@ -54,10 +54,8 @@ const CartScreen = ({navigation, route}) => {
         if (status === 'loggedOut') {
             if (newData.length > 0) {
                 AsyncStorage.setItem('cartItems', JSON.stringify(newData));
-                AsyncStorage.setItem('cartItemCount', (newData.length).toString());
             } else {
                 AsyncStorage.setItem('cartItems', "[]");
-                AsyncStorage.setItem('cartItemCount', "0");
             }
         } else {
             if (newData.length > 0) {
@@ -125,7 +123,10 @@ const CartScreen = ({navigation, route}) => {
     }
     const onPressButton = () => {
         if (total === 0) {
-            navigation.navigate('PetStore');
+            navigation.navigate(navigation.navigate("HomeBottomTabBar", {
+                screen: "PetStore",
+                status: status
+            }));
         } else {
             navigation.navigate("Confirm", {
                 details: {
@@ -224,10 +225,7 @@ const CartScreen = ({navigation, route}) => {
                 leftIconSize={45}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
-                onPressLeft={() => navigation.navigate("HomeBottomTabBar", {
-                screen: "PetStore",
-                status: status
-            })}/>
+                onPressLeft={() => navigation.goBack()}/>
             <View
                 style={{
                 marginBottom: total === 0

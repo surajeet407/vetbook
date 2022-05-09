@@ -100,14 +100,13 @@ const ItemDetailScreen = ({navigation, route}) => {
                             route.params.item.quantity = numericInputVal;
                             cartItem.push(route.params.item);
                             AsyncStorage.setItem('cartItems', JSON.stringify(cartItem));
-                            AsyncStorage
-                                .getItem('cartItemCount')
-                                .then((data, msg) => {
-                                    if (data) {
-                                        setCartItemCount((parseInt(data) + 1).toString())
-                                        AsyncStorage.setItem('cartItemCount', (parseInt(data) + 1).toString());
-                                    }
-                                })
+                                AsyncStorage
+                                    .getItem('cartItems')
+                                    .then((data, msg) => {
+                                        if (data) {
+                                            setCartItemCount(JSON.parse(data).length)
+                                        }
+                                    })
                             Toast.show({
                                 type: 'customToast',
                                 text1: "Item added to your cart...",
@@ -126,7 +125,6 @@ const ItemDetailScreen = ({navigation, route}) => {
                         data.push(route.params.item);
                         AsyncStorage.setItem('cartItems', JSON.stringify(data));
                         setCartItemCount("1");
-                        AsyncStorage.setItem('cartItemCount', "1");
                         Toast.show({
                             type: 'customToast',
                             text1: "Item added to your cart...",
@@ -228,10 +226,12 @@ const ItemDetailScreen = ({navigation, route}) => {
     const getCartItemCount = () => {
         if (status === 'loggedOut') {
             AsyncStorage
-                .getItem('cartItemCount')
+                .getItem('cartItems')
                 .then((data, msg) => {
                     if (data) {
-                        setCartItemCount(data)
+                        setCartItemCount(JSON.parse(data).length)
+                    } else {
+                        setCartItemCount(0)
                     }
                 })
         } else {

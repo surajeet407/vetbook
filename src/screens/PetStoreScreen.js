@@ -129,10 +129,12 @@ const PetStoreScreen = ({navigation, route}) => {
     const getCartItems = () => {
         if (status === 'loggedOut') {
             AsyncStorage
-                .getItem('cartItemCount')
+                .getItem('cartItems')
                 .then((data, msg) => {
                     if (data) {
-                        setCartItemCount(data)
+                        setCartItemCount(JSON.parse(data).length)
+                    } else {
+                        setCartItemCount(0)
                     }
                 })
         } else {

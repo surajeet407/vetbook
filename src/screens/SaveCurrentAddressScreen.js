@@ -40,6 +40,8 @@ import React, {useEffect, useState, useRef} from 'react';
   const [floor, setFloor] = useState("");
   const [nearby, setNearby] = useState("");
   const [tag, setTag] = useState("");
+  const [name, setName] = useState("");
+  const [pinCode, setPinCode] = useState("");
     
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     useEffect(() => {
@@ -88,39 +90,56 @@ import React, {useEffect, useState, useRef} from 'react';
           text = "Please enter nearby"
         } else if(tag === "") {
           text = "Please select tag";
-        } else if(tag === "") {
-          text = "Please select tag";
-        } else if(checked === "") {
+        } else if(name === "") {
+          text = "Please enter name";
+        } else if(pinCode === "") {
+          text = "Please enter pin code";
+        }  else if(checked === "") {
           text = "Please select default";
         }
         
-        if(address !== "" && floor !== "" && nearby !== "" && tag !== ""){
+        if(address !== "" && floor !== "" && nearby !== "" && tag !== ""  && name !== "" && pinCode !== ""){
           if (status === 'loggedOut') {
-            AsyncStorage
-                .getItem('AsynchronousAddresses')
-                .then((data) => {
-                    let obj = {
-                      ...region, 
-                      id: uuid.v4(),
-                      tag: tag,
-                      default: checked === "true"? true:false,
-                      address: address,
-                      floor: floor,
-                      nearby: nearby
-                    }, ar = [];
-                    if (data && JSON.parse(data).length > 0) {
-                      let actData = JSON.parse(data)
-                      for(var i = 0; i < actData.length; i++) {
-                        actData[i].default = false
-                      }
-                      ar = actData
-                      ar.push(obj)
-                    } else {
-                      ar.push(obj)
+            if(phoneNo === "") {
+              Keyboard.dismiss();
+              Toast.show({
+                type: 'customToast',
+                text1: "Please enter phone no",
+                position: 'top',
+                visibilityTime: 1500,
+                topOffset: 15,
+                props: {
+                    backgroundColor: Colors.error_toast_color
+                }
+              });
+            } else {
+              AsyncStorage
+              .getItem('AsynchronousAddresses')
+              .then((data) => {
+                  let obj = {
+                    ...region, 
+                    id: uuid.v4(),
+                    tag: tag,
+                    default: checked === "true"? true:false,
+                    address: address,
+                    floor: floor,
+                    nearby: nearby
+                  }, ar = [];
+                  if (data && JSON.parse(data).length > 0) {
+                    let actData = JSON.parse(data)
+                    for(var i = 0; i < actData.length; i++) {
+                      actData[i].default = false
                     }
-                    AsyncStorage
-                    .setItem('AsynchronousAddresses', JSON.stringify(ar))
-                });
+                    ar = actData
+                    ar.push(obj)
+                  } else {
+                    ar.push(obj)
+                  }
+                  AsyncStorage
+                  .setItem('AsynchronousAddresses', JSON.stringify(ar))
+              });
+            }
+            
         } else {
             AsyncStorage
                 .getItem('phoneNo')
@@ -232,11 +251,14 @@ import React, {useEffect, useState, useRef} from 'react';
                     <FormElement inputEditable={false} onChangeText={(val) => setAddress(val)} inputValue={address} showLabel={false} title='Complete Address' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100} multiline={true} numberOfLines={3}/>
                     <FormElement onChangeText={(val) => setFloor(val)} inputValue={floor} showLabel={false} title='Floor /Apartment' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
                     <FormElement onChangeText={(val) => setNearby(val)} inputValue={nearby} showLabel={false} title='Nearby' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
-                    <FormElement onPressToken={onPressTag} tokens={tags}  showLabel={true} title='Select Tag' type='token' labelColor={Colors.secondary}/>
-                    <FormElement defaultSelection={0} onPressToken={onPressDefault} tokens={defaultOptions}  showLabel={true} title='Make it as default' type='token' labelColor={Colors.secondary}/>
+                    
                     {status === "loggedOut" && (
                       <FormElement onChangeText={(val) => setPhoneNo(val)} inputValue={phoneNo} showLabel={false} title='Phone No' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
                     )}
+                    <FormElement onChangeText={(val) => setName(val)} inputValue={name} showLabel={false} title='Name' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
+                    <FormElement onChangeText={(val) => setPinCode(val)} inputValue={pinCode} showLabel={false} title='PIN Code' type='input' labelColor={Colors.secondary} keyboardType='numeric' maxLength={6}/>
+                    <FormElement onPressToken={onPressTag} tokens={tags}  showLabel={true} title='Select Tag' type='token' labelColor={Colors.secondary}/>
+                    <FormElement defaultSelection={0} onPressToken={onPressDefault} tokens={defaultOptions}  showLabel={true} title='Make it as default' type='token' labelColor={Colors.secondary}/>
                 </View>
             </ScrollView>
         </View>

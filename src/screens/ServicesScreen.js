@@ -107,7 +107,7 @@ const ServicesScreen = ({navigation, route}) => {
                             }
                         })
                         mainData[path].mode = 'cancelled'
-                        AsyncStorage.getItem("anonymusService", JSON.stringify(mainData))
+                        AsyncStorage.setItem("anonymusService", JSON.stringify(mainData))
                         getData();
                         Toast.show({
                             type: 'customToast',

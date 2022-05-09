@@ -21,16 +21,11 @@ import Icon, {Icons} from '../util/Icons';
 import i18n from '../util/i18n';
 import database from '@react-native-firebase/database';
 
-
 const TrackOrderScreen = ({navigation, route}) => {
     let images = []
     if (route.params.details.type === 'Items') {
-        images = [
-            require('../assets/lottie/serviceOrdered.json'),
-            require('../assets/lottie/confirmed.json'),
-            require('../assets/lottie/smiley.json')
-        ];
-    } else  {
+        images = [require('../assets/lottie/serviceOrdered.json'), require('../assets/lottie/confirmed.json'), require('../assets/lottie/smiley.json')];
+    } else {
         images = [
             require('../assets/lottie/serviceOrdered.json'),
             require('../assets/lottie/confirming.json'),
@@ -40,8 +35,10 @@ const TrackOrderScreen = ({navigation, route}) => {
             require('../assets/lottie/smiley.json')
         ];
     }
-    const [stepIndicatorHeight, setStepIndicatorHeight] = useState(400)
-    const [stepCount, setStepCount] = useState(0)
+    const [stepIndicatorHeight,
+        setStepIndicatorHeight] = useState(400)
+    const [stepCount,
+        setStepCount] = useState(0)
     const [status,
         setStatus] = useState(route.params.status);
     const [details,
@@ -56,7 +53,7 @@ const TrackOrderScreen = ({navigation, route}) => {
         }
     };
     const getData = () => {
-        if (route.params.details.type === 'Items' || route.params.details.type === 'Adopt') {
+        if (details.type === 'Items' || details.type === 'Adopt') {
             setStepCount(3)
             setStepIndicatorHeight(400)
             setLabels([
@@ -86,13 +83,21 @@ const TrackOrderScreen = ({navigation, route}) => {
                                         var trackItemDetails = snapshot
                                             .val()
                                             .filter(item => item.id === details.id)
-                                            // console.log(trackItemDetails)
+                                        // console.log(trackItemDetails)
                                         setCurrentPosition(parseInt(trackItemDetails[0].trackStep))
                                     }
                                 })
                         }
                     })
 
+            } else {
+                database()
+                    .ref("/anonymous/" + details.id)
+                    .on("value", snapshot => {
+                        if (snapshot.val()) {
+                            setCurrentPosition(parseInt(snapshot.val().trackStep))
+                        }
+                    })
             }
 
         } else {
@@ -123,17 +128,28 @@ const TrackOrderScreen = ({navigation, route}) => {
                         }
                     })
 
+            } else {
+                database()
+                    .ref("/anonymous/" + details.id)
+                    .on("value", snapshot => {
+                        if (snapshot.val()) {
+                            setCurrentPosition(parseInt(snapshot.val().trackStep))
+                        }
+                    })
             }
         }
 
     }
     const onPressNavBack = () => {
-        if(route.params.details.fromScreen === 'Confirm') {
-            navigation.navigate("HomeBottomTabBar", {screen: "Home", status: route.params.details.userStatus})
+        if (route.params.details.fromScreen === 'Confirm') {
+            navigation.navigate("HomeBottomTabBar", {
+                screen: "Home",
+                status: route.params.details.userStatus
+            })
         } else {
             navigation.goBack()
         }
-        
+
     }
     useEffect(() => {
         getData()
@@ -348,40 +364,35 @@ const TrackOrderScreen = ({navigation, route}) => {
                                     </View>
                                 </Animatable.View>
                             </View>
-                        : 
-                        <View>
+                        : <View>
                             <Animatable.View
-                                    delay={100}
-                                    animation={'slideInLeft'}
+                                delay={100}
+                                animation={'slideInLeft'}
+                                style={{
+                                marginLeft: 10,
+                                width: '70%',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Title size={20} label={"Pet Items"} bold={true} color={Colors.appBackground}/>
+                                <View
                                     style={{
-                                    marginLeft: 10,
-                                    width: '70%',
-                                    alignItems: 'flex-start'
+                                    flexDirection: 'row'
                                 }}>
-                                    <Title
-                                        size={20}
-                                        label={"Pet Items"}
-                                        bold={true}
-                                        color={Colors.appBackground}/>
+                                    <Title size={16} label='Total Price:' bold={true} color={Colors.appBackground}/>
                                     <View
                                         style={{
-                                        flexDirection: 'row'
+                                        marginLeft: 5
                                     }}>
-                                        <Title size={16} label='Total Price:' bold={true} color={Colors.appBackground}/>
-                                        <View
-                                            style={{
-                                            marginLeft: 5
-                                        }}>
-                                            <Title
-                                                size={16}
-                                                label={"₹ " + details.total + " /-"}
-                                                bold={true}
-                                                color={Colors.white}/>
-                                        </View>
+                                        <Title
+                                            size={16}
+                                            label={"₹ " + details.total + " /-"}
+                                            bold={true}
+                                            color={Colors.white}/>
                                     </View>
-                                </Animatable.View>
+                                </View>
+                            </Animatable.View>
                         </View>
-                        }
+}
 
                 </View>
             </ImageBackground>

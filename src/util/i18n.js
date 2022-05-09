@@ -20,6 +20,8 @@ export default {
     },
     //settings screen
     firstSectionTitle : "Manage",
+    secondSectionTitle : "Support",
+    thirdSectionTitle : "Legal",
     manageAddress : "Manage Address",
     trackService : "Track Service",
     orders : "Orders",

@@ -93,15 +93,19 @@ import LottieView from 'lottie-react-native';
                 if (onGoingItems.length > 0) {
                   setShowTrackComponent(true);
                   setTrackDetails(onGoingItems[0]);
+                } else {
+                  setShowTrackComponent(false);
                 }
+                debugger
                 for(let i = 0; i < mainData.length; i++) {
-                  if((mainData[i].serviceType  === 'Consult' || mainData[i].serviceType  === 'Veterinary' || mainData[i].serviceType  === 'BloodTest') && snapshot.val()[i].mode === 'ongoing') {
+                  if((mainData[i].serviceType  === 'Consult' || mainData[i].serviceType  === 'Veterinary' || mainData[i].serviceType  === 'BloodTest') && mainData[i].mode === 'ongoing') {
                     setVetServiceCount(1)
                   }
                   if(mainData[i].serviceType === 'Training' && mainData[i].mode === 'ongoing') {
                     setTrainingServiceCount(1)
                   }
                   if(mainData[i].serviceType === 'Grooming' && mainData[i].mode === 'ongoing') {
+
                     setGroomingServiceCount(1)
                   }
                 }
@@ -175,6 +179,7 @@ import LottieView from 'lottie-react-native';
       navigation.navigate(item.navTo, {item: item})
     }
     } else if(item.title === 'Grooming') {
+      console.log(groomingServiceCount)
       if(groomingServiceCount > 0) {
         Toast.show({
           type: 'customToast',

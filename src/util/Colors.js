@@ -1,6 +1,6 @@
 export default {
     appBackground : "#fff",
-    primary : '#2b7fb8',
+    primary : '#039a83',
     secondary : '#464775',
     tertiary : "",
     black : '#000',

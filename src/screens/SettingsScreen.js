@@ -73,11 +73,11 @@ const SettingsScreen = ({navigation, route}) => {
 
                     <View >
                         <SectionBanner
-                            fontSize={20}
+                            fontSize={18}
                             title={i18n.firstSectionTitle}
-                            borderColor={Colors.appBackground}
-                            borderWidth={100}
-                            titleColor={Colors.mediumDark}/>
+                            borderColor={Colors.darkGray}
+                            borderWidth={80}
+                            titleColor={Colors.secondary}/>
                         <Animatable.View
                             delay={100}
                             animation={'fadeInLeft'}
@@ -243,11 +243,11 @@ const SettingsScreen = ({navigation, route}) => {
                         marginTop: 20
                     }}>
                         <SectionBanner
-                            fontSize={20}
-                            title='Support'
-                            borderColor={Colors.appBackground}
-                            borderWidth={100}
-                            titleColor={Colors.mediumDark}/>
+                            fontSize={18}
+                            title={i18n.secondSectionTitle}
+                            borderColor={Colors.darkGray}
+                            borderWidth={80}
+                            titleColor={Colors.secondary}/>
                         <Animatable.View
                             delay={100}
                             animation={'fadeInLeft'}
@@ -301,11 +301,11 @@ const SettingsScreen = ({navigation, route}) => {
                             .width - 40
                     }}>
                         <SectionBanner
-                            fontSize={20}
-                            title='Legal'
-                            borderColor={Colors.appBackground}
-                            borderWidth={100}
-                            titleColor={Colors.mediumDark}/>
+                            fontSize={18}
+                            title={i18n.thirdSectionTitle}
+                            borderColor={Colors.darkGray}
+                            borderWidth={50}
+                            titleColor={Colors.secondary}/>
                         <Animatable.View
                             delay={100}
                             animation={'fadeInLeft'}

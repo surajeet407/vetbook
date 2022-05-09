@@ -82,6 +82,8 @@ import LottieView from 'lottie-react-native';
           })
 
   } else {
+      // AsyncStorage
+      //   .setItem("anonymusService", "[]")
       AsyncStorage
           .getItem("anonymusService")
           .then((data) => {

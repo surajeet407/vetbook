@@ -171,6 +171,11 @@ const OrdersScreen = ({navigation, route}) => {
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/>
             <FlatList
+                ListEmptyComponent={
+                    <View style={{alignItems: 'center', marginTop: 20}}>
+                        <Title label="No orders are found..." size={20} color={Colors.darkGray}/>
+                    </View>
+                }
                 showsVerticalScrollIndicator={false}
                 data={pastOrders}
                 keyExtractor={item => item.id}

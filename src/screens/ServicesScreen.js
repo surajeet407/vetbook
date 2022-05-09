@@ -164,6 +164,11 @@ const ServicesScreen = ({navigation, route}) => {
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/>
 
             <FlatList
+                ListEmptyComponent={
+                    <View style={{alignItems: 'center', marginTop: 20}}>
+                        <Title label="No service requests are found..." size={20} color={Colors.darkGray}/>
+                    </View>
+                }
                 showsVerticalScrollIndicator={false}
                 data={pastServices}
                 keyExtractor={item => item.id}

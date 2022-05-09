@@ -140,6 +140,20 @@ import React, {useEffect, useState, useRef} from 'react';
                   }
                   AsyncStorage
                   .setItem('AsynchronousAddresses', JSON.stringify(ar))
+
+                  
+                  Toast.show({
+                    type: 'customToast',
+                    text1: "Address saved...",
+                    position: 'top',
+                    visibilityTime: 1500,
+                    topOffset: 15,
+                    props: {
+                          backgroundColor: Colors.green2
+                    }
+                    
+                });
+                navigation.goBack()
               });
             }
             
@@ -226,7 +240,7 @@ import React, {useEffect, useState, useRef} from 'react';
               subHeaderTextColor={Colors.secondary}
 
               position={'relative'} 
-              headerHeight={60}
+              headerHeight={80}
 
               headerText={"Save Address"} 
               headerTextSize={25} 
@@ -242,27 +256,23 @@ import React, {useEffect, useState, useRef} from 'react';
               onPressLeft={() => navigation.goBack()} 
           />
           <View style={[{
-            flex: 1,
             overflow: 'hidden',
             backgroundColor: Colors.lightOverlayColor,
             borderTopLeftRadius: 40,
             borderTopRightRadius: 40,
             padding: 20,
+            marginBottom: 100
             }]}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View>
-                    <View style={{marginTop: 20, marginBottom: 10}}>
-                        <SectionBanner fontSize={20} title='Enter Address Details' borderColor={Colors.primary} borderWidth={100} titleColor={Colors.mediumDark}/>
-                    </View>
+            <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
+                <View> 
                     <FormElement inputEditable={false} onChangeText={(val) => setAddress(val)} inputValue={address} showLabel={false} title='Complete Address' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100} multiline={true} numberOfLines={3}/>
                     <FormElement onChangeText={(val) => setFloor(val)} inputValue={floor} showLabel={false} title='Floor /Apartment' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
                     <FormElement onChangeText={(val) => setNearby(val)} inputValue={nearby} showLabel={false} title='Nearby' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
-                    
-                    {status === "loggedOut" && (
-                      <FormElement onChangeText={(val) => setPhoneNo(val)} inputValue={phoneNo} showLabel={false} title='Phone No' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
-                    )}
                     <FormElement onChangeText={(val) => setName(val)} inputValue={name} showLabel={false} title='Name' type='input' labelColor={Colors.secondary} keyboardType='default' maxLength={100}/>
                     <FormElement onChangeText={(val) => setPinCode(val)} inputValue={pinCode} showLabel={false} title='PIN Code' type='input' labelColor={Colors.secondary} keyboardType='numeric' maxLength={6}/>
+                    {status === "loggedOut" && (
+                      <FormElement onChangeText={(val) => setPhoneNo(val)} inputValue={phoneNo} showLabel={false} title='Phone No' type='input' labelColor={Colors.secondary} keyboardType='numeric' maxLength={10}/>
+                    )}
                     <FormElement onPressToken={onPressTag} tokens={tags}  showLabel={true} title='Select Tag' type='token' labelColor={Colors.secondary}/>
                     <FormElement defaultSelection={0} onPressToken={onPressDefault} tokens={defaultOptions}  showLabel={true} title='Make it as default' type='token' labelColor={Colors.secondary}/>
                 </View>

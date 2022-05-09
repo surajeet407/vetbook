@@ -20,7 +20,8 @@ import database from '@react-native-firebase/database';
 import i18n from '../util/i18n';
 
 const SettingsScreen = ({navigation, route}) => {
-    const [homeAddress, setHomeAddress] = useState("")
+    const [homeAddress,
+        setHomeAddress] = useState("")
     const [status,
         setStatus] = useState(route.params.status);
     const handleAuthButton = () => {
@@ -44,8 +45,8 @@ const SettingsScreen = ({navigation, route}) => {
         AsyncStorage
             .getItem("homeAddress")
             .then((homeAddress, msg) => {
-            setHomeAddress(JSON.parse(homeAddress))
-        })
+                setHomeAddress(JSON.parse(homeAddress))
+            })
     }, [])
     return (
         <View
@@ -53,7 +54,10 @@ const SettingsScreen = ({navigation, route}) => {
             flex: 1,
             backgroundColor: Colors.appBackground
         }}>
-            <LandingHeader homeAddress={homeAddress} status={status} navigation={navigation}/>
+            <LandingHeader
+                homeAddress={homeAddress}
+                status={status}
+                navigation={navigation}/>
             <View
                 style={{
                 marginTop: 80,
@@ -80,45 +84,47 @@ const SettingsScreen = ({navigation, route}) => {
                             style={{
                             marginTop: 5
                         }}>
-                            {status === "loggedIn" && (
-                                <TouchableOpacity
+                            <TouchableOpacity
+                                style={{
+                                paddingVertical: 8,
+                                borderColor: Colors.gray,
+                                borderBottomWidth: 1,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}
+                                onPress={() => navigation.navigate("ManageAddress", {
+                                showSelection: false,
+                                status: status
+                            })}>
+                                <View
                                     style={{
-                                    paddingVertical: 8,
-                                    borderColor: Colors.gray,
-                                    borderBottomWidth: 1,
                                     flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between'
-                                }}
-                                    onPress={() => navigation.navigate("ManageAddress", {showSelection: false, status: status})}>
-                                    <View
-                                        style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center'
-                                    }}>
-                                        <Icon
-                                            style={{
-                                            marginRight: 10,
-                                            marginTop: 5
-                                        }}
-                                            type={Icons.Entypo}
-                                            name={'address'}
-                                            size={20}
-                                            color={Colors.primary}/>
-                                        <Text
-                                            style={{
-                                            fontFamily: 'PTSerif-Bold',
-                                            fontSize: 18
-                                        }}>{i18n.manageAddress}</Text>
-                                    </View>
+                                    alignItems: 'center'
+                                }}>
                                     <Icon
-                                        type={Icons.MaterialIcons}
-                                        name={'keyboard-arrow-right'}
+                                        style={{
+                                        marginRight: 10,
+                                        marginTop: 5
+                                    }}
+                                        type={Icons.Entypo}
+                                        name={'address'}
                                         size={20}
-                                        color={Colors.secondary}/>
+                                        color={Colors.primary}/>
+                                    <Text
+                                        style={{
+                                        fontFamily: 'PTSerif-Bold',
+                                        fontSize: 18
+                                    }}>{i18n.manageAddress}</Text>
+                                </View>
+                                <Icon
+                                    type={Icons.MaterialIcons}
+                                    name={'keyboard-arrow-right'}
+                                    size={20}
+                                    color={Colors.secondary}/>
 
-                                </TouchableOpacity>
-                            )}
+                            </TouchableOpacity>
+
                             <TouchableOpacity
                                 style={{
                                 paddingVertical: 8,
@@ -284,7 +290,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     size={20}
                                     color={Colors.secondary}/>
                             </TouchableOpacity>
-                           
+
                         </Animatable.View>
                     </View>
                     <View

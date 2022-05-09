@@ -50,7 +50,6 @@ import LottieView from 'lottie-react-native';
 
 
   const getData = () => {
-    debugger;
     if (status === 'loggedIn') {
       AsyncStorage
           .getItem('phoneNo')

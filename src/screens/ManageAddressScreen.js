@@ -9,6 +9,7 @@ import React, {useRef, useState, useEffect} from 'react';
    ImageBackground
  } from 'react-native';
  import Colors from '../util/Colors';
+ import { useIsFocused } from '@react-navigation/native';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { RadioButton } from 'react-native-paper';
@@ -22,6 +23,7 @@ import i18n from '../util/i18n';
  
  const ManageAddressScreen = ({navigation, route}) => {
   // console.log(route.params.details)
+  const isFocused = useIsFocused();
   const [status,
     setStatus] = useState(route.params.status);
   const [addressess, setAddressess] = useState([]);
@@ -57,11 +59,21 @@ import i18n from '../util/i18n';
             
           }
       })
+    } else {
+      if (newAddressess.length > 0) {
+        AsyncStorage
+        .setItem('AsynchronousAddresses', JSON.stringify(newAddressess))
+      } else {
+        AsyncStorage
+        .setItem('AsynchronousAddresses', '[]')
+      }
     }
   };
+
   const onPressAddressRadioButton = (id) => {
     setChecked(id);
   }
+
   const getData = () => {
     if(status === 'loggedIn') {
       AsyncStorage
@@ -77,6 +89,14 @@ import i18n from '../util/i18n';
             })
           }
       })
+    } else {
+      AsyncStorage
+        .getItem('AsynchronousAddresses')
+        .then((data) => {
+          if (data && JSON.parse(data).length > 0) {
+            setAddressess(JSON.parse(data))
+          }
+      });
     }
     
   }
@@ -103,7 +123,6 @@ import i18n from '../util/i18n';
               .once("value")
               .then(snapshot => {
                 if(snapshot.val()) {
-                  console.log(snapshot.val())
                   let path, ar = snapshot.val();
                   for (let i = 0; i < ar.length; i++) {
                     if(ar[i].id === checked) {
@@ -123,14 +142,38 @@ import i18n from '../util/i18n';
               })
             }
         })
+      } else {
+        AsyncStorage
+          .getItem('AsynchronousAddresses')
+          .then((data) => {
+            if (data && JSON.parse(data).length > 0) {
+              let path, ar = JSON.parse(data);
+              for (let i = 0; i < ar.length; i++) {
+                if(ar[i].id === checked) {
+                    path = i
+                    ar[i].default = true
+                } else {
+                  ar[i].default = false
+                }
+              }
+              AsyncStorage
+                .setItem('AsynchronousAddresses', JSON.stringify(ar))
+              navigation.navigate("Confirm", {details: {
+                ...route.params.details,
+                address: ar[path]
+              }})
+            }
+        });
       }
     }
     
   }
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (isFocused) {
+      getData();
+    }
+  }, [isFocused]);
    return (
     <View style={{ flex: 1, backgroundColor: Colors.appBackground}} >
         <GeneralHeader 

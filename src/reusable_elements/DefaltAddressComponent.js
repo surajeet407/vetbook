@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import Colors from '../util/Colors';
 import Button from '../reusable_elements/Button';
 import * as Animatable from 'react-native-animatable';
@@ -9,6 +10,7 @@ import database from '@react-native-firebase/database';
 import i18n from '../util/i18n';
 
 const DefaltAddressComponent = (props) => {
+    const isFocused = useIsFocused();
     const [showAddress, setShowAddress] = useState(false)
     const [address, setAddress] = useState({})
     const [status, setStatus]  = useState();
@@ -16,40 +18,66 @@ const DefaltAddressComponent = (props) => {
         props
             .navigation
             .navigate("ManageAddress", {details: {...props.params}, status: status, showSelection: true})
+        
     }
     useEffect(() => {
-        AsyncStorage.getItem('userStatus').then((status) => {
-            setStatus(status)
-            if(status === 'loggedIn') {
-                AsyncStorage
-                  .getItem('phoneNo')
-                  .then((phoneNo, msg) => {
-                    if (phoneNo) {
-                      database()
-                      .ref('/users/' + phoneNo + "/addresses")
-                      .on("value", snapshot => {
-                        if(snapshot.val()) {
+        if (isFocused) {
+            AsyncStorage.getItem('userStatus').then((status) => {
+                setStatus(status)
+                
+                if(status === 'loggedIn') {
+                    AsyncStorage
+                    .getItem('phoneNo')
+                    .then((phoneNo, msg) => {
+                        if (phoneNo) {
+                        database()
+                        .ref('/users/' + phoneNo + "/addresses")
+                        .on("value", snapshot => {
+                            if(snapshot.val()) {
+                                let count = 0
+                                for(let i = 0; i < snapshot.val().length; i++) {
+                                    if(snapshot.val()[i].default) {
+                                        setAddress(snapshot.val()[i])
+                                        count++
+                                    } 
+                                } 
+                                if (count === 0) {
+                                    setShowAddress(false)
+                                } else {
+                                    setShowAddress(true) 
+                                }
+                            } else {
+                                setShowAddress(false)
+                            }
+                        })
+                        }
+                    })
+                } else {
+                    AsyncStorage
+                        .getItem('AsynchronousAddresses')
+                        .then((data) => {
+                        if (data && JSON.parse(data).length > 0) {
+                            
                             let count = 0
-                          for(let i = 0; i < snapshot.val().length; i++) {
-                              if(snapshot.val()[i].default) {
-                                setAddress(snapshot.val()[i])
-                                count++
-                              } 
-                          } 
-                          if (count === 0) {
-                            setShowAddress(false)
-                          } else {
-                            setShowAddress(true) 
-                          }
+                            for(let i = 0; i < JSON.parse(data).length; i++) {
+                                if(JSON.parse(data)[i].default) {
+                                    setAddress(JSON.parse(data)[i])
+                                    count++
+                                } 
+                            } 
+                            if (count === 0) {
+                                setShowAddress(false)
+                            } else {
+                                setShowAddress(true) 
+                            }
                         } else {
                             setShowAddress(false)
                         }
-                      })
-                    }
-                })
-              }
-        })
-    }, [])
+                    });
+                }
+            })
+        }
+    }, [isFocused])
 
     return (
         <Animatable.View

@@ -156,7 +156,6 @@ const PetStoreScreen = ({navigation, route}) => {
     }
 
     useEffect(() => {
-        console.log("here")
         if (isFocused) {
             AsyncStorage
                 .getItem("homeAddress")

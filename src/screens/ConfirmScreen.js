@@ -74,12 +74,14 @@ import moment from 'moment';
     
   }
 
-const _updateUiBasedOnServiceType = () => {
+const _updateUiBasedOnServiceType = (txnId) => {
   let type = "", anonymusPath = '', loggedInPath = '', clearCart = false, ar = [], obj = {...route.params.details}
   obj.id = uuid.v4()
   obj.orderedOn = moment().format('yyyy-MM-DD').toString()
   obj.userStatus = "loggedOut"
   obj.trackStep = "0"
+  obj.txnId = txnId,
+  obj.paymentStatus = "Success"
   if (route.params.details.serviceType === "None" ) {
     obj.mode = "inprocess"
     type = 'Items';
@@ -92,6 +94,7 @@ const _updateUiBasedOnServiceType = () => {
     anonymusPath = 'anonymusOrders'
     loggedInPath = 'orders'
   } else {
+    obj.notes = ""
     obj.mode = "ongoing"
     obj.total = total
     type = 'Service';
@@ -138,6 +141,7 @@ const _updateUiBasedOnServiceType = () => {
                     ar.push(obj);
                     database().ref('/users/' + phoneNo + "/" + loggedInPath).set(ar)
                   }
+                  navigation.navigate("PaymentStatus", {details: {...obj}})
               })
           }
       })
@@ -146,27 +150,27 @@ const _updateUiBasedOnServiceType = () => {
 }
 
   const _initializePayment = (desc, image, name) => {
-    // var options = {
-    //   description: desc,
-    //   image: image,
-    //   currency: 'INR',
-    //   key: "rzp_test_EIvDuWAtnslSuW",
-    //   amount: 100 * parseInt(total),
-    //   name: name,
-    //   theme: {color: Colors.primary}
-    // }
-    // RazorpayCheckout.open(options).then((data) => {
-    //   console.log(data);
-    //   _updateUiBasedOnServiceType()
-    //   navigation.navigate("PaymentStatus", {status: "Success"})
-    // }).catch((error) => {
-    //   console.log(error.description)
-    //   if(error.description.error.reason !== "payment_cancelled") {
-    //     navigation.navigate("PaymentStatus", {status: "Error"})
-    //   }
+    var options = {
+      description: desc,
+      image: image,
+      currency: 'INR',
+      key: "rzp_test_EIvDuWAtnslSuW",
+      amount: 100 * parseInt(total),
+      name: name,
+      theme: {color: Colors.primary}
+    }
+    RazorpayCheckout.open(options).then((data) => {
+      console.log(data);
+      _updateUiBasedOnServiceType(data.razorpay_payment_id)
+    }).catch((error) => {
+      console.log(error.description)
+      if(error.description.error.reason !== "payment_cancelled") {
+        let obj = {...route.params.details}
+        obj.paymentStatus = "Error"
+        navigation.navigate("PaymentStatus", {details: obj})
+      }
       
-    // });
-    _updateUiBasedOnServiceType()
+    });
     
   }
 
@@ -385,7 +389,7 @@ const _updateUiBasedOnServiceType = () => {
                       color={Colors.appBackground}
                       status={ isActive ? 'checked' : 'unchecked' }
                     />
-                    <Text style={styles.headerText}>{item.headerLeftText}</Text>
+                    <Text style={[styles.headerText, {color: isActive? Colors.white:Colors.darkGray}]}>{item.headerLeftText}</Text>
                   </View>
                   <Icon type={Icons.AntDesign} name={isActive? 'checksquare':'checksquareo'} size={30} color={Colors.appBackground} />
                 </View>

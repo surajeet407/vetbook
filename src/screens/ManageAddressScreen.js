@@ -187,7 +187,7 @@ import i18n from '../util/i18n';
               <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <View>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontFamily: 'Oswald-SemiBold', fontSize: 20, color: checked === item.id? Colors.secondary:Colors.darkGray}}>{item.nearby}</Text>
+                    <Text style={{fontFamily: 'Oswald-SemiBold', fontSize: 20, color: checked === item.id? Colors.secondary:Colors.darkGray}}>{item.name}</Text>
                     <Text style={{color: Colors.appBackground, marginLeft: 5, marginTop: 5, padding: 5, backgroundColor: Colors.primary, borderRadius: 10, fontFamily: 'Oswald-Medium', fontSize: 10}}>{item.tag}</Text>
                   </View>
                   <View style={{width: showSelection? '98%':'100%'}}>

@@ -10,7 +10,7 @@ import React, {useState, useRef, useEffect} from 'react';
    ScrollView,
    Animated,
  } from 'react-native';
- import { useTheme } from '@react-navigation/native';
+ import { useTheme, useIsFocused } from '@react-navigation/native';
  import Toast from 'react-native-toast-message';
  import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../util/Colors';
@@ -33,6 +33,7 @@ import LottieView from 'lottie-react-native';
 
  
  const HomeScreen = ({navigation, route}) => {
+  const isFocused = useIsFocused();
   const [homeAddress, setHomeAddress] = useState("")
   const [vetServiceCount, setVetServiceCount] = useState(0)
   const [groomingServiceCount, setGroomingServiceCount] = useState(0)
@@ -46,19 +47,7 @@ import LottieView from 'lottie-react-native';
   const [storeData, setStoreData] = useState({});
   const [loadind, setLoading] = useState(true);
   const { colors } = useTheme();
-  const animation = useRef(new Animated.Value(0)).current;
 
-  const opacity = animation.interpolate({
-    inputRange: [0, 100],
-    outputRange: [1, 0],
-    extrapolate: 'clamp'
-  })
-
-  const height = animation.interpolate({
-      inputRange: [0, 100],
-      outputRange: [120, 80],
-      extrapolate: 'clamp'
-  }) 
 
   const getData = () => {
     if (status === 'loggedIn') {
@@ -200,12 +189,14 @@ import LottieView from 'lottie-react-native';
     }
   }
   useEffect(() => {
+    if (isFocused) {
       AsyncStorage
         .getItem("homeAddress")
         .then((homeAddress, msg) => {
           setHomeAddress(JSON.parse(homeAddress))
       })
-    getData();
+      getData();
+    }
   }, [])
    return (
     <View  style={{ flex: 1, backgroundColor: Colors.appBackground}} >
@@ -216,7 +207,6 @@ import LottieView from 'lottie-react-native';
       <View style={{ paddingHorizontal: 10, marginTop: 65, marginBottom: showTrackComponent? 60:0, flex: 1}}>
         <View style={{}}>
           <ScrollView scrollEventThrottle={16}
-          onScroll={Animated.event([{nativeEvent: {contentOffset: {y: animation}}}], {useNativeDriver: false})}
           showsVerticalScrollIndicator={false}>
             {homeAddress.serviceAvailable?
               <View>

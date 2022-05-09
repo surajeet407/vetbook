@@ -123,7 +123,10 @@ import React, {useEffect, useState, useRef} from 'react';
                     default: checked === "true"? true:false,
                     address: address,
                     floor: floor,
-                    nearby: nearby
+                    nearby: nearby,
+                    name: name,
+                    pinCode: pinCode,
+                    phoneNo: phoneNo
                   }, ar = [];
                   if (data && JSON.parse(data).length > 0) {
                     let actData = JSON.parse(data)
@@ -156,7 +159,10 @@ import React, {useEffect, useState, useRef} from 'react';
                                   default: checked === "true"? true:false,
                                   address: address,
                                   floor: floor,
-                                  nearby: nearby
+                                  nearby: nearby,
+                                  name: name,
+                                  pinCode: pinCode
+
                                 }, ar = [];
                                 if (snapshot.val()) {
                                     let actData = snapshot.val()

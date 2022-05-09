@@ -23,28 +23,7 @@ import i18n from '../util/i18n';
  
  const PaymentStatusScreen = ({navigation, route}) => {
   // const [status, setStatus] = useState(route.params.status);
-  const [status, setStatus] = useState("Error");
-  const handlePaymentFailed = () => {
-    var options = {
-      description: "",
-      currency: 'INR',
-      key: "rzp_test_EIvDuWAtnslSuW",
-      amount: 100,
-      name: "Pay",
-      prefill: {
-        contact: '8900162177',
-        name: 'VetBook'
-      },
-      theme: {color: Colors.primary}
-    }
-    RazorpayCheckout.open(options).then((data) => {
-      // console.log(data);
-      navigation.navigate("PaymentStatus", {status: "Success"})
-    }).catch((error) => {
-      // console.log(error.description)
-      navigation.navigate("PaymentStatus", {status: "Error"})
-    });
-  }
+  const [status, setStatus] = useState(route.params.details.paymentStatus);
    return (
     <View style={{ flex: 1, backgroundColor: status === 'Success'? Colors.deepGreen:Colors.red}} >
         <View style={{position: 'absolute',
@@ -79,9 +58,9 @@ import i18n from '../util/i18n';
               {/* <Title label="Thank you for using our app, we will try to provide you the best service" color={Colors.mediumDark} bold={true} size={25}/> */}
               <View style={{marginTop: 20}}>
                 {status === 'Success'? 
-                <Button backgroundColor={Colors.deepGreen} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Track Service" onPress={() => navigation.navigate("TrackOrder")}/>
+                <Button backgroundColor={Colors.deepGreen} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Track Service" onPress={() => navigation.navigate("TrackOrder", {details: {...route.params.details}})}/>
                 :  
-                <Button backgroundColor={Colors.red} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Try Again" onPress={() => handlePaymentFailed}/>
+                <Button backgroundColor={Colors.red} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Try Again" onPress={() => navigation.goBack()}/>
                 }
               </View>
             </View>   

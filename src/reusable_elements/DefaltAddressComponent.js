@@ -65,7 +65,7 @@ const DefaltAddressComponent = (props) => {
                     flexDirection: 'row',
                     alignItems: 'center'
                 }}>
-                    <Title color={Colors.mediumDark} size={18} bold={true} label={address.nearby}/>
+                    <Title color={Colors.mediumDark} size={18} bold={true} label={address.name}/>
                     <View
                         style={{
                         backgroundColor: Colors.primary,

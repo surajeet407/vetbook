@@ -107,15 +107,17 @@ const OrdersScreen = ({navigation, route}) => {
                 .getItem("anonymusOrders")
                 .then((data) => {
                     if (data && JSON.parse(data).length > 0) {
+                        
                         let path,
-                            data = JSON.parse(data);
-                        data.forEach((dbItem, index) => {
+                            mainData = JSON.parse(data);
+                        mainData.forEach((dbItem, index) => {
                             if (dbItem.id === id) {
                                 path = index
                             }
                         })
-                        data[path].mode = 'cancelled'
-                        AsyncStorage.getItem("anonymusOrders", JSON.stringify(data))
+                        
+                        mainData[path].mode = 'cancelled'
+                        AsyncStorage.setItem("anonymusOrders", JSON.stringify(mainData))
                         getData();
                         Toast.show({
                             type: 'customToast',

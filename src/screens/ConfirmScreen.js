@@ -107,18 +107,18 @@ const _updateUiBasedOnServiceType = (txnId) => {
   AsyncStorage.getItem('userStatus').then((status) => {
     if(status === 'loggedOut') {
       if(clearCart) { 
-        AsyncStorage.setItem("cartItems", null)
+        AsyncStorage.setItem("cartItems", "[]")
       }
       AsyncStorage.getItem(anonymusPath).then((data) => {
         obj.userStatus = "loggedOut"
         if(data && JSON.parse(data).length > 0) {
           ar = JSON.parse(data)
           ar.push(obj)
-          AsyncStorage.setItem(anonymusPath, JSON.stringify(ar))
         } else {
           ar.push(obj);
-          AsyncStorage.setItem(anonymusPath, JSON.stringify(ar))
         }
+        AsyncStorage.setItem(anonymusPath, JSON.stringify(ar))
+        navigation.navigate("PaymentStatus", {details: {...obj}})
       });
     } else {
       AsyncStorage
@@ -137,11 +137,10 @@ const _updateUiBasedOnServiceType = (txnId) => {
                   if (snapshot.val() && snapshot.val().length > 0) {
                     ar = snapshot.val()
                     ar.push(obj)
-                    database().ref('/users/' + phoneNo + "/" + loggedInPath).set(ar)
                   } else {
                     ar.push(obj);
-                    database().ref('/users/' + phoneNo + "/" + loggedInPath).set(ar)
                   }
+                  database().ref('/users/' + phoneNo + "/" + loggedInPath).set(ar)
                   navigation.navigate("PaymentStatus", {details: {...obj}})
               })
           }

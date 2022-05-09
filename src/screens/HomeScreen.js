@@ -85,26 +85,26 @@ import LottieView from 'lottie-react-native';
       AsyncStorage
           .getItem("anonymusService")
           .then((data) => {
-            console.log(data)
               if (data && JSON.parse(data).length > 0) {
-                let data = JSON.parse(data)
-                let onGoingItems = data.filter(item => item.mode === 'ongoing')
-                // console.log(onGoingItems)
+                let mainData = JSON.parse(data)
+                let onGoingItems = mainData.filter(item => item.mode === 'ongoing')
                 if (onGoingItems.length > 0) {
                   setShowTrackComponent(true);
                   setTrackDetails(onGoingItems[0]);
                 }
-                for(let i = 0; i < data.length; i++) {
-                  if((data[i].serviceType  === 'Consult' || data[i].serviceType  === 'Veterinary' || data[i].serviceType  === 'BloodTest') && snapshot.val()[i].mode === 'ongoing') {
+                for(let i = 0; i < mainData.length; i++) {
+                  if((mainData[i].serviceType  === 'Consult' || mainData[i].serviceType  === 'Veterinary' || mainData[i].serviceType  === 'BloodTest') && snapshot.val()[i].mode === 'ongoing') {
                     setVetServiceCount(1)
                   }
-                  if(data[i].serviceType === 'Training' && data[i].mode === 'ongoing') {
+                  if(mainData[i].serviceType === 'Training' && mainData[i].mode === 'ongoing') {
                     setTrainingServiceCount(1)
                   }
-                  if(data[i].serviceType === 'Grooming' && data[i].mode === 'ongoing') {
+                  if(mainData[i].serviceType === 'Grooming' && mainData[i].mode === 'ongoing') {
                     setGroomingServiceCount(1)
                   }
                 }
+              } else {
+                setShowTrackComponent(false);
               }
           });
   }

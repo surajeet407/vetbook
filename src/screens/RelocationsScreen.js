@@ -100,14 +100,14 @@ const RelocationsScreen = ({navigation, route}) => {
                 .then((data) => {
                     if (data && JSON.parse(data).length > 0) {
                         let path,
-                            data = JSON.parse(data);
-                        data.forEach((dbItem, index) => {
+                        mainData = JSON.parse(data);
+                        mainData.forEach((dbItem, index) => {
                             if (dbItem.id === id) {
                                 path = index
                             }
                         })
-                        data[path].mode = 'cancelled'
-                        AsyncStorage.setItem("anonymusRelocation", JSON.stringify(data))
+                        mainData[path].mode = 'cancelled'
+                        AsyncStorage.setItem("anonymusRelocation", JSON.stringify(mainData))
                         getData();
                         Toast.show({
                             type: 'customToast',

@@ -56,7 +56,7 @@ const TrackOrderScreen = ({navigation, route}) => {
         }
     };
     const getData = () => {
-        if (route.params.details.type === 'Items') {
+        if (route.params.details.type === 'Items' || route.params.details.type === 'Adopt') {
             setStepCount(3)
             setStepIndicatorHeight(400)
             setLabels([

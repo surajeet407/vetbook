@@ -202,7 +202,7 @@ import LottieView from 'lottie-react-native';
     <View  style={{ flex: 1, backgroundColor: Colors.appBackground}} >
       <LandingHeader homeAddress={homeAddress} status={status} navigation={navigation}/>
       {showTrackComponent && (
-        <TrackComponent onPress={() => navigation.navigate("TrackOrder" , {details: trackDetails})}/>
+        <TrackComponent onPress={() => navigation.navigate("TrackOrder" , {details: {...trackDetails, fromScreen: 'Home'}})}/>
       )}
       <View style={{ paddingHorizontal: 10, marginTop: 65, marginBottom: showTrackComponent? 60:0, flex: 1}}>
         <View style={{}}>

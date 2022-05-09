@@ -272,7 +272,7 @@ const ServicesScreen = ({navigation, route}) => {
                                         justifyContent: 'space-between'
                                     }}>
                                         <TouchableOpacity
-                                            onPress={() => navigation.navigate("TrackOrder", {details: item})}
+                                            onPress={() => navigation.navigate("TrackOrder", {details: {...item, fromScreen: 'Services'}})}
                                             style={{
                                             flexDirection: 'row',
                                             alignItems: 'center'

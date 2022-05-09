@@ -99,7 +99,7 @@ const NotificationScreen = ({navigation}) => {
                             borderLeftColor: Colors.primary
                         }}>
                             <RNBounceable
-                                onPress={() => navigation.navigate("TrackOrder")}
+                                onPress={() => navigation.navigate("TrackOrder", {details: {fromScreen: 'Services'}})}
                                 style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',

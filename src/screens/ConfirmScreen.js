@@ -82,6 +82,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
   obj.trackStep = "0"
   obj.txnId = txnId,
   obj.paymentStatus = "Success"
+  obj.fromScreen = "Confirm"
   if (route.params.details.serviceType === "None" ) {
     obj.mode = "inprocess"
     type = 'Items';

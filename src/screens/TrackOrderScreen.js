@@ -81,8 +81,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                         if (phoneNo) {
                             database()
                                 .ref("/users/" + phoneNo + "/orders")
-                                .once("value")
-                                .then(snapshot => {
+                                .on("value", snapshot => {
                                     if (snapshot.val()) {
                                         var trackItemDetails = snapshot
                                             .val()
@@ -113,8 +112,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                         if (phoneNo) {
                             database()
                                 .ref("/users/" + phoneNo + "/services")
-                                .once("value")
-                                .then(snapshot => {
+                                .on("value", snapshot => {
                                     if (snapshot.val()) {
                                         var trackItemDetails = snapshot
                                             .val()
@@ -129,7 +127,14 @@ const TrackOrderScreen = ({navigation, route}) => {
         }
 
     }
-
+    const onPressNavBack = () => {
+        if(route.params.details.fromScreen === 'Confirm') {
+            navigation.navigate("HomeBottomTabBar", {screen: "Home", status: route.params.details.userStatus})
+        } else {
+            navigation.goBack()
+        }
+        
+    }
     useEffect(() => {
         getData()
     }, [])
@@ -167,7 +172,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                 leftIconSize={45}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
-                onPressLeft={() => navigation.goBack()}/>
+                onPressLeft={onPressNavBack}/>
             <View
                 style={{
                 backgroundColor: Colors.appBackground,

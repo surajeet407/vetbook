@@ -282,7 +282,7 @@ const OrdersScreen = ({navigation, route}) => {
                                                 justifyContent: 'space-between'
                                             }}>
                                                 <TouchableOpacity
-                                                    onPress={() => navigation.navigate("TrackOrder", {details: item})}
+                                                    onPress={() => navigation.navigate("TrackOrder", {details: {...item, fromScreen: 'Orders'}})}
                                                     style={{
                                                     flexDirection: 'row',
                                                     alignItems: 'center'

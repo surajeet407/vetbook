@@ -19,18 +19,15 @@ import * as Animatable from 'react-native-animatable';
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import database from '@react-native-firebase/database';
 import Share from 'react-native-share';
-import RNFetchBlob from 'rn-fetch-blob'
 import PagerView from 'react-native-pager-view';
 import {ExpandingDot} from 'react-native-animated-pagination-dots';
 import i18n from '../util/i18n';
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 const DOT_SIZE = 40;
-const fs = RNFetchBlob.fs;
 
 const PetDetailScreen = ({navigation, route}) => {
     const animation = useRef(new Animated.Value(0)).current;
-    const opacity = useRef(new Animated.Value(0)).current;
     const screenWidth = Dimensions
         .get('screen')
         .width;
@@ -71,31 +68,7 @@ const PetDetailScreen = ({navigation, route}) => {
         ],
         extrapolate: 'clamp'
     })
-    const onPressShare = () => {
-        let imagePath = null;
-        RNFetchBlob
-            .config({fileCache: true})
-            .fetch("GET", route.params.item.image)
-            .then(resp => {
-                imagePath = resp.path();
-                return resp.readFile("base64");
-            })
-            .then(base64Data => {
-                // console.log(base64Data);
-                let base64Image = "data:image/png;base64" + base64Data;
-                // console.log(base64Image);
-                Share
-                    .open({message: route.params.item.name, url: base64Image})
-                    .then((res) => {
-                        // console.log(res);
-                    })
-                    .catch((err) => {
-                        // console.log(err);
-                    });
-                return fs.unlink(imagePath);
-            });
 
-    }
     const onPressAdopt = () => {
         navigation.navigate("Confirm", {
             details: {
@@ -131,14 +104,6 @@ const PetDetailScreen = ({navigation, route}) => {
                     }}
                         color={'#fff'}/>
                 </TouchableOpacity>
-                <RNBounceable onPress={onPressShare}>
-                    <Icon
-                        name={'md-share-social-outline'}
-                        style={{
-                        fontSize: 40
-                    }}
-                        color={'#fff'}/>
-                </RNBounceable>
             </View>
 
             <ImageBackground

@@ -285,7 +285,7 @@ const PetDetailScreen = ({navigation, route}) => {
                         }}>
                             <Title color={Colors.primary} size={25} bold={true} label="About Me"/>
                         </View>
-                        <Title color={'grey'} size={18} bold={true} label={route.params.item.desc}/>
+                        <Title color={'grey'} size={15} bold={true} label={route.params.item.desc}/>
                     </View>
                 </View>
             </ScrollView>

@@ -34,7 +34,7 @@ import LottieView from 'lottie-react-native';
  
  const HomeScreen = ({navigation, route}) => {
   const isFocused = useIsFocused();
-  const [homeAddress, setHomeAddress] = useState("")
+  const [homeAddress, setHomeAddress] = useState({})
   const [vetServiceCount, setVetServiceCount] = useState(0)
   const [groomingServiceCount, setGroomingServiceCount] = useState(0)
   const [trainingServiceCount, setTrainingServiceCount] = useState(0)

@@ -20,7 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import Icon, {Icons} from '../util/Icons';
 import {Rating} from 'react-native-ratings';
-import {Button} from 'react-native-paper'
+import {Button, Chip} from 'react-native-paper'
 import i18n from '../util/i18n';
 
 const width = Dimensions
@@ -28,72 +28,79 @@ const width = Dimensions
     .width - 50;
 
 const RelocationsScreen = ({navigation, route}) => {
+    const filters = [{
+        key: "ongoing",
+        text: "Ongoing"
+    },{
+        key: "cancelled",
+        text: "Cancelled"
+    },{
+        key: "completed",
+        text: "Completed"
+    }]
+    const [phoneNo,
+        setPhoneNo] = useState("");
+    const [catIndex,
+        setCatIndex] = useState(0);
     const [status,
         setStatus] = useState(route.params.status);
     const [pastRelocations,
         setPastRelocations] = useState([])
     const reOrder = () => {}
-    const getData = () => {
-        if (status === 'loggedIn') {
-            AsyncStorage
-                .getItem('phoneNo')
-                .then((phoneNo, msg) => {
-                    if (phoneNo) {
-                        database()
-                            .ref("/users/" + phoneNo + "/relocations")
-                            .on('value', snapshot => {
-                                // console.log(snapshot.val())
-                                if (snapshot.val()) {
-                                    setPastRelocations(snapshot.val());
-                                }
-                            })
-                    }
-                })
-        } else {
-            AsyncStorage
-                .getItem("anonymusRelocation")
-                .then((data) => {
-                    if (data && JSON.parse(data).length > 0) {
-                        setPastRelocations(JSON.parse(data));
-                    }
-                });
-        }
-    }
-    const onPressCancel = (id) => {
-        if (status === 'loggedIn') {
-            AsyncStorage
-                .getItem('phoneNo')
-                .then((phoneNo, msg) => {
-                    if (phoneNo) {
-                        database()
-                            .ref("/users/" + phoneNo + "/relocations")
-                            .once('value')
-                            .then(snapshot => {
-                                let path;
-                                snapshot
-                                    .val()
-                                    .forEach((dbItem, index) => {
-                                        if (dbItem.id === id) {
-                                            path = index
-                                        }
 
-                                    })
-                                database()
-                                    .ref("/users/" + phoneNo + "/relocations/" + path)
-                                    .update({mode: 'cancelled'})
-                                Toast.show({
-                                    type: 'customToast',
-                                    text1: "Relocation request has been cancelled...",
-                                    position: 'bottom',
-                                    visibilityTime: 1500,
-                                    bottomOffset: 80,
-                                    props: {
-                                        backgroundColor: Colors.error_toast_color
-                                    }
-                                });
-                            })
-                    }
-                })
+
+    const getDataFromStorage = (filter) => {
+        AsyncStorage
+            .getItem("anonymusRelocation")
+            .then((data) => {
+                if (data && JSON.parse(data).length > 0) {
+                    let allItem = JSON.parse(data);
+                    let items = allItem.filter(item => item.mode === filter)
+                    setPastRelocations(items);
+                }
+            });
+    }
+    const getDataFromDatabase = (phoneNo, filter) => {
+        database()
+            .ref("/users/" + phoneNo + "/services")
+            .on('value', snapshot => {
+                if (snapshot.val()) {
+                    let items = snapshot.val().filter(item => item.mode === filter)
+                    setPastRelocations(items);
+                }
+            })
+    }
+
+    const onPressCancel = (id) => {
+        if (status === 'loggedIn') { 
+            database()
+                .ref("/users/" + phoneNo + "/relocations")
+                .once('value')
+                .then(snapshot => {
+                    let path;
+                    snapshot
+                        .val()
+                        .forEach((dbItem, index) => {
+                            if (dbItem.id === id) {
+                                path = index
+                            }
+
+                        })
+                    database()
+                        .ref("/users/" + phoneNo + "/relocations/" + path)
+                        .update({mode: 'cancelled'})
+                    getDataFromDatabase(phoneNo, filters[catIndex].key)
+                    Toast.show({
+                        type: 'customToast',
+                        text1: "Relocation request has been cancelled...",
+                        position: 'bottom',
+                        visibilityTime: 1500,
+                        bottomOffset: 80,
+                        props: {
+                            backgroundColor: Colors.error_toast_color
+                        }
+                    });
+                })        
         } else {
             AsyncStorage
                 .getItem("anonymusRelocation")
@@ -108,7 +115,7 @@ const RelocationsScreen = ({navigation, route}) => {
                         })
                         mainData[path].mode = 'cancelled'
                         AsyncStorage.setItem("anonymusRelocation", JSON.stringify(mainData))
-                        getData();
+                        getDataFromStorage(filters[catIndex].key)
                         Toast.show({
                             type: 'customToast',
                             text1: "Relocation request has been cancelled...",
@@ -123,9 +130,27 @@ const RelocationsScreen = ({navigation, route}) => {
                 });
         }
     }
+    const onPressToken = (index) => {
+        setCatIndex(index);
+        if (status === 'loggedIn') {
+            getDataFromDatabase(phoneNo, filters[index].key);
+        } else {
+            getDataFromStorage(filters[index].key)
+        }
+
+    }
 
     useEffect(() => {
-        getData();
+        if (status === 'loggedIn') {
+            AsyncStorage
+            .getItem('phoneNo')
+            .then((phoneNo, msg) => {
+                setPhoneNo(phoneNo)
+                getDataFromDatabase(phoneNo, "ongoing");
+            })
+        } else {
+            getDataFromStorage("ongoing")
+        }
     }, []);
     return (
         <View
@@ -162,6 +187,52 @@ const RelocationsScreen = ({navigation, route}) => {
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/>
+                <View
+                style={{
+                padding: 10,
+                alignItems: 'center',
+                width: '100%'
+                }}>
+                <View
+                    style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    }}>
+                    {filters
+                        .map((item, index) => <Animatable.View
+                            delay={index * 100}
+                            animation={'fadeInLeft'}
+                            key={index}
+                            style={{
+                            marginHorizontal: 5
+                        }}>
+                            <Chip
+                                style={{
+                                backgroundColor: index === catIndex
+                                    ? Colors.primary
+                                    : Colors.gray
+                            }}
+                                textStyle={{
+                                fontFamily: 'Oswald-SemiBold',
+                                color: index === catIndex
+                                    ? '#fff'
+                                    : 'grey'
+                            }}
+                                selectedColor={index === catIndex
+                                ? '#fff'
+                                : 'red'}
+                                selected={index === catIndex
+                                ? true
+                                : false}
+                                mode='outlined'
+                                icon={index === catIndex
+                                ? 'check'
+                                : ''}
+                                onPress={() => onPressToken(index)}>{item.text}
+                            </Chip>
+                        </Animatable.View>)}
+                    </View>
+                </View>
 
             <FlatList
                 ListEmptyComponent={
@@ -176,7 +247,7 @@ const RelocationsScreen = ({navigation, route}) => {
                 return (
                     <Animatable.View
                         delay={50 * rowMap}
-                        animation={'slideInRight'}
+                        animation={'slideInLeft'}
                         style={{
                         backgroundColor: Colors.appBackground,
                         marginHorizontal: 20,

@@ -45,7 +45,6 @@ const TrackOrderScreen = ({navigation, route}) => {
         images = [
             require('../assets/lottie/serviceOrdered.json'),
             require('../assets/lottie/confirming.json'),
-            require('../assets/lottie/confirmed.json'),
             require('../assets/lottie/searchDoctor.json'),
             require('../assets/lottie/cycle.json'),
             require('../assets/lottie/smiley.json')
@@ -62,7 +61,7 @@ const TrackOrderScreen = ({navigation, route}) => {
     const [labels,
         setLabels] = useState([])
     const [currentPosition,
-        setCurrentPosition] = useState(0);
+        setCurrentPosition] = useState(parseInt(route.params.details.trackStep));
     const closeRow = (rowMap, rowKey) => {
         if (rowMap[rowKey]) {
             rowMap[rowKey].closeRow();
@@ -94,14 +93,15 @@ const TrackOrderScreen = ({navigation, route}) => {
                         if (phoneNo) {
                             database()
                                 .ref("/users/" + phoneNo + "/orders")
-                                .once("value")
-                                .then(snapshot => {
+                                .on("value", snapshot => {
                                     if (snapshot.val()) {
-                                        var trackItemDetails = snapshot
-                                            .val()
-                                            .filter(item => item.id === details.id)
-                                        // console.log(trackItemDetails)
-                                        setCurrentPosition(parseInt(trackItemDetails[0].trackStep))
+                                        if (currentPosition) {
+                                            var trackItemDetails = snapshot
+                                                .val()
+                                                .filter(item => item.id === details.id)
+                                            // console.log(trackItemDetails)
+                                            setCurrentPosition(parseInt(trackItemDetails[0].trackStep))
+                                        }
                                     }
                                 })
                         }
@@ -119,15 +119,26 @@ const TrackOrderScreen = ({navigation, route}) => {
             }
 
         } else {
-            setStepCount(6)
-            setStepIndicatorHeight(600)
-            database()
-                .ref('/stepIndicator')
-                .on('value', snapshot => {
-                    if (snapshot.val()) {
-                        setLabels(snapshot.val())
-                    }
-                })
+            setStepCount(5)
+            setStepIndicatorHeight(400)
+            setLabels([
+                {
+                    "name": "We have received your request",
+                    "step": "0"
+                }, {
+                    "name": "Service Confirmed",
+                    "step": "1"
+                }, {
+                    "name": "Assigning to Doctor",
+                    "step": "2"
+                }, {
+                    "name": "Doctor is on the way",
+                    "step": "3"
+                }, {
+                    "name": "Service provided",
+                    "step": "4"
+                }
+            ])
             if (details.userStatus === 'loggedIn') {
                 AsyncStorage
                     .getItem('phoneNo')
@@ -135,13 +146,15 @@ const TrackOrderScreen = ({navigation, route}) => {
                         if (phoneNo) {
                             database()
                                 .ref("/users/" + phoneNo + "/services")
-                                .once("value")
-                                .then(snapshot => {
+                                .on("value", snapshot => {
                                     if (snapshot.val()) {
-                                        var trackItemDetails = snapshot
-                                            .val()
-                                            .filter(item => item.id === details.id)
-                                        setCurrentPosition(parseInt(trackItemDetails[0].trackStep))
+                                        if (currentPosition) {
+                                            console.log("here--------------------------------------------------------------------")
+                                            var trackItemDetails = snapshot
+                                                .val()
+                                                .filter(item => item.id === details.id)
+                                            setCurrentPosition(parseInt(trackItemDetails[0].trackStep))
+                                        }
                                     }
                                 })
                         }
@@ -233,11 +246,11 @@ const TrackOrderScreen = ({navigation, route}) => {
                 rightSideTextSize={20}
                 rightSideTextColor={Colors.secondary}
                 subHeaderText={"Id: #" + details.id}
-                showSubHeaderText={false}
+                showSubHeaderText={details.type === 'Service'? false:true}
                 subHeaderTextSize={16}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={90}
+                headerHeight={details.type === 'Service'? 90: 120}
                 headerText={'Track Service'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}
@@ -261,7 +274,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                         style={{
                         width: '100%',
                         height: 280,
-                        marginBottom: 10
+                        marginBottom: 40
                     }}>
                         <MapView
                             ref={mapRef}
@@ -307,13 +320,12 @@ const TrackOrderScreen = ({navigation, route}) => {
                             zIndex: 999,
                             position: 'absolute',
                             borderRadius: 20,
-                            backgroundColor: Colors.secondary,
+                            backgroundColor: Colors.accent,
                             height: "25%",
                             width: "98%",
                             justifyContent: 'center',
                             top: "85%",
-                            left: 5,
-                            elevation: 5
+                            left: 5
                         }}>
                             <View
                                 style={{
@@ -354,7 +366,12 @@ const TrackOrderScreen = ({navigation, route}) => {
                                     flexDirection: 'row',
                                     alignItems: 'center'
                                 }}>
-                                    <Icon onPress={() => Linking.openURL('tel:7550841824')} type={Icons.Feather} name={'phone-call'} color={Colors.white} size={30}/>
+                                    <Icon
+                                        onPress={() => Linking.openURL('tel:7550841824')}
+                                        type={Icons.Feather}
+                                        name={'phone-call'}
+                                        color={Colors.white}
+                                        size={30}/>
                                 </View>
                             </View>
                         </View>

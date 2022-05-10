@@ -20,7 +20,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import {Rating} from 'react-native-ratings';
-import {Button} from 'react-native-paper'
+import {Button, Chip} from 'react-native-paper'
 import i18n from '../util/i18n';
 import RNBounceable from '@freakycoder/react-native-bounceable';
 
@@ -29,6 +29,20 @@ const width = Dimensions
     .width - 50;
 
 const OrdersScreen = ({navigation, route}) => {
+    const filters = [{
+        key: "inprocess",
+        text: "In Process"
+    },{
+        key: "cancelled",
+        text: "Cancelled"
+    },{
+        key: "delivered",
+        text: "Delivered"
+    }]
+    const [phoneNo,
+        setPhoneNo] = useState("");
+    const [catIndex,
+        setCatIndex] = useState(0);
     const [status,
         setStatus] = useState(route.params.status);
     const [activeSections,
@@ -36,72 +50,59 @@ const OrdersScreen = ({navigation, route}) => {
     const [pastOrders,
         setPastOrders] = useState([])
     const reOrder = () => {}
-    const getData = () => {
-        if (status === 'loggedIn') {
-            AsyncStorage
-                .getItem('phoneNo')
-                .then((phoneNo, msg) => {
-                    if (phoneNo) {
-                        database()
-                            .ref("/users/" + phoneNo + "/orders")
-                            .on('value', snapshot => {
-                                if (snapshot.val()) {
-                                    setPastOrders(snapshot.val());
-                                }
-                            })
-                    }
-                })
-        } else {
-            AsyncStorage
-                .getItem("anonymusOrders")
-                .then((data) => {
-                    if (data && JSON.parse(data).length > 0) {
-                        setPastOrders(JSON.parse(data));
-                    }
-                });
-        }
 
+    const getDataFromStorage = (filter) => {
+        AsyncStorage
+            .getItem("anonymusOrders")
+            .then((data) => {
+                if (data && JSON.parse(data).length > 0) {
+                    let allItem = JSON.parse(data);
+                    let items = allItem.filter(item => item.mode === filter)
+                    setPastOrders(items);
+                }
+            });
     }
-
-    const updateSections = (section) => {
-        setActiveSections(section);
+    const getDataFromDatabase = (phoneNo, filter) => {
+        database()
+            .ref("/users/" + phoneNo + "/orders")
+            .on('value', snapshot => {
+                if (snapshot.val()) {
+                    let items = snapshot.val().filter(item => item.mode === filter)
+                    setPastOrders(items);
+                }
+            })
     }
 
     const onPressCancel = (id) => {
         if (status === 'loggedIn') {
-            AsyncStorage
-                .getItem('phoneNo')
-                .then((phoneNo, msg) => {
-                    if (phoneNo) {
-                        database()
-                            .ref("/users/" + phoneNo + "/orders")
-                            .once('value')
-                            .then(snapshot => {
-                                let path;
-                                snapshot
-                                    .val()
-                                    .forEach((dbItem, index) => {
-                                        if (dbItem.id === id) {
-                                            path = index
-                                        }
+            database()
+                .ref("/users/" + phoneNo + "/orders")
+                .once('value')
+                .then(snapshot => {
+                    let path;
+                    snapshot
+                        .val()
+                        .forEach((dbItem, index) => {
+                            if (dbItem.id === id) {
+                                path = index
+                            }
 
-                                    })
-                                database()
-                                    .ref("/users/" + phoneNo + "/orders/" + path)
-                                    .update({mode: 'cancelled'})
-                                Toast.show({
-                                    type: 'customToast',
-                                    text1: "This order has been cancelled...",
-                                    position: 'bottom',
-                                    visibilityTime: 1500,
-                                    bottomOffset: 80,
-                                    props: {
-                                        backgroundColor: Colors.error_toast_color
-                                    }
-                                });
-                            })
-                    }
-                })
+                        })
+                    database()
+                        .ref("/users/" + phoneNo + "/orders/" + path)
+                        .update({mode: 'cancelled'})
+                    getDataFromDatabase(phoneNo, filters[catIndex].key)
+                    Toast.show({
+                        type: 'customToast',
+                        text1: "This order has been cancelled...",
+                        position: 'bottom',
+                        visibilityTime: 1500,
+                        bottomOffset: 80,
+                        props: {
+                            backgroundColor: Colors.error_toast_color
+                        }
+                    });
+                })    
         } else {
             AsyncStorage
                 .getItem("anonymusOrders")
@@ -118,7 +119,7 @@ const OrdersScreen = ({navigation, route}) => {
                         
                         mainData[path].mode = 'cancelled'
                         AsyncStorage.setItem("anonymusOrders", JSON.stringify(mainData))
-                        getData();
+                        getDataFromStorage(filters[catIndex].key)
                         Toast.show({
                             type: 'customToast',
                             text1: "This order has been cancelled...",
@@ -133,9 +134,28 @@ const OrdersScreen = ({navigation, route}) => {
                 });
         }
     }
+    const onPressToken = (index) => {
+        setCatIndex(index);
+        if (status === 'loggedIn') {
+            getDataFromDatabase(phoneNo, filters[index].key);
+        } else {
+            getDataFromStorage(filters[index].key)
+        }
+
+    }
 
     useEffect(() => {
-        getData();
+        if (status === 'loggedIn') {
+            AsyncStorage
+            .getItem('phoneNo')
+            .then((phoneNo, msg) => {
+                setPhoneNo(phoneNo)
+                getDataFromDatabase(phoneNo, "inprocess");
+            })
+        } else {
+            getDataFromStorage("inprocess")
+        }
+        
     }, []);
     return (
         <View
@@ -172,6 +192,52 @@ const OrdersScreen = ({navigation, route}) => {
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/>
+                <View
+                style={{
+                padding: 10,
+                alignItems: 'center',
+                width: '100%'
+                }}>
+                <View
+                    style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    }}>
+                    {filters
+                        .map((item, index) => <Animatable.View
+                            delay={index * 100}
+                            animation={'fadeInLeft'}
+                            key={index}
+                            style={{
+                            marginHorizontal: 5
+                        }}>
+                            <Chip
+                                style={{
+                                backgroundColor: index === catIndex
+                                    ? Colors.primary
+                                    : Colors.gray
+                            }}
+                                textStyle={{
+                                fontFamily: 'Oswald-SemiBold',
+                                color: index === catIndex
+                                    ? '#fff'
+                                    : 'grey'
+                            }}
+                                selectedColor={index === catIndex
+                                ? '#fff'
+                                : 'red'}
+                                selected={index === catIndex
+                                ? true
+                                : false}
+                                mode='outlined'
+                                icon={index === catIndex
+                                ? 'check'
+                                : ''}
+                                onPress={() => onPressToken(index)}>{item.text}
+                            </Chip>
+                        </Animatable.View>)}
+                    </View>
+                </View>
             <FlatList
                 ListEmptyComponent={
                     <View style={{alignItems: 'center', marginTop: 20}}>
@@ -188,7 +254,7 @@ const OrdersScreen = ({navigation, route}) => {
                         <RNBounceable onPress={() => navigation.navigate("PetDetail", {item: item})}>
                             <Animatable.View
                                 delay={50 * rowMap}
-                                animation={'slideInRight'}
+                                animation={'slideInLeft'}
                                 style={{
                                 backgroundColor: Colors.appBackground,
                                 marginHorizontal: 20,

@@ -56,6 +56,7 @@
     "react-native-razorpay": "^2.2.9",
     "react-native-safe-area-context": "^3.4.0",
     "react-native-screens": "^3.11.1",
+    "react-native-segmented-control-tab": "^4.0.0",
     "react-native-share": "^7.3.9",
     "react-native-skeleton-placeholder": "^5.0.0",
     "react-native-step-indicator": "^1.0.3",

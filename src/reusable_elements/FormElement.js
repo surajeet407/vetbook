@@ -158,7 +158,7 @@ const FormElement = (props) => {
                                 mode='outlined'
                                 icon={index === catIndex
                                 ? 'check'
-                                : 'close'}
+                                : ''}
                                 onPress={() => onPressToken({index})}>{item}
                             </Chip>
                         </Animatable.View>)}

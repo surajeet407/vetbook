@@ -25,6 +25,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import LandingHeader from '../reusable_elements/LandingHeader';
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Title from '../reusable_elements/Title';
 import i18n from '../util/i18n';
 
 const PetStoreScreen = ({navigation, route}) => {

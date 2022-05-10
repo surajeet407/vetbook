@@ -270,6 +270,7 @@ const PetStoreScreen = ({navigation, route}) => {
                     <View style={{
                         marginTop: 30
                     }}>
+                    {petStoreItems.length > 0?
                         <RNMasonryScroll
                             removeClippedSubviews={true}
                             columns={2}
@@ -295,6 +296,11 @@ const PetStoreScreen = ({navigation, route}) => {
                                     .width / 2 - 40}/>
                             </View>)}
                         </RNMasonryScroll>
+                    :
+                    <View style={{alignItems: 'center', marginTop: 20}}>
+                        <Title label="No items are found..." size={20} color={Colors.darkGray}/>
+                    </View>
+                    }
                     </View>
                 </ScrollView>
             </View>

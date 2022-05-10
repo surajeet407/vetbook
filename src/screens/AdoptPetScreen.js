@@ -162,6 +162,7 @@ const AdoptPetScreen = ({navigation}) => {
                         selectedCategoryIndex={selectedCategoryIndex}
                         index={index}
                         animationStyle="fadeInLeft"/>)}/>
+                    {pets.length > 0?
                     <RNMasonryScroll
                         style={{
                         marginTop: 20
@@ -255,6 +256,11 @@ const AdoptPetScreen = ({navigation}) => {
                             </View>
                         </Animatable.View>)}
                     </RNMasonryScroll>
+                    :
+                    <View style={{alignItems: 'center', marginTop: 20}}>
+                        <Title label="No pets are found in here..." size={20} color={Colors.darkGray}/>
+                    </View>
+                    }
                 </View>
             </View>
         </View>

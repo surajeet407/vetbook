@@ -23,6 +23,7 @@ import {Rating} from 'react-native-ratings';
 import i18n from '../util/i18n';
 import {Button, Chip} from 'react-native-paper'
 
+
 const width = Dimensions
     .get('screen')
     .width - 50;
@@ -38,6 +39,7 @@ const ServicesScreen = ({navigation, route}) => {
         key: "completed",
         text: "Completed"
     }]
+    const bottomSheetRef = useRef(null)
     const [phoneNo,
         setPhoneNo] = useState("");
     const [catIndex,

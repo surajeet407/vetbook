@@ -62,7 +62,7 @@ const RelocationsScreen = ({navigation, route}) => {
     }
     const getDataFromDatabase = (phoneNo, filter) => {
         database()
-            .ref("/users/" + phoneNo + "/services")
+            .ref("/users/" + phoneNo + "/relocations")
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     let items = snapshot.val().filter(item => item.mode === filter)

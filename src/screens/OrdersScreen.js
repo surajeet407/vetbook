@@ -419,7 +419,7 @@ const OrdersScreen = ({navigation, route}) => {
                         :
                         <Animatable.View
                             delay={50 * rowMap}
-                            animation={'slideInRight'}
+                            animation={'slideInLeft'}
                             style={{
                             backgroundColor: Colors.appBackground,
                             marginHorizontal: 20,

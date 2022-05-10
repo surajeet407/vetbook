@@ -15,7 +15,6 @@ import React, {useEffect, useState, useRef} from 'react';
  import Geolocation from '@react-native-community/geolocation';
  import Colors from '../util/Colors';
  import Button from '../reusable_elements/Button';
- import Geocoder from 'react-native-geocoding';
  import Icon, { Icons } from '../util/Icons';
  import LottieView from 'lottie-react-native';
  import FormElement from '../reusable_elements/FormElement';

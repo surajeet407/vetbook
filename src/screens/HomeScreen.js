@@ -12,7 +12,6 @@ import React, {useState, useRef, useEffect} from 'react';
  } from 'react-native';
  import { useTheme, useIsFocused } from '@react-navigation/native';
  import Toast from 'react-native-toast-message';
- import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../util/Colors';
  import Icon from 'react-native-vector-icons/FontAwesome';
  import { Button } from 'react-native-paper';

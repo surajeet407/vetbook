@@ -7,27 +7,28 @@ import {
     ScrollView,
     TouchableOpacity,
     Animated,
-    ImageBackground
+    ImageBackground,
+    Linking
 } from 'react-native';
 import StepIndicator from 'react-native-step-indicator';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
 import Colors from '../util/Colors';
 import Title from '../reusable_elements/Title';
 import LottieView from 'lottie-react-native';
-import SectionBanner from '../reusable_elements/SectionBanner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
 import Icon, {Icons} from '../util/Icons';
 import i18n from '../util/i18n';
 import database from '@react-native-firebase/database';
 import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
-import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import Constants from '../util/Constants';
 
 const TrackOrderScreen = ({navigation, route}) => {
-    const lat = 22.6098639429
-    const lan = 88.4011250887
+    const mainLat = 22.6098639429
+    const mainLan = 88.4011250887
+    const [markers,
+        setMarkers] = useState(null)
     const mapRef = useRef(null)
     const [estimatedTime,
         setEstimatedTime] = useState(0);
@@ -36,7 +37,7 @@ const TrackOrderScreen = ({navigation, route}) => {
     const [coords,
         setCoords] = useState([]);
     const [region,
-        setRegion] = useState(null);
+        setRegion] = useState({latitude: 22.6461341, longitude: 88.786546354235, latitudeDelta: 0.0032349810554670455, longitudeDelta: 0.0025001540780067444});
     let images = []
     if (route.params.details.type === 'Items') {
         images = [require('../assets/lottie/serviceOrdered.json'), require('../assets/lottie/confirmed.json'), require('../assets/lottie/smiley.json')];
@@ -171,9 +172,7 @@ const TrackOrderScreen = ({navigation, route}) => {
 
     }
 
-    const getDirections = (url) => {
-        const KEY = "AIzaSyBBPGbYThYVRWkyWMt8-N5Y_wjtMFcEmRQ"; //put your API key here.
-        //otherwise, you'll have an 'unauthorized' error.
+    const getDirections = (url, lat, lan) => {
         axios
             .get(url)
             .then(function (response) {
@@ -184,9 +183,6 @@ const TrackOrderScreen = ({navigation, route}) => {
                 setEstimatedTime((response.data.routes[0].duration / 3600).toFixed(2))
                 setDistance((response.data.routes[0].distance / 1000).toFixed(2))
                 setCoords(coords)
-                mapRef
-                    .current
-                    .fitToElements(true);
             })
             .catch(function (error) {
                 console.log(error)
@@ -195,22 +191,34 @@ const TrackOrderScreen = ({navigation, route}) => {
     };
 
     useEffect(() => {
-        if(details.type === 'Service') {
+        if (details.type === 'Service') {
             AsyncStorage
-            .getItem("homeAddress")
-            .then((address, msg) => {
-                let data = JSON.parse(address)
-                console.log(data)
-                setRegion({latitude: data.lat, longitude: data.lan, latitudeDelta: 0.0032349810554670455, longitudeDelta: 0.0025001540780067444})
-                let url = "https://api.mapbox.com/directions/v5/mapbox/driving/" + data.lan + "," + data.lat + ";" + lan + "," + lat + "?annotations=duration&overview=full&geometries=geojson&access_token=" + Constants.MAP_BOX_API
-                getDirections(url)
-            })
+                .getItem("homeAddress")
+                .then((address, msg) => {
+                    let data = JSON.parse(address)
+                    setRegion({latitude: data.lat, longitude: data.lan, latitudeDelta: 0.0032349810554670455, longitudeDelta: 0.0025001540780067444})
+                    setMarkers([
+                        {
+                            latitude: data.lat,
+                            longitude: data.lan,
+                            title: 'Home'
+                        }, {
+                            latitude: mainLat,
+                            longitude: mainLan,
+                            title: 'Doctor'
+                        }
+                    ])
+                    let url = "https://api.mapbox.com/directions/v5/mapbox/driving/" + data.lan + "," + data.lat + ";" + mainLan + "," + mainLat + "?annotations=duration&overview=full&geometries=geojson&access_token=" + Constants.MAP_BOX_API
+                    getDirections(url, data.lat, data.lan)
+                })
         }
         getData()
     }, [])
     return (
-        <View style={{
-            flex: 1
+        <View
+            style={{
+            flex: 1,
+            backgroundColor: Colors.appBackground
         }}>
             <GeneralHeader
                 showRigtIcon={false}
@@ -225,11 +233,11 @@ const TrackOrderScreen = ({navigation, route}) => {
                 rightSideTextSize={20}
                 rightSideTextColor={Colors.secondary}
                 subHeaderText={"Id: #" + details.id}
-                showSubHeaderText={true}
+                showSubHeaderText={false}
                 subHeaderTextSize={16}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={100}
+                headerHeight={90}
                 headerText={'Track Service'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}
@@ -244,55 +252,113 @@ const TrackOrderScreen = ({navigation, route}) => {
             <View
                 style={{
                 marginBottom: 80,
-                marginTop: 10,
-                padding: 20,
                 flex: 1,
                 width: '100%',
                 alignItems: 'flex-start'
             }}>
                 {details.type === 'Service' && (
-                <View
-                    style={{
-                    width: '100%',
-                    height: 280
-                }}>
-                    <MapView
-                        ref={mapRef}
-                        provider={PROVIDER_GOOGLE}
-                        style={styles.map}
-                        region={region}
-                        annotations={region}>
-                        {coords.length > 0 && <Polyline
-                            strokeColor={Colors.error_toast_color}
-                            fillColor={Colors.error_toast_color}
-                            strokeWidth={8}
-                            coordinates={coords}/>
-}
-                    </MapView>
                     <View
                         style={{
-                        position: 'absolute',
-                        borderRadius: 20,
-                        backgroundColor: Colors.secondary,
-                        height: "25%",
-                        width: "50%",
-                        justifyContent: 'center',
-                        bottom: 5,
-                        left: 5,
-                        elevation: 5
+                        width: '100%',
+                        height: 280,
+                        marginBottom: 10
                     }}>
-                        <View style={{marginLeft: 10}}>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={12} label={"Estimated Time: "} bold={true} color={Colors.darkGray}/>
-                                <Title size={14} label={estimatedTime + " Minitues"} bold={true} color={Colors.white}/>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Title size={12} label={"Distance: "} bold={true} color={Colors.darkGray}/>
-                                <Title size={14} label={distance + " KM"} bold={true} color={Colors.white}/>
+                        <MapView
+                            ref={mapRef}
+                            showsMyLocationButton={true}
+                            provider={PROVIDER_GOOGLE}
+                            style={styles.map}
+                            zoomEnabled={true}
+                            minZoomLevel={-1}
+                            paddingAdjustmentBehavior="automatic"
+                            region={region}
+                            onLayout=
+                            {() => setTimeout( () => { mapRef.current.fitToCoordinates(markers, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: true, }); }, 2000 )}>
+                            {markers && markers.map((marker, index) => (
+                                <Marker
+                                    identifier={index + ""}
+                                    key={index}
+                                    coordinate={{
+                                    latitude: marker.latitude,
+                                    longitude: marker.longitude
+                                }}>
+                                    <View style={{}}>
+                                        <Icon
+                                            size={50}
+                                            color={marker.title === 'Home'
+                                            ? Colors.green2
+                                            : Colors.secondary}
+                                            type={Icons.MaterialIcons}
+                                            name={marker.title === 'Home'
+                                            ? 'location-history'
+                                            : 'add-location'}/>
+                                    </View>
+                                </Marker>
+                            ))}
+                            {coords.length > 0 && <Polyline
+                                strokeColor={Colors.error_toast_color}
+                                fillColor={Colors.error_toast_color}
+                                strokeWidth={8}
+                                coordinates={coords}/>
+}
+                        </MapView>
+                        <View
+                            style={{
+                            zIndex: 999,
+                            position: 'absolute',
+                            borderRadius: 20,
+                            backgroundColor: Colors.secondary,
+                            height: "25%",
+                            width: "98%",
+                            justifyContent: 'center',
+                            top: "85%",
+                            left: 5,
+                            elevation: 5
+                        }}>
+                            <View
+                                style={{
+                                paddingHorizontal: 20,
+                                paddingVertical: 10,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}>
+                                <View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title
+                                            size={14}
+                                            label={"Estimated Time: "}
+                                            bold={true}
+                                            color={Colors.darkGray}/>
+                                        <Title
+                                            size={14}
+                                            label={estimatedTime + " Minitues"}
+                                            bold={true}
+                                            color={Colors.white}/>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={14} label={"Distance: "} bold={true} color={Colors.darkGray}/>
+                                        <Title size={14} label={distance + " KM"} bold={true} color={Colors.white}/>
+                                    </View>
+                                </View>
+                                <View
+                                    style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
+                                }}>
+                                    <Icon onPress={() => Linking.openURL('tel:7550841824')} type={Icons.Feather} name={'phone-call'} color={Colors.white} size={30}/>
+                                </View>
                             </View>
                         </View>
                     </View>
-                </View>
                 )}
                 <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
 
@@ -301,8 +367,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                         <View
                             style={{
                             height: stepIndicatorHeight,
-                            padding: 10,
-                            marginTop: 10
+                            padding: 20
                         }}>
                             <StepIndicator
                                 direction='vertical'
@@ -326,9 +391,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                                 stepIndicatorLabelUnFinishedColor: Colors.lightOverlayColor
                             }}
                                 currentPosition={currentPosition}
-                                labels={labels.map((item, index) => <Animatable.View
-                                delay={100 * index}
-                                animation={'fadeInRight'}
+                                labels={labels.map((item, index) => <View
                                 style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',
@@ -382,7 +445,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                                             : Colors.gray}/>
                                     </View>
                                 </View>
-                            </Animatable.View>)}/>
+                            </View>)}/>
                         </View>
                     </View>
                 </ScrollView>

@@ -76,7 +76,7 @@ import moment from 'moment';
   }
 
 const _updateUiBasedOnServiceType = (txnId) => {
-  let type = "", anonymusPath = '', loggedInPath = '', clearCart = false, ar = [], obj = {...route.params.details}
+  let type = "", anonymusPath = '', navToScreen = 'Orders', loggedInPath = '', clearCart = false, ar = [], obj = {...route.params.details}
   obj.id = uuid.v4()
   obj.orderedOn = moment().format('yyyy-MM-DD').toString()
   obj.userStatus = "loggedOut"
@@ -103,6 +103,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
     type = 'Service';
     anonymusPath = 'anonymusService'
     loggedInPath = 'services'
+    navToScreen = "Services"
     
   } 
   obj.type = type
@@ -120,7 +121,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
           ar.push(obj);
         }
         AsyncStorage.setItem(anonymusPath, JSON.stringify(ar))
-        navigation.navigate("PaymentStatus", {details: {...obj}})
+        navigation.navigate("ServicesBottomTabBar", {screen: navToScreen, status: obj.userStatus})
       });
     } else {
       AsyncStorage
@@ -143,7 +144,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
                     ar.push(obj);
                   }
                   database().ref('/users/' + phoneNo + "/" + loggedInPath).set(ar)
-                  navigation.navigate("PaymentStatus", {details: {...obj}})
+                  navigation.navigate("ServicesBottomTabBar", {screen: navToScreen, status: obj.userStatus})
               })
           }
       })
@@ -167,9 +168,9 @@ const _updateUiBasedOnServiceType = (txnId) => {
     }).catch((error) => {
       // console.log(error.description)
       if(error.description.error.reason !== "payment_cancelled") {
-        let obj = {...route.params.details}
-        obj.paymentStatus = "Error"
-        navigation.navigate("PaymentStatus", {details: obj})
+        // let obj = {...route.params.details}
+        // obj.paymentStatus = "Error"
+        // navigation.navigate("PaymentStatus", {details: obj})
       }
       
     });

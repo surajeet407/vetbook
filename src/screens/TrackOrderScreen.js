@@ -28,6 +28,11 @@ import Constants from '../util/Constants';
 const TrackOrderScreen = ({navigation, route}) => {
     const lat = 22.6098639429
     const lan = 88.4011250887
+    const mapRef = useRef(null)
+    const [estimatedTime,
+        setEstimatedTime] = useState(0);
+    const [distance,
+        setDistance] = useState(0);
     const [coords,
         setCoords] = useState([]);
     const [region,
@@ -88,7 +93,8 @@ const TrackOrderScreen = ({navigation, route}) => {
                         if (phoneNo) {
                             database()
                                 .ref("/users/" + phoneNo + "/orders")
-                                .on("value", snapshot => {
+                                .once("value")
+                                .then(snapshot => {
                                     if (snapshot.val()) {
                                         var trackItemDetails = snapshot
                                             .val()
@@ -103,7 +109,8 @@ const TrackOrderScreen = ({navigation, route}) => {
             } else {
                 database()
                     .ref("/anonymous/" + details.id)
-                    .on("value", snapshot => {
+                    .once("value")
+                    .then(snapshot => {
                         if (snapshot.val()) {
                             setCurrentPosition(parseInt(snapshot.val().trackStep))
                         }
@@ -127,7 +134,8 @@ const TrackOrderScreen = ({navigation, route}) => {
                         if (phoneNo) {
                             database()
                                 .ref("/users/" + phoneNo + "/services")
-                                .on("value", snapshot => {
+                                .once("value")
+                                .then(snapshot => {
                                     if (snapshot.val()) {
                                         var trackItemDetails = snapshot
                                             .val()
@@ -141,7 +149,8 @@ const TrackOrderScreen = ({navigation, route}) => {
             } else {
                 database()
                     .ref("/anonymous/" + details.id)
-                    .on("value", snapshot => {
+                    .once("value")
+                    .then(snapshot => {
                         if (snapshot.val()) {
                             setCurrentPosition(parseInt(snapshot.val().trackStep))
                         }
@@ -168,12 +177,16 @@ const TrackOrderScreen = ({navigation, route}) => {
         axios
             .get(url)
             .then(function (response) {
-                let points = response.data.waypoints;
+                let points = response.data.routes[0].geometry.coordinates;
                 let coords = points.map((point, index) => {
-                    return {longitude: point.location[0], latitude: point.location[1]};
+                    return {longitude: point[0], latitude: point[1]};
                 });
-                // console.log(coords)
+                setEstimatedTime((response.data.routes[0].duration / 3600).toFixed(2))
+                setDistance((response.data.routes[0].distance / 1000).toFixed(2))
                 setCoords(coords)
+                mapRef
+                    .current
+                    .fitToElements(true);
             })
             .catch(function (error) {
                 console.log(error)
@@ -182,15 +195,17 @@ const TrackOrderScreen = ({navigation, route}) => {
     };
 
     useEffect(() => {
-        AsyncStorage
+        if(details.type === 'Service') {
+            AsyncStorage
             .getItem("homeAddress")
             .then((address, msg) => {
                 let data = JSON.parse(address)
                 console.log(data)
                 setRegion({latitude: data.lat, longitude: data.lan, latitudeDelta: 0.0032349810554670455, longitudeDelta: 0.0025001540780067444})
-                let url = "https://api.mapbox.com/directions/v5/mapbox/walking/" + data.lan + "," + data.lat + ";" + lan + "," + lat + "?annotations=maxspeed&overview=full&geometries=geojson&access_token=" + Constants.MAP_BOX_API
+                let url = "https://api.mapbox.com/directions/v5/mapbox/driving/" + data.lan + "," + data.lat + ";" + lan + "," + lat + "?annotations=duration&overview=full&geometries=geojson&access_token=" + Constants.MAP_BOX_API
                 getDirections(url)
             })
+        }
         getData()
     }, [])
     return (
@@ -235,226 +250,50 @@ const TrackOrderScreen = ({navigation, route}) => {
                 width: '100%',
                 alignItems: 'flex-start'
             }}>
+                {details.type === 'Service' && (
                 <View
                     style={{
                     width: '100%',
-                    height: 300
+                    height: 280
                 }}>
                     <MapView
+                        ref={mapRef}
                         provider={PROVIDER_GOOGLE}
                         style={styles.map}
                         region={region}
-                        customMapStyle={[
-                        {
-                            "elementType": "geometry",
-                            "stylers": [
-                                {
-                                    "color": "#1d2c4d"
-                                }
-                            ]
-                        }, {
-                            "elementType": "labels.text.fill",
-                            "stylers": [
-                                {
-                                    "color": "#8ec3b9"
-                                }
-                            ]
-                        }, {
-                            "elementType": "labels.text.stroke",
-                            "stylers": [
-                                {
-                                    "color": "#1a3646"
-                                }
-                            ]
-                        }, {
-                            "featureType": "administrative.country",
-                            "elementType": "geometry.stroke",
-                            "stylers": [
-                                {
-                                    "color": "#4b6878"
-                                }
-                            ]
-                        }, {
-                            "featureType": "administrative.land_parcel",
-                            "elementType": "labels.text.fill",
-                            "stylers": [
-                                {
-                                    "color": "#64779e"
-                                }
-                            ]
-                        }, {
-                            "featureType": "administrative.province",
-                            "elementType": "geometry.stroke",
-                            "stylers": [
-                                {
-                                    "color": "#4b6878"
-                                }
-                            ]
-                        }, {
-                            "featureType": "landscape.man_made",
-                            "elementType": "geometry.stroke",
-                            "stylers": [
-                                {
-                                    "color": "#334e87"
-                                }
-                            ]
-                        }, {
-                            "featureType": "landscape.natural",
-                            "elementType": "geometry",
-                            "stylers": [
-                                {
-                                    "color": "#023e58"
-                                }
-                            ]
-                        }, {
-                            "featureType": "poi",
-                            "elementType": "geometry",
-                            "stylers": [
-                                {
-                                    "color": "#283d6a"
-                                }
-                            ]
-                        }, {
-                            "featureType": "poi",
-                            "elementType": "labels.text.fill",
-                            "stylers": [
-                                {
-                                    "color": "#6f9ba5"
-                                }
-                            ]
-                        }, {
-                            "featureType": "poi",
-                            "elementType": "labels.text.stroke",
-                            "stylers": [
-                                {
-                                    "color": "#1d2c4d"
-                                }
-                            ]
-                        }, {
-                            "featureType": "poi.park",
-                            "elementType": "geometry.fill",
-                            "stylers": [
-                                {
-                                    "color": "#023e58"
-                                }
-                            ]
-                        }, {
-                            "featureType": "poi.park",
-                            "elementType": "labels.text.fill",
-                            "stylers": [
-                                {
-                                    "color": "#3C7680"
-                                }
-                            ]
-                        }, {
-                            "featureType": "road",
-                            "elementType": "geometry",
-                            "stylers": [
-                                {
-                                    "color": "#304a7d"
-                                }
-                            ]
-                        }, {
-                            "featureType": "road",
-                            "elementType": "labels.text.fill",
-                            "stylers": [
-                                {
-                                    "color": "#98a5be"
-                                }
-                            ]
-                        }, {
-                            "featureType": "road",
-                            "elementType": "labels.text.stroke",
-                            "stylers": [
-                                {
-                                    "color": "#1d2c4d"
-                                }
-                            ]
-                        }, {
-                            "featureType": "road.highway",
-                            "elementType": "geometry",
-                            "stylers": [
-                                {
-                                    "color": "#2c6675"
-                                }
-                            ]
-                        }, {
-                            "featureType": "road.highway",
-                            "elementType": "geometry.stroke",
-                            "stylers": [
-                                {
-                                    "color": "#255763"
-                                }
-                            ]
-                        }, {
-                            "featureType": "road.highway",
-                            "elementType": "labels.text.fill",
-                            "stylers": [
-                                {
-                                    "color": "#b0d5ce"
-                                }
-                            ]
-                        }, {
-                            "featureType": "road.highway",
-                            "elementType": "labels.text.stroke",
-                            "stylers": [
-                                {
-                                    "color": "#023e58"
-                                }
-                            ]
-                        }, {
-                            "featureType": "transit",
-                            "elementType": "labels.text.fill",
-                            "stylers": [
-                                {
-                                    "color": "#98a5be"
-                                }
-                            ]
-                        }, {
-                            "featureType": "transit",
-                            "elementType": "labels.text.stroke",
-                            "stylers": [
-                                {
-                                    "color": "#1d2c4d"
-                                }
-                            ]
-                        }, {
-                            "featureType": "transit.line",
-                            "elementType": "geometry.fill",
-                            "stylers": [
-                                {
-                                    "color": "#283d6a"
-                                }
-                            ]
-                        }, {
-                            "featureType": "transit.station",
-                            "elementType": "geometry",
-                            "stylers": [
-                                {
-                                    "color": "#3a4762"
-                                }
-                            ]
-                        }, {
-                            "featureType": "water",
-                            "elementType": "geometry",
-                            "stylers": [
-                                {
-                                    "color": "#0e1626"
-                                }
-                            ]
-                        }, {
-                            "featureType": "water",
-                            "elementType": "labels.text.fill",
-                            "stylers": [
-                                {
-                                    "color": "#4e6d70"
-                                }
-                            ]
-                        }
-                    ]}>
-                        {coords.length > 0 && <Polyline coordinates={coords}/>}
+                        annotations={region}>
+                        {coords.length > 0 && <Polyline
+                            strokeColor={Colors.error_toast_color}
+                            fillColor={Colors.error_toast_color}
+                            strokeWidth={8}
+                            coordinates={coords}/>
+}
                     </MapView>
+                    <View
+                        style={{
+                        position: 'absolute',
+                        borderRadius: 20,
+                        backgroundColor: Colors.secondary,
+                        height: "25%",
+                        width: "50%",
+                        justifyContent: 'center',
+                        bottom: 5,
+                        left: 5,
+                        elevation: 5
+                    }}>
+                        <View style={{marginLeft: 10}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={12} label={"Estimated Time: "} bold={true} color={Colors.darkGray}/>
+                                <Title size={14} label={estimatedTime + " Minitues"} bold={true} color={Colors.white}/>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Title size={12} label={"Distance: "} bold={true} color={Colors.darkGray}/>
+                                <Title size={14} label={distance + " KM"} bold={true} color={Colors.white}/>
+                            </View>
+                        </View>
+                    </View>
                 </View>
+                )}
                 <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
 
                     <View>
@@ -462,7 +301,8 @@ const TrackOrderScreen = ({navigation, route}) => {
                         <View
                             style={{
                             height: stepIndicatorHeight,
-                            padding: 10
+                            padding: 10,
+                            marginTop: 10
                         }}>
                             <StepIndicator
                                 direction='vertical'

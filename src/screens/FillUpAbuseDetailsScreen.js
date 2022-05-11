@@ -126,7 +126,7 @@ const PetAbuseScreen = ({navigation}) => {
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={60}
+                headerHeight={80}
                 headerText={'Fill up Details'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}

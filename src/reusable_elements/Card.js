@@ -13,7 +13,7 @@ const Card = (props) => {
             borderRadius: 25,
             elevation: 5,
             marginBottom: 10,
-            marginTop: 10
+            marginTop: 5
         }}>
             {props.showTag && (
                 <View

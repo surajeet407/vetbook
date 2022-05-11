@@ -229,7 +229,10 @@ import i18n from '../util/i18n';
                 <View>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text style={{fontFamily: 'Oswald-SemiBold', fontSize: 20, color: checked === item.id? Colors.secondary:Colors.darkGray}}>{item.name}</Text>
-                    <Text style={{color: Colors.appBackground, marginLeft: 5, marginTop: 5, padding: 5, backgroundColor: Colors.error_toast_color, borderRadius: 10, fontFamily: 'Oswald-Medium', fontSize: 10}}>{item.tag}</Text>
+                    <Text style={{color: Colors.appBackground, marginLeft: 5, marginTop: 5, paddingHorizontal: 5, backgroundColor: Colors.error_toast_color, fontFamily: 'Oswald-Medium', fontSize: 10}}>{item.tag}</Text>
+                    {item.default && (
+                      <Text style={{color: Colors.appBackground, marginLeft: 5, marginTop: 5, paddingHorizontal: 5, backgroundColor: Colors.green2, fontFamily: 'Oswald-Medium', fontSize: 10}}>Default</Text>
+                    )}
                   </View>
                   <View style={{width: showSelection? '98%':'100%'}}>
                     <Text style={{fontFamily: 'PTSerif-Italic', fontSize: 15, color: checked === item.id? Colors.white:Colors.darkGray}}>{item.address + " " + item.pinCode}</Text>

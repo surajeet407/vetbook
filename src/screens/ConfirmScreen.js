@@ -193,7 +193,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
           visibilityTime: 1500,
           bottomOffset: 120,
           props: {
-              backgroundColor: 'red'
+              backgroundColor: Colors.error_toast_color
           }
         });
       }
@@ -382,22 +382,18 @@ const _updateUiBasedOnServiceType = (txnId) => {
 
 
             {(route.params.details.serviceType === "Training" || route.params.details.serviceType === "Grooming" || route.params.details.serviceType === "Consult") && (
-            <View style={{}}>
+            <View style={{marginTop: 10}}>
               <Accordion
                 underlayColor={Colors.appBackground}
                 sections={priceDetails}
                 activeSections={activeSections}
                 renderHeader={(item, index, isActive, items) => 
                 <View 
-                  style={{borderRadius: 10, elevation: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 10, marginVertical: 10, backgroundColor: isActive ? Colors.secondary : Colors.appBackground }}>
+                  style={{borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 5, marginVertical: 5, backgroundColor: isActive ? Colors.secondary : Colors.darkOverlayColor }}>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <RadioButton
-                      color={Colors.appBackground}
-                      status={ isActive ? 'checked' : 'unchecked' }
-                    />
-                    <Text style={[styles.headerText, {color: isActive? Colors.white:Colors.darkGray}]}>{item.headerLeftText}</Text>
+                    <Text style={[styles.headerText, {color: isActive? Colors.white:Colors.white}]}>{item.headerLeftText}</Text>
                   </View>
-                  <Icon type={Icons.AntDesign} name={isActive? 'checksquare':'checksquareo'} size={30} color={Colors.appBackground} />
+                  <Icon style={{right: 5}} type={Icons.AntDesign} name={isActive? 'checksquare':'checksquareo'} size={20} color={Colors.appBackground} />
                 </View>
                 }
                 renderContent={(item, index, isActive, items) => 
@@ -456,7 +452,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
     padding: 10,
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 15,
     fontFamily: 'Oswald-SemiBold',
     marginLeft: 5,
     marginBottom: 5

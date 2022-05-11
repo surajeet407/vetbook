@@ -97,12 +97,19 @@ const DefaltAddressComponent = (props) => {
                     <Title color={Colors.mediumDark} size={18} bold={true} label={address.name}/>
                     <View
                         style={{
-                        backgroundColor: Colors.primary,
-                        marginLeft: 10,
-                        borderRadius: 10,
-                        padding: 5
+                        backgroundColor: Colors.error_toast_color,
+                        marginLeft: 5,
+                        paddingHorizontal: 5
                     }}>
                         <Title color={Colors.appBackground} size={10} bold={true} label={address.tag}/>
+                    </View>
+                    <View
+                        style={{
+                        backgroundColor: Colors.green2,
+                        marginLeft: 5,
+                        paddingHorizontal: 5
+                    }}>
+                        <Title color={Colors.appBackground} size={10} bold={true} label={'Default'}/>
                     </View>
                 </View>
                 <Title

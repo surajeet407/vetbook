@@ -36,7 +36,7 @@ import moment from 'moment';
  const ConfirmScreen = ({navigation, route}) => {
   //  console.log(route.params.details)
   const [cartItems, setCartItems] = useState([])
-  const [defaltAddress, setDefaltAddress] = useState({})
+  const [defaltAddress, setDefaltAddress] = useState(null)
   const [priceDetails, setPriceDetails] = useState([]);
   const [total, setTotal] = useState("");
   const [activeSections, setActiveSections] = useState([0]);
@@ -178,28 +178,42 @@ const _updateUiBasedOnServiceType = (txnId) => {
   }
 
   const onPressMakePayment = () => {
-    if (route.params.details.serviceType === "None" ) {
-      _initializePayment("", "", "Item Total");
-    } else if(route.params.details.serviceType === "BloodTest" || route.params.details.serviceType === "Adopt") {
-      _initializePayment(route.params.details.desc, route.params.details.image, route.params.details.serviceType);
-    }  else {
-      if(priceDetails[activeSections]) {
+    console.log(defaltAddress)
+    if(defaltAddress) {
+      if (route.params.details.serviceType === "None" ) {
+        _initializePayment("", "", "Item Total");
+      } else if(route.params.details.serviceType === "BloodTest" || route.params.details.serviceType === "Adopt") {
         _initializePayment(route.params.details.desc, route.params.details.image, route.params.details.serviceType);
-      } else {
-        Toast.show({
-          type: 'customToast',
-          text1: 'Please select one service...',
-          position: 'bottom',
-          visibilityTime: 1500,
-          bottomOffset: 120,
-          props: {
-              backgroundColor: Colors.error_toast_color
-          }
-        });
+      }  else {
+        if(priceDetails[activeSections]) {
+          _initializePayment(route.params.details.desc, route.params.details.image, route.params.details.serviceType);
+        } else {
+          Toast.show({
+            type: 'customToast',
+            text1: 'Please select one service...',
+            position: 'bottom',
+            visibilityTime: 1500,
+            bottomOffset: 120,
+            props: {
+                backgroundColor: Colors.error_toast_color
+            }
+          });
+        }
       }
+    } else {
+      Toast.show({
+        type: 'customToast',
+        text1: 'Please add or select one address...',
+        position: 'bottom',
+        visibilityTime: 1500,
+        bottomOffset: 120,
+        props: {
+            backgroundColor: Colors.error_toast_color
+        }
+      });
     }
-    
   }
+
   const updateDefaltAddress = (address) => {
     setDefaltAddress(address)
   }
@@ -291,6 +305,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
                 )}
               /> 
           </View>
+
           :
           <ScrollView scrollEventThrottle={16}
               showsVerticalScrollIndicator={false}>

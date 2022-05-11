@@ -23,6 +23,8 @@ import {Rating} from 'react-native-ratings';
 import {Button, Chip} from 'react-native-paper'
 import i18n from '../util/i18n';
 import RNBounceable from '@freakycoder/react-native-bounceable';
+import {Picker} from '@react-native-picker/picker';
+import SegmentedControlTab from 'react-native-segmented-control-tab'
 
 const width = Dimensions
     .get('screen')
@@ -39,6 +41,9 @@ const OrdersScreen = ({navigation, route}) => {
         key: "delivered",
         text: "Delivered"
     }]
+
+    const [pickerValue, 
+        setPickerValue] = useState("");
     const [phoneNo,
         setPhoneNo] = useState("");
     const [catIndex,
@@ -65,7 +70,8 @@ const OrdersScreen = ({navigation, route}) => {
     const getDataFromDatabase = (phoneNo, filter) => {
         database()
             .ref("/users/" + phoneNo + "/orders")
-            .on('value', snapshot => {
+            .once('value')
+            .then(snapshot => {
                 if (snapshot.val()) {
                     let items = snapshot.val().filter(item => item.mode === filter)
                     setPastOrders(items);
@@ -74,52 +80,36 @@ const OrdersScreen = ({navigation, route}) => {
     }
 
     const onPressCancel = (id) => {
-        if (status === 'loggedIn') {
-            database()
-                .ref("/users/" + phoneNo + "/orders")
-                .once('value')
-                .then(snapshot => {
-                    let path;
-                    snapshot
-                        .val()
-                        .forEach((dbItem, index) => {
-                            if (dbItem.id === id) {
-                                path = index
-                            }
-
-                        })
-                    database()
-                        .ref("/users/" + phoneNo + "/orders/" + path)
-                        .update({mode: 'cancelled'})
-                    getDataFromDatabase(phoneNo, filters[catIndex].key)
-                    Toast.show({
-                        type: 'customToast',
-                        text1: "This order has been cancelled...",
-                        position: 'bottom',
-                        visibilityTime: 1500,
-                        bottomOffset: 80,
-                        props: {
-                            backgroundColor: Colors.error_toast_color
-                        }
-                    });
-                })    
+        if(pickerValue === "") {
+            Toast.show({
+                type: 'customToast',
+                text1: "Select reason for cancellation...",
+                position: 'bottom',
+                visibilityTime: 1500,
+                bottomOffset: 80,
+                props: {
+                    backgroundColor: Colors.error_toast_color
+                }
+            });
         } else {
-            AsyncStorage
-                .getItem("anonymusOrders")
-                .then((data) => {
-                    if (data && JSON.parse(data).length > 0) {
-                        
-                        let path,
-                            mainData = JSON.parse(data);
-                        mainData.forEach((dbItem, index) => {
-                            if (dbItem.id === id) {
-                                path = index
-                            }
-                        })
-                        
-                        mainData[path].mode = 'cancelled'
-                        AsyncStorage.setItem("anonymusOrders", JSON.stringify(mainData))
-                        getDataFromStorage(filters[catIndex].key)
+            if (status === 'loggedIn') {
+                database()
+                    .ref("/users/" + phoneNo + "/orders")
+                    .once('value')
+                    .then(snapshot => {
+                        let path;
+                        snapshot
+                            .val()
+                            .forEach((dbItem, index) => {
+                                if (dbItem.id === id) {
+                                    path = index
+                                }
+    
+                            })
+                        database()
+                            .ref("/users/" + phoneNo + "/orders/" + path)
+                            .update({mode: 'cancelled', reasonForCancellation: pickerValue})
+                        getDataFromDatabase(phoneNo, filters[catIndex].key)
                         Toast.show({
                             type: 'customToast',
                             text1: "This order has been cancelled...",
@@ -130,18 +120,49 @@ const OrdersScreen = ({navigation, route}) => {
                                 backgroundColor: Colors.error_toast_color
                             }
                         });
-                    }
-                });
+                    })    
+            } else {
+                AsyncStorage
+                    .getItem("anonymusOrders")
+                    .then((data) => {
+                        if (data && JSON.parse(data).length > 0) {
+                            
+                            let path,
+                                mainData = JSON.parse(data);
+                            mainData.forEach((dbItem, index) => {
+                                if (dbItem.id === id) {
+                                    path = index
+                                }
+                            })
+                            
+                            mainData[path].mode = 'cancelled'
+                            mainData[path].reasonForCancellation = pickerValue
+                            AsyncStorage.setItem("anonymusOrders", JSON.stringify(mainData))
+                            getDataFromStorage(filters[catIndex].key)
+                            Toast.show({
+                                type: 'customToast',
+                                text1: "This order has been cancelled...",
+                                position: 'bottom',
+                                visibilityTime: 1500,
+                                bottomOffset: 80,
+                                props: {
+                                    backgroundColor: Colors.error_toast_color
+                                }
+                            });
+                        }
+                    });
+            }
         }
+        
     }
-    const onPressToken = (index) => {
-        setCatIndex(index);
+
+    const handleCustomIndexSelect = (index) => {
+        setCatIndex(index)
         if (status === 'loggedIn') {
             getDataFromDatabase(phoneNo, filters[index].key);
         } else {
             getDataFromStorage(filters[index].key)
         }
-
     }
 
     useEffect(() => {
@@ -176,11 +197,11 @@ const OrdersScreen = ({navigation, route}) => {
                 rightSideTextSize={20}
                 rightSideTextColor={Colors.secondary}
                 subHeaderText="See all your orders..."
-                showSubHeaderText={true}
+                showSubHeaderText={false}
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={120}
+                headerHeight={100}
                 headerText={'All Orders'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}
@@ -193,50 +214,22 @@ const OrdersScreen = ({navigation, route}) => {
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/>
                 <View
-                style={{
-                padding: 10,
-                alignItems: 'center',
-                width: '100%'
-                }}>
-                <View
                     style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
+                    paddingHorizontal: 20,
+                    alignItems: 'center',
+                    width: '100%'
                     }}>
-                    {filters
-                        .map((item, index) => <Animatable.View
-                            delay={index * 100}
-                            animation={'fadeInLeft'}
-                            key={index}
-                            style={{
-                            marginHorizontal: 5
-                        }}>
-                            <Chip
-                                style={{
-                                backgroundColor: index === catIndex
-                                    ? Colors.primary
-                                    : Colors.gray
-                            }}
-                                textStyle={{
-                                fontFamily: 'Oswald-SemiBold',
-                                color: index === catIndex
-                                    ? '#fff'
-                                    : 'grey'
-                            }}
-                                selectedColor={index === catIndex
-                                ? '#fff'
-                                : 'red'}
-                                selected={index === catIndex
-                                ? true
-                                : false}
-                                mode='outlined'
-                                icon={index === catIndex
-                                ? 'check'
-                                : ''}
-                                onPress={() => onPressToken(index)}>{item.text}
-                            </Chip>
-                        </Animatable.View>)}
-                    </View>
+                    <SegmentedControlTab
+                        values={["In Process", "Cancelled", "Delivered"]}
+                        borderRadius={0}
+                        tabsContainerStyle={{ height: 50, backgroundColor: Colors.white }}
+                        tabStyle={{ backgroundColor: Colors.darkGray, borderColor: Colors.green, borderWidth: 2 }}
+                        activeTabStyle={{ backgroundColor: Colors.green }}
+                        tabTextStyle={{ color: '#444444', fontFamily: 'Oswald-Medium' }}
+                        activeTabTextStyle={{ color: Colors.white }}
+                        selectedIndex={catIndex}
+                        onTabPress={handleCustomIndexSelect}
+                    />
                 </View>
             <FlatList
                 ListEmptyComponent={
@@ -249,19 +242,19 @@ const OrdersScreen = ({navigation, route}) => {
                 keyExtractor={item => item.id}
                 renderItem={({item, rowMap}) => {
                 return (
-                    <View>
+                    <Animatable.View
+                            delay={50 * rowMap}
+                            animation={'slideInLeft'}
+                            style={{
+                            backgroundColor: Colors.appBackground,
+                            marginHorizontal: 20,
+                            marginVertical: 10,
+                            padding: 10,
+                            elevation: 5
+                        }}>
                         {item.serviceType === 'Adopt'? 
                         <RNBounceable onPress={() => navigation.navigate("PetDetail", {item: item})}>
-                            <Animatable.View
-                                delay={50 * rowMap}
-                                animation={'slideInLeft'}
-                                style={{
-                                backgroundColor: Colors.appBackground,
-                                marginHorizontal: 20,
-                                marginVertical: 10,
-                                padding: 10,
-                                elevation: 5
-                            }}>
+                            <View>
                                 <View
                                     style={{
                                     flexDirection: 'row',
@@ -272,7 +265,7 @@ const OrdersScreen = ({navigation, route}) => {
                                         size={20}
                                         label={'Adoption Details : '}
                                         bold={true}
-                                        color={Colors.darkGray}/>
+                                        color={Colors.primary}/>
                                     <Title
                                         size={18}
                                         label={"Price: " + item.cost + "/-"}
@@ -291,12 +284,13 @@ const OrdersScreen = ({navigation, route}) => {
                                         alignItems: 'center'
                                     }}>
                                         <View>
+                                            <Title size={15} label={"Transaction Id: " + item.txnId} bold={true} color={Colors.darkGray}/>
                                             <View
                                                 style={{
                                                 flexDirection: 'row',
                                                 alignItems: 'center'
                                             }}>
-                                                <Title size={15} label={"Ordered On:"} bold={true} color={Colors.gray}/>
+                                                <Title size={15} label={"Ordered On:"} bold={true} color={Colors.darkGray}/>
                                                 <View
                                                     style={{
                                                     marginLeft: 5
@@ -309,7 +303,7 @@ const OrdersScreen = ({navigation, route}) => {
                                                 flexDirection: 'row',
                                                 alignItems: 'center'
                                             }}>
-                                                <Title size={15} label={"Status:"} bold={true} color={Colors.gray}/>
+                                                <Title size={15} label={"Status:"} bold={true} color={Colors.darkGray}/>
                                                 <View
                                                     style={{
                                                     marginLeft: 5
@@ -335,98 +329,11 @@ const OrdersScreen = ({navigation, route}) => {
                                         }}/>
                                     </View>
                                 </View>
-                                {item.mode !== 'cancelled' && (
-                                    <View
-                                        style={{
-                                        borderTopColor: Colors.darkGray,
-                                        borderTopWidth: 1,
-                                        padding: 5
-                                    }}>
-                                        {item.mode === 'inprocess' && (
-                                            <View
-                                                style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                                justifyContent: 'space-between'
-                                            }}>
-                                                <TouchableOpacity
-                                                    onPress={() => navigation.navigate("TrackOrder", {details: {...item, fromScreen: 'Orders'}})}
-                                                    style={{
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center'
-                                                }}>
-                                                    <Title size={18} label={'Track'} bold={true} color={Colors.secondary}/>
-                                                    <Icon
-                                                        type={Icons.AntDesign}
-                                                        style={{
-                                                        marginTop: 5,
-                                                        marginLeft: 5
-                                                    }}
-                                                        name={'arrowright'}
-                                                        size={20}
-                                                        color={Colors.secondary}/>
-                                                </TouchableOpacity>
-                                                <Button
-                                                    labelStyle={{
-                                                    color: Colors.white,
-                                                    fontFamily: 'PTSerif-Bold'
-                                                }}
-                                                    color={Colors.error_toast_color}
-                                                    mode="contained"
-                                                    onPress={() => onPressCancel(item.id)}>Cancel</Button>
-                                            </View>
-                                        )}
-                                        {item.mode === 'delivered' && (
-                                            <View
-                                                style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                                justifyContent: 'space-between'
-                                            }}>
-                                                <TouchableOpacity
-                                                    onPress={() => navigation.navigate("Confirm", {details: item})}
-                                                    style={{
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center'
-                                                }}>
-                                                    <Title size={18} label={'Order Again'} bold={true} color={Colors.secondary}/>
-                                                    <Icon
-                                                        type={Icons.AntDesign}
-                                                        style={{
-                                                        marginTop: 5,
-                                                        marginLeft: 5
-                                                    }}
-                                                        name={'arrowright'}
-                                                        size={20}
-                                                        color={Colors.secondary}/>
-                                                </TouchableOpacity>
-                                                <Rating
-                                                    type='custom'
-                                                    ratingColor='#3498db'
-                                                    ratingBackgroundColor='#c8c7c8'
-                                                    ratingCount={5}
-                                                    imageSize={20}
-                                                    minValue={0}
-                                                    startingValue={0}
-                                                    jumpValue={1}
-                                                    showRating={false}/>
-                                            </View>
-                                        )}
-                                    </View>
-                                )}
-                            </Animatable.View> 
+                                
+                            </View> 
                         </RNBounceable>  
                         :
-                        <Animatable.View
-                            delay={50 * rowMap}
-                            animation={'slideInLeft'}
-                            style={{
-                            backgroundColor: Colors.appBackground,
-                            marginHorizontal: 20,
-                            marginVertical: 10,
-                            padding: 10,
-                            elevation: 5
-                        }}>
+                        <View>
                             <View
                                 style={{
                                 flexDirection: 'row',
@@ -437,7 +344,7 @@ const OrdersScreen = ({navigation, route}) => {
                                     size={20}
                                     label={'Order Details : '}
                                     bold={true}
-                                    color={Colors.darkGray}/>
+                                    color={Colors.primary}/>
                                 <Title
                                     size={18}
                                     label={"Price: " + item.total + "/-"}
@@ -456,12 +363,13 @@ const OrdersScreen = ({navigation, route}) => {
                                     alignItems: 'center'
                                 }}>
                                     <View>
+                                        <Title size={15} label={"Transaction Id: " + item.txnId} bold={true} color={Colors.darkGray}/>
                                         <View
                                             style={{
                                             flexDirection: 'row',
                                             alignItems: 'center'
                                         }}>
-                                            <Title size={15} label={"Booked On:"} bold={true} color={Colors.gray}/>
+                                            <Title size={15} label={"Booked On:"} bold={true} color={Colors.darkGray}/>
                                             <View
                                                 style={{
                                                 marginLeft: 5
@@ -474,7 +382,7 @@ const OrdersScreen = ({navigation, route}) => {
                                             flexDirection: 'row',
                                             alignItems: 'center'
                                         }}>
-                                            <Title size={15} label={"Status:"} bold={true} color={Colors.gray}/>
+                                            <Title size={15} label={"Status:"} bold={true} color={Colors.darkGray}/>
                                             <View
                                                 style={{
                                                 marginLeft: 5
@@ -488,6 +396,9 @@ const OrdersScreen = ({navigation, route}) => {
                                                     color={Colors.error_toast_color}/>)}
                                             </View>
                                         </View>
+                                        {item.mode === 'cancelled' && (
+                                            <Text style={{color: Colors.darkGray, fontSize: 15, fontFamily: 'Oswald-Medium'}}>{"Reason for cancellation: " + item.reasonForCancellation}</Text>
+                                        )}
                                     </View>
                                 </View>
                                 {item
@@ -533,88 +444,143 @@ const OrdersScreen = ({navigation, route}) => {
                                         </View>
                                     </View>)}
                             </View>
-                            {item.mode !== 'cancelled' && (
+                            
+                        </View>   
+                        }
+                        {item.mode !== 'cancelled' && (
+                        <View>
+                            {item.mode === 'inprocess' && (
+                                <View>
+                                    <View
+                                        style={{
+                                        borderWidth: 1,
+                                        borderColor: Colors.darkGray
+                                    }}>
+                                        <Picker
+                                            placeholder='Select reason for cancellation'
+                                            dropdownIconColor={Colors.darkGray}
+                                            mode="dropdown"
+                                            selectedValue={pickerValue}
+                                            onValueChange={(itemValue, itemIndex) => setPickerValue(itemValue)}>
+                                            <Picker.Item
+                                                style={{
+                                                color: Colors.darkGray,
+                                                fontFamily: 'Oswald-Medium'
+                                            }}
+                                                label="Select reason for cancellation"
+                                                value=""/>
+                                            <Picker.Item
+                                                style={{
+                                                color: Colors.darkGray,
+                                                fontFamily: 'Oswald-Medium'
+                                            }}
+                                                label="I have changed my mind"
+                                                value="I have changed my mind"/>
+                                            <Picker.Item
+                                                style={{
+                                                color: Colors.darkGray,
+                                                fontFamily: 'Oswald-Medium'
+                                            }}
+                                                label="Found local doctor"
+                                                value="Found local doctor"/>
+                                            <Picker.Item
+                                                style={{
+                                                color: Colors.darkGray,
+                                                fontFamily: 'Oswald-Medium'
+                                            }}
+                                                label="Price is not reasonable"
+                                                value="Price is not reasonable"/>
+                                            <Picker.Item
+                                                style={{
+                                                color: Colors.darkGray,
+                                                fontFamily: 'Oswald-Medium'
+                                            }}
+                                                label="Somewhat not satisfied with the privious service"
+                                                value="Somewhat not satisfied with the privious service"/>
+                                        </Picker>
+                                    </View>
+                                    <View
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        marginTop: 5
+                                    }}>
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate("TrackOrder", {
+                                            details: {
+                                                ...item,
+                                                fromScreen: 'Services'
+                                            }
+                                        })}
+                                            style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center'
+                                        }}>
+                                            <Title size={18} label={'Track'} bold={true} color={Colors.secondary}/>
+                                            <Icon
+                                                type={Icons.AntDesign}
+                                                style={{
+                                                marginTop: 5,
+                                                marginLeft: 5
+                                            }}
+                                                name={'arrowright'}
+                                                size={20}
+                                                color={Colors.secondary}/>
+                                        </TouchableOpacity>
+                                        <Button
+                                            labelStyle={{
+                                            color: Colors.white,
+                                            fontFamily: 'PTSerif-Bold'
+                                        }}
+                                            color={Colors.error_toast_color}
+                                            mode="contained"
+                                            onPress={() => onPressCancel(item.id)}>Cancel</Button>
+                                    </View>
+                                </View>
+                            )}
+                            {item.mode === 'delivered' && (
                                 <View
                                     style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
                                     borderTopColor: Colors.darkGray,
                                     borderTopWidth: 1,
                                     padding: 5
                                 }}>
-                                    {item.mode === 'inprocess' && (
-                                        <View
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate("Confirm", {details: item})}
+                                        style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Title size={18} label={'Order Again'} bold={true} color={Colors.secondary}/>
+                                        <Icon
+                                            type={Icons.AntDesign}
                                             style={{
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between'
-                                        }}>
-                                            <TouchableOpacity
-                                                onPress={() => navigation.navigate("TrackOrder", {details: item})}
-                                                style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Title size={18} label={'Track'} bold={true} color={Colors.secondary}/>
-                                                <Icon
-                                                    type={Icons.AntDesign}
-                                                    style={{
-                                                    marginTop: 5,
-                                                    marginLeft: 5
-                                                }}
-                                                    name={'arrowright'}
-                                                    size={20}
-                                                    color={Colors.secondary}/>
-                                            </TouchableOpacity>
-                                            <Button
-                                                labelStyle={{
-                                                color: Colors.white,
-                                                fontFamily: 'PTSerif-Bold'
-                                            }}
-                                                color={Colors.error_toast_color}
-                                                mode="contained"
-                                                onPress={() => onPressCancel(item.id)}>Cancel</Button>
-                                        </View>
-                                    )}
-                                    {item.mode === 'delivered' && (
-                                        <View
-                                            style={{
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between'
-                                        }}>
-                                            <TouchableOpacity
-                                                onPress={() => navigation.navigate("Confirm", {details: item})}
-                                                style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Title size={18} label={'Order Again'} bold={true} color={Colors.secondary}/>
-                                                <Icon
-                                                    type={Icons.AntDesign}
-                                                    style={{
-                                                    marginTop: 5,
-                                                    marginLeft: 5
-                                                }}
-                                                    name={'arrowright'}
-                                                    size={20}
-                                                    color={Colors.secondary}/>
-                                            </TouchableOpacity>
-                                            <Rating
-                                                type='custom'
-                                                ratingColor='#3498db'
-                                                ratingBackgroundColor='#c8c7c8'
-                                                ratingCount={5}
-                                                imageSize={20}
-                                                minValue={0}
-                                                startingValue={0}
-                                                jumpValue={1}
-                                                showRating={false}/>
-                                        </View>
-                                    )}
+                                            marginTop: 5,
+                                            marginLeft: 5
+                                        }}
+                                            name={'arrowright'}
+                                            size={20}
+                                            color={Colors.secondary}/>
+                                    </TouchableOpacity>
+                                    <Rating
+                                        type='custom'
+                                        ratingColor='#3498db'
+                                        ratingBackgroundColor='#c8c7c8'
+                                        ratingCount={5}
+                                        imageSize={20}
+                                        minValue={0}
+                                        startingValue={0}
+                                        jumpValue={1}
+                                        showRating={false}/>
                                 </View>
                             )}
-                        </Animatable.View>   
-                        }
-                    </View>
+                        </View>
+                        )}
+                    </Animatable.View>
                 )
             }}/>
         </View>

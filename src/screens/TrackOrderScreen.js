@@ -149,8 +149,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                                 .on("value", snapshot => {
                                     if (snapshot.val()) {
                                         if (currentPosition) {
-                                            console.log("here--------------------------------------------------------------------")
-                                            var trackItemDetails = snapshot
+                                            let trackItemDetails = snapshot
                                                 .val()
                                                 .filter(item => item.id === details.id)
                                             setCurrentPosition(parseInt(trackItemDetails[0].trackStep))
@@ -193,7 +192,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                 let coords = points.map((point, index) => {
                     return {longitude: point[0], latitude: point[1]};
                 });
-                setEstimatedTime((response.data.routes[0].duration / 3600).toFixed(2))
+                setEstimatedTime((response.data.routes[0].duration / 60).toFixed(2))
                 setDistance((response.data.routes[0].distance / 1000).toFixed(2))
                 setCoords(coords)
             })

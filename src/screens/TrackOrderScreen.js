@@ -10,6 +10,7 @@ import {
     ImageBackground,
     Linking
 } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import StepIndicator from 'react-native-step-indicator';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
 import Colors from '../util/Colors';
@@ -27,6 +28,7 @@ import Constants from '../util/Constants';
 const TrackOrderScreen = ({navigation, route}) => {
     const mainLat = 22.6098639429
     const mainLan = 88.4011250887
+    const isFocused = useIsFocused();
     const [markers,
         setMarkers] = useState(null)
     const mapRef = useRef(null)
@@ -149,6 +151,7 @@ const TrackOrderScreen = ({navigation, route}) => {
                                 .on("value", snapshot => {
                                     if (snapshot.val()) {
                                         if (currentPosition) {
+                                            console.log("here")
                                             let trackItemDetails = snapshot
                                                 .val()
                                                 .filter(item => item.id === details.id)
@@ -203,29 +206,31 @@ const TrackOrderScreen = ({navigation, route}) => {
     };
 
     useEffect(() => {
-        if (details.type === 'Service') {
-            AsyncStorage
-                .getItem("homeAddress")
-                .then((address, msg) => {
-                    let data = JSON.parse(address)
-                    setRegion({latitude: data.lat, longitude: data.lan, latitudeDelta: 0.0032349810554670455, longitudeDelta: 0.0025001540780067444})
-                    setMarkers([
-                        {
-                            latitude: data.lat,
-                            longitude: data.lan,
-                            title: 'Home'
-                        }, {
-                            latitude: mainLat,
-                            longitude: mainLan,
-                            title: 'Doctor'
-                        }
-                    ])
-                    let url = "https://api.mapbox.com/directions/v5/mapbox/driving/" + data.lan + "," + data.lat + ";" + mainLan + "," + mainLat + "?annotations=duration&overview=full&geometries=geojson&access_token=" + Constants.MAP_BOX_API
-                    getDirections(url, data.lat, data.lan)
-                })
+        if (isFocused) {
+            if (details.type === 'Service') {
+                AsyncStorage
+                    .getItem("homeAddress")
+                    .then((address, msg) => {
+                        let data = JSON.parse(address)
+                        setRegion({latitude: data.lat, longitude: data.lan, latitudeDelta: 0.0032349810554670455, longitudeDelta: 0.0025001540780067444})
+                        setMarkers([
+                            {
+                                latitude: data.lat,
+                                longitude: data.lan,
+                                title: 'Home'
+                            }, {
+                                latitude: mainLat,
+                                longitude: mainLan,
+                                title: 'Doctor'
+                            }
+                        ])
+                        let url = "https://api.mapbox.com/directions/v5/mapbox/driving/" + data.lan + "," + data.lat + ";" + mainLan + "," + mainLat + "?annotations=duration&overview=full&geometries=geojson&access_token=" + Constants.MAP_BOX_API
+                        getDirections(url, data.lat, data.lan)
+                    })
+            }
+            getData()
         }
-        getData()
-    }, [])
+    }, [isFocused])
     return (
         <View
             style={{

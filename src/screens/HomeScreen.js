@@ -10,11 +10,11 @@ import React, {useState, useRef, useEffect} from 'react';
    ScrollView,
    Animated,
  } from 'react-native';
- import { useTheme, useIsFocused } from '@react-navigation/native';
- import Toast from 'react-native-toast-message';
+import { useTheme, useIsFocused } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 import Colors from '../util/Colors';
- import Icon from 'react-native-vector-icons/FontAwesome';
- import { Button } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Button } from 'react-native-paper';
 import Title from '../reusable_elements/Title';
 import LandingHeader from '../reusable_elements/LandingHeader';
 import TrackComponent from '../reusable_elements/TrackComponent';

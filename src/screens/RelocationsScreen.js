@@ -24,6 +24,7 @@ import {Button, Chip} from 'react-native-paper'
 import i18n from '../util/i18n';
 import {Picker} from '@react-native-picker/picker';
 import SegmentedControlTab from 'react-native-segmented-control-tab'
+import RBSheet from "react-native-raw-bottom-sheet";
 
 const width = Dimensions
     .get('screen')
@@ -41,6 +42,9 @@ const RelocationsScreen = ({navigation, route}) => {
         text: "Completed"
     }]
 
+    const refRBSheet = useRef(null)
+    const [itemId, 
+        setItemId] = useState("");
     const [pickerValue, 
         setPickerValue] = useState("");
     const [phoneNo,
@@ -61,6 +65,14 @@ const RelocationsScreen = ({navigation, route}) => {
                 if (data && JSON.parse(data).length > 0) {
                     let allItem = JSON.parse(data);
                     let items = allItem.filter(item => item.mode === filter)
+                    let pickerValArray = [],
+                        obj = {
+                            value: "Select reason for cancellation"
+                        }
+                    for(let i = 0; i < items.length; i++){
+                        pickerValArray.push(obj)
+                    }
+                    setPickerValue(pickerValArray)
                     setPastRelocations(items);
                 }
             });
@@ -72,24 +84,33 @@ const RelocationsScreen = ({navigation, route}) => {
             .then(snapshot => {
                 if (snapshot.val()) {
                     let items = snapshot.val().filter(item => item.mode === filter)
+                    let pickerValArray = [],
+                        obj = {
+                            value: "Select reason for cancellation"
+                        }
+                    for(let i = 0; i < items.length; i++){
+                        pickerValArray.push(obj)
+                    }
+                    setPickerValue(pickerValArray)
                     setPastRelocations(items);
                 }
             })
     }
 
-    const onPressCancel = (id) => {
+    const onPressSubmit = () => {
         if(pickerValue === "") {
             Toast.show({
                 type: 'customToast',
                 text1: "Select reason for cancellation...",
                 position: 'bottom',
                 visibilityTime: 1500,
-                bottomOffset: 80,
+                bottomOffset: 200,
                 props: {
                     backgroundColor: Colors.error_toast_color
                 }
             });
         } else {
+            refRBSheet.current.close()
             if (status === 'loggedIn') { 
                 database()
                     .ref("/users/" + phoneNo + "/relocations")
@@ -99,25 +120,26 @@ const RelocationsScreen = ({navigation, route}) => {
                         snapshot
                             .val()
                             .forEach((dbItem, index) => {
-                                if (dbItem.id === id) {
+                                if (dbItem.id === itemId) {
                                     path = index
                                 }
     
                             })
                         database()
                             .ref("/users/" + phoneNo + "/relocations/" + path)
-                            .update({mode: 'cancelled', reasonForCancellation: pickerValue})
-                        getDataFromDatabase(phoneNo, filters[catIndex].key)
-                        Toast.show({
-                            type: 'customToast',
-                            text1: "Relocation request has been cancelled...",
-                            position: 'bottom',
-                            visibilityTime: 1500,
-                            bottomOffset: 80,
-                            props: {
-                                backgroundColor: Colors.error_toast_color
-                            }
-                        });
+                            .update({mode: 'cancelled', reasonForCancellation: pickerValue}).then(() => {
+                                getDataFromDatabase(phoneNo, filters[catIndex].key)
+                                Toast.show({
+                                    type: 'customToast',
+                                    text1: "Relocation request has been cancelled...",
+                                    position: 'bottom',
+                                    visibilityTime: 1500,
+                                    bottomOffset: 80,
+                                    props: {
+                                        backgroundColor: Colors.error_toast_color
+                                    }
+                                });
+                            })
                     })        
             } else {
                 AsyncStorage
@@ -127,24 +149,26 @@ const RelocationsScreen = ({navigation, route}) => {
                             let path,
                             mainData = JSON.parse(data);
                             mainData.forEach((dbItem, index) => {
-                                if (dbItem.id === id) {
+                                if (dbItem.id === itemId) {
                                     path = index
                                 }
                             })
                             mainData[path].mode = 'cancelled'
                             mainData[path].reasonForCancellation = pickerValue
-                            AsyncStorage.setItem("anonymusRelocation", JSON.stringify(mainData))
-                            getDataFromStorage(filters[catIndex].key)
-                            Toast.show({
-                                type: 'customToast',
-                                text1: "Relocation request has been cancelled...",
-                                position: 'bottom',
-                                visibilityTime: 1500,
-                                bottomOffset: 80,
-                                props: {
-                                    backgroundColor: Colors.error_toast_color
-                                }
-                            });
+                            AsyncStorage.setItem("anonymusRelocation", JSON.stringify(mainData)).then(() => {
+                                getDataFromStorage(filters[catIndex].key)
+                                Toast.show({
+                                    type: 'customToast',
+                                    text1: "Relocation request has been cancelled...",
+                                    position: 'bottom',
+                                    visibilityTime: 1500,
+                                    bottomOffset: 80,
+                                    props: {
+                                        backgroundColor: Colors.error_toast_color
+                                    }
+                                });
+                            })
+                            
                         }
                     });
             }
@@ -152,8 +176,14 @@ const RelocationsScreen = ({navigation, route}) => {
         
     }
 
+    const onPressCancel = (id) => {
+        refRBSheet.current.open()
+        setItemId(id)
+    }
+
     const handleCustomIndexSelect = (index) => {
         setCatIndex(index)
+        setPickerValue("")
         if (status === 'loggedIn') {
             getDataFromDatabase(phoneNo, filters[index].key);
         } else {
@@ -543,74 +573,40 @@ const RelocationsScreen = ({navigation, route}) => {
                             }}>
                                 {item.mode === 'inprocess' && (
                                     <View>
-                                    <View
-                                        style={{
-                                        borderWidth: 1,
-                                        borderColor: Colors.darkGray
-                                    }}>
-                                        <Picker
-                                            placeholder='Select reason for cancellation'
-                                            dropdownIconColor={Colors.darkGray} mode="dropdown"
-                                            selectedValue={pickerValue}
-                                            onValueChange={(itemValue, itemIndex) =>
-                                                setPickerValue(itemValue)
-                                            }>
-                                            <Picker.Item  style={{
-                                                color: Colors.darkGray,
-                                                fontFamily: 'Oswald-Medium'
-                                            }} label="Select reason for cancellation" value="" />
-                                            <Picker.Item  style={{
-                                                color: Colors.darkGray,
-                                                fontFamily: 'Oswald-Medium'
-                                            }} label="I have changed my mind" value="I have changed my mind" />
-                                            <Picker.Item style={{
-                                                color: Colors.darkGray,
-                                                fontFamily: 'Oswald-Medium'
-                                            }} label="Found local doctor" value="Found local doctor" />
-                                            <Picker.Item style={{
-                                                color: Colors.darkGray,
-                                                fontFamily: 'Oswald-Medium'
-                                            }} label="Price is not reasonable" value="Price is not reasonable" />
-                                            <Picker.Item style={{
-                                                color: Colors.darkGray,
-                                                fontFamily: 'Oswald-Medium'
-                                            }} label="Somewhat not satisfied with the privious service" value="Somewhat not satisfied with the privious service" />
-                                        </Picker>
-                                    </View>
-                                    <View
-                                        style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        marginTop: 5
-                                    }}>
-                                        <TouchableOpacity
-                                            onPress={() => navigation.navigate("TrackOrder", {details: {...item, fromScreen: 'Services'}})}
+                                        <View
                                             style={{
                                             flexDirection: 'row',
-                                            alignItems: 'center'
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            marginTop: 5
                                         }}>
-                                            <Title size={18} label={'Track'} bold={true} color={Colors.secondary}/>
-                                            <Icon
-                                                type={Icons.AntDesign}
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate("TrackOrder", {details: {...item, fromScreen: 'Services'}})}
                                                 style={{
-                                                marginTop: 5,
-                                                marginLeft: 5
+                                                flexDirection: 'row',
+                                                alignItems: 'center'
+                                            }}>
+                                                <Title size={18} label={'Track'} bold={true} color={Colors.secondary}/>
+                                                <Icon
+                                                    type={Icons.AntDesign}
+                                                    style={{
+                                                    marginTop: 5,
+                                                    marginLeft: 5
+                                                }}
+                                                    name={'arrowright'}
+                                                    size={20}
+                                                    color={Colors.secondary}/>
+                                            </TouchableOpacity>
+                                            <Button
+                                                labelStyle={{
+                                                color: Colors.white,
+                                                fontFamily: 'PTSerif-Bold'
                                             }}
-                                                name={'arrowright'}
-                                                size={20}
-                                                color={Colors.secondary}/>
-                                        </TouchableOpacity>
-                                        <Button
-                                            labelStyle={{
-                                            color: Colors.white,
-                                            fontFamily: 'PTSerif-Bold'
-                                        }}
-                                            color={Colors.error_toast_color}
-                                            mode="contained"
-                                            onPress={() => onPressCancel(item.id)}>Cancel</Button>
+                                                color={Colors.error_toast_color}
+                                                mode="contained"
+                                                onPress={() => onPressCancel(item.id)}>Cancel</Button>
+                                        </View>
                                     </View>
-                                </View>
                                 )}
                                 {item.mode === 'completed' && (
                                     <View
@@ -656,6 +652,82 @@ const RelocationsScreen = ({navigation, route}) => {
                     </Animatable.View>
                 )
             }}/>
+            <RBSheet
+                height={180}
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                customStyles={{
+                container: {
+                    backgroundColor: Colors.white,
+                    borderTopLeftRadius: 50,
+                    borderTopRightRadius: 50,
+                    elevation: 10,
+                    overflow: 'hidden',
+                    paddingHorizontal: 20
+                },
+                wrapper: {
+                    backgroundColor: "transparent",
+                },
+                draggableIcon: {
+                    backgroundColor: Colors.secondary
+                }
+                }}
+                >
+                <View style={{marginTop: 20}}>
+                    <View
+                        style={{
+                        borderWidth: 1,
+                        borderColor: Colors.darkGray
+                    }}>
+                        <Picker
+                            placeholder='Select reason for cancellation'
+                            dropdownIconColor={Colors.darkGray}
+                            mode="dropdown"
+                            selectedValue={pickerValue}
+                            onValueChange={(itemValue) => { 
+                            setPickerValue(itemValue)
+                        }}>
+                            <Picker.Item  style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                            }} label="Select reason for cancellation" value="" />
+                            <Picker.Item  style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                            }} label="I have changed my mind" value="I have changed my mind" />
+                            <Picker.Item style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                            }} label="Solved by local partner" value="Solved by local partner" />
+                            <Picker.Item style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                            }} label="Somewhat not satisfied with the privious service" value="Somewhat not satisfied with the privious service" />
+                            <Picker.Item style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                            }} label="On my own" value="On my own" />
+                            <Picker.Item style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                            }} label="Don't want to share" value="Don't want to share" />
+                        </Picker>
+                    </View>  
+                    <View style={{alignItems: 'center', margin: 20}}>
+                        <View style={{width: '50%'}}>
+                            <Button
+                                labelStyle={{
+                                color: Colors.white,
+                                fontFamily: 'PTSerif-Bold'
+                                }}
+                                color={Colors.error_toast_color}
+                                mode="contained"
+                                onPress={onPressSubmit}>Submit</Button>   
+                        </View>
+                    </View>
+                </View>
+            </RBSheet>
         </View>
     );
 };

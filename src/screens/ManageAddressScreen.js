@@ -171,6 +171,7 @@ import i18n from '../util/i18n';
       getData();
     }
   }, [isFocused]);
+  
    return (
     <View style={{ flex: 1, backgroundColor: Colors.appBackground}} >
         <GeneralHeader 
@@ -208,7 +209,7 @@ import i18n from '../util/i18n';
             leftIconBackgroundColor={Colors.appBackground}
             onPressLeft={() => navigation.goBack()} 
         />
-      <View style={{marginBottom: showSelection? 80:0, paddingHorizontal: 15, marginTop: 10, flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start', backgroundColor: Colors.appBackground,  width: '100%'}}>
+      <View style={{marginBottom: showSelection? 80:0, paddingHorizontal: 5, marginTop: 10, flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start', backgroundColor: Colors.appBackground,  width: '100%'}}>
           {addressess.length !== 0?
           <SwipeListView
             disableLeftSwipe={showSelection? true:false}

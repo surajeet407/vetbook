@@ -25,6 +25,7 @@ import {Button, Chip} from 'react-native-paper'
 import {Picker} from '@react-native-picker/picker';
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import Constants from '../util/Constants';
+import RBSheet from "react-native-raw-bottom-sheet";
 
 
 const width = Dimensions
@@ -43,6 +44,9 @@ const ServicesScreen = ({navigation, route}) => {
         text: "Completed"
     }]
 
+    const refRBSheet = useRef(null)
+    const [itemId, 
+        setItemId] = useState("");
     const [pickerValue, 
         setPickerValue] = useState("");
     const [phoneNo,
@@ -77,20 +81,20 @@ const ServicesScreen = ({navigation, route}) => {
                 }
             })
     }
-
-    const onPressCancel = (id) => {
+    const onPressSubmit = () => {
         if(pickerValue === "") {
             Toast.show({
                 type: 'customToast',
                 text1: "Select reason for cancellation...",
                 position: 'bottom',
                 visibilityTime: 1500,
-                bottomOffset: 80,
+                bottomOffset: 200,
                 props: {
                     backgroundColor: Colors.error_toast_color
                 }
             });
         } else {
+            refRBSheet.current.close()
             if (status === 'loggedIn') {
                 database()
                 .ref("/users/" + phoneNo + "/services")
@@ -100,42 +104,14 @@ const ServicesScreen = ({navigation, route}) => {
                     snapshot
                         .val()
                         .forEach((dbItem, index) => {
-                            if (dbItem.id === id) {
+                            if (dbItem.id === itemId) {
                                 path = index;
                             }
                         })
                     database()
                         .ref("/users/" + phoneNo + "/services/" + path)
-                        .update({mode: 'cancelled', reasonForCancellation: pickerValue})
-                    getDataFromDatabase(phoneNo, filters[catIndex].key)
-                    Toast.show({
-                        type: 'customToast',
-                        text1: "This Service has been cancelled...",
-                        position: 'bottom',
-                        visibilityTime: 1500,
-                        bottomOffset: 80,
-                        props: {
-                            backgroundColor: Colors.error_toast_color
-                        }
-                    });
-                })
-                    
-            } else {
-                AsyncStorage
-                    .getItem("anonymusService")
-                    .then((data) => {
-                        if (data && JSON.parse(data).length > 0) {
-                            let path,
-                            mainData = JSON.parse(data);
-                            mainData.forEach((dbItem, index) => {
-                                if (dbItem.id === id) {
-                                    path = index
-                                }
-                            })
-                            mainData[path].mode = 'cancelled'
-                            mainData[path].reasonForCancellation = pickerValue
-                            AsyncStorage.setItem("anonymusService", JSON.stringify(mainData))
-                            getDataFromStorage(filters[catIndex].key)
+                        .update({mode: 'cancelled', reasonForCancellation: pickerValue}).then(() => {
+                            getDataFromDatabase(phoneNo, filters[catIndex].key)
                             Toast.show({
                                 type: 'customToast',
                                 text1: "This Service has been cancelled...",
@@ -146,15 +122,52 @@ const ServicesScreen = ({navigation, route}) => {
                                     backgroundColor: Colors.error_toast_color
                                 }
                             });
+                        })
+                    
+                })
+                    
+            } else {
+                AsyncStorage
+                    .getItem("anonymusService")
+                    .then((data) => {
+                        if (data && JSON.parse(data).length > 0) {
+                            let path,
+                            mainData = JSON.parse(data);
+                            mainData.forEach((dbItem, index) => {
+                                if (dbItem.id === itemId) {
+                                    path = index
+                                }
+                            })
+                            mainData[path].mode = 'cancelled'
+                            mainData[path].reasonForCancellation = pickerValue
+                            AsyncStorage.setItem("anonymusService", JSON.stringify(mainData)).then(() => {
+                                getDataFromStorage(filters[catIndex].key)
+                                Toast.show({
+                                    type: 'customToast',
+                                    text1: "This Service has been cancelled...",
+                                    position: 'bottom',
+                                    visibilityTime: 1500,
+                                    bottomOffset: 80,
+                                    props: {
+                                        backgroundColor: Colors.error_toast_color
+                                    }
+                                });
+                            }) 
                         }
                     });
             }
         }
         
     }
+
+    const onPressCancel = (id) => {
+        refRBSheet.current.open()
+        setItemId(id)
+    }
     
     const handleCustomIndexSelect = (index) => {
         setCatIndex(index)
+        setPickerValue("")
         if (status === 'loggedIn') {
             getDataFromDatabase(phoneNo, filters[index].key);
         } else {
@@ -228,6 +241,7 @@ const ServicesScreen = ({navigation, route}) => {
                 />
                 </View>
             <FlatList
+                extraData={pastServices}
                 ListEmptyComponent={
                     <View style={{alignItems: 'center', marginTop: 20}}>
                         <Title label="No service requests are found..." size={20} color={Colors.darkGray}/>
@@ -236,10 +250,10 @@ const ServicesScreen = ({navigation, route}) => {
                 showsVerticalScrollIndicator={false}
                 data={pastServices}
                 keyExtractor={item => item.id}
-                renderItem={({item, rowMap}) => {
+                renderItem={({item, index}) => {
                 return (
                     <Animatable.View
-                        delay={50 * rowMap}
+                        delay={50 * index}
                         animation={'slideInLeft'}
                         style={{
                         backgroundColor: Colors.appBackground,
@@ -316,41 +330,10 @@ const ServicesScreen = ({navigation, route}) => {
                         {item.mode !== 'cancelled' && (
                             <View>
                                 {item.mode === 'ongoing' && (
-                                    <View>
-                                        <View
-                                            style={{
-                                            borderWidth: 1,
-                                            borderColor: Colors.darkGray
-                                        }}>
-                                            <Picker
-                                                placeholder='Select reason for cancellation'
-                                                dropdownIconColor={Colors.darkGray} mode="dropdown"
-                                                selectedValue={pickerValue}
-                                                onValueChange={(itemValue, itemIndex) =>
-                                                    setPickerValue(itemValue)
-                                                }>
-                                                <Picker.Item  style={{
-                                                    color: Colors.darkGray,
-                                                    fontFamily: 'Oswald-Medium'
-                                                }} label="Select reason for cancellation" value="" />
-                                                <Picker.Item  style={{
-                                                    color: Colors.darkGray,
-                                                    fontFamily: 'Oswald-Medium'
-                                                }} label="I have changed my mind" value="I have changed my mind" />
-                                                <Picker.Item style={{
-                                                    color: Colors.darkGray,
-                                                    fontFamily: 'Oswald-Medium'
-                                                }} label="Found local doctor" value="Found local doctor" />
-                                                <Picker.Item style={{
-                                                    color: Colors.darkGray,
-                                                    fontFamily: 'Oswald-Medium'
-                                                }} label="Price is not reasonable" value="Price is not reasonable" />
-                                                <Picker.Item style={{
-                                                    color: Colors.darkGray,
-                                                    fontFamily: 'Oswald-Medium'
-                                                }} label="Somewhat not satisfied with the privious service" value="Somewhat not satisfied with the privious service" />
-                                            </Picker>
-                                        </View>
+                                    <View style={{
+                                        borderTopColor: Colors.darkGray,
+                                        borderTopWidth: 1,
+                                        padding: 5}}>
                                         <View
                                             style={{
                                             flexDirection: 'row',
@@ -430,6 +413,93 @@ const ServicesScreen = ({navigation, route}) => {
                     </Animatable.View>
                 )
             }}/>
+            <RBSheet
+                height={180}
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                customStyles={{
+                container: {
+                    backgroundColor: Colors.white,
+                    borderTopLeftRadius: 50,
+                    borderTopRightRadius: 50,
+                    elevation: 10,
+                    overflow: 'hidden',
+                    paddingHorizontal: 20
+                },
+                wrapper: {
+                    backgroundColor: "transparent",
+                },
+                draggableIcon: {
+                    backgroundColor: Colors.secondary
+                }
+                }}
+                >
+                <View style={{marginTop: 20}}>
+                    <View
+                        style={{
+                        borderWidth: 1,
+                        borderColor: Colors.darkGray
+                    }}>
+                        <Picker
+                            placeholder='Select reason for cancellation'
+                            dropdownIconColor={Colors.darkGray}
+                            mode="dropdown"
+                            selectedValue={pickerValue}
+                            onValueChange={(itemValue) => { 
+                            setPickerValue(itemValue)
+                        }}>
+                            <Picker.Item
+                                style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                            }}
+                                label="Select reason for cancellation"
+                                value=""/>
+                            <Picker.Item
+                                style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                            }}
+                                label="I have changed my mind"
+                                value="I have changed my mind"/>
+                            <Picker.Item
+                                style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                            }}
+                                label="Found local doctor"
+                                value="Found local doctor"/>
+                            <Picker.Item
+                                style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                                }}
+                                label="Price is not reasonable"
+                                value="Price is not reasonable"/>
+                            <Picker.Item
+                                style={{
+                                color: Colors.darkGray,
+                                fontFamily: 'Oswald-Medium'
+                            }}
+                                label="Somewhat not satisfied with the privious service"
+                                value="Somewhat not satisfied with the privious service"/>
+                        </Picker>
+                    </View>  
+                    <View style={{alignItems: 'center', margin: 20}}>
+                        <View style={{width: '50%'}}>
+                            <Button
+                                labelStyle={{
+                                color: Colors.white,
+                                fontFamily: 'PTSerif-Bold'
+                                }}
+                                color={Colors.error_toast_color}
+                                mode="contained"
+                                onPress={onPressSubmit}>Submit</Button>   
+                        </View>
+                    </View>
+                </View>
+            </RBSheet>
         </View>
     );
 };

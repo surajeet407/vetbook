@@ -224,19 +224,21 @@ import i18n from '../util/i18n';
               <View style={{marginBottom: 5}}/>
             )}
             renderItem={ ({item, rowMap}) => (
-            <View style={[styles.item, {backgroundColor: checked === item.id ? Colors.darkGray:Colors.appBackground}]}>
+            <View style={[styles.item, {backgroundColor: checked === item.id ? Colors.green2:Colors.appBackground}]}>
               <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <View>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text style={{fontFamily: 'Oswald-SemiBold', fontSize: 20, color: checked === item.id? Colors.secondary:Colors.darkGray}}>{item.name}</Text>
-                    <Text style={{color: Colors.appBackground, marginLeft: 5, marginTop: 5, padding: 5, backgroundColor: Colors.primary, borderRadius: 10, fontFamily: 'Oswald-Medium', fontSize: 10}}>{item.tag}</Text>
+                    <Text style={{color: Colors.appBackground, marginLeft: 5, marginTop: 5, padding: 5, backgroundColor: Colors.error_toast_color, borderRadius: 10, fontFamily: 'Oswald-Medium', fontSize: 10}}>{item.tag}</Text>
                   </View>
                   <View style={{width: showSelection? '98%':'100%'}}>
-                    <Text style={{fontFamily: 'PTSerif-Italic', fontSize: 18, color: checked === item.id? Colors.white:Colors.darkGray}}>{item.address}</Text>
+                    <Text style={{fontFamily: 'PTSerif-Italic', fontSize: 15, color: checked === item.id? Colors.white:Colors.darkGray}}>{item.address + " " + item.pinCode}</Text>
                   </View>
                 </View>
                 {showSelection?
-                <RadioButton onPress={() => onPressAddressRadioButton(item.id)} color={Colors.primary} status={ checked === item.id ? 'checked' : 'unchecked' }/>
+                <View style={{right: 10}}>
+                  <RadioButton onPress={() => onPressAddressRadioButton(item.id)} color={Colors.primary} status={ checked === item.id ? 'checked' : 'unchecked' }/>
+                </View>
                 :
                 null
                 }

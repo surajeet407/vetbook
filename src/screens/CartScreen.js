@@ -87,7 +87,7 @@ const CartScreen = ({navigation, route}) => {
         setCartItems(val);
         let price = 0
         val.forEach((item) => {
-            price = price + parseInt(item.price) * parseInt(item.quantity);
+            price = price + parseInt(item.discountPrice) * parseInt(item.quantity);
         })
         setAmount(price);
         setTax(parseInt((parseInt(price) * 18) / 100));
@@ -278,7 +278,7 @@ const CartScreen = ({navigation, route}) => {
                                         fontSize: 12,
                                         fontFamily: 'Oswald-Regular'
                                     }}
-                                        title={"₹ " + item.price + " /-"}
+                                        title={"₹ " + item.discountPrice + " /-"}
                                         color={Colors.secondary}
                                         ratio={0.2}
                                         distance={50}
@@ -347,7 +347,7 @@ const CartScreen = ({navigation, route}) => {
                                         }}
                                             rightButtonBackgroundColor={Colors.appBackground}
                                             leftButtonBackgroundColor={Colors.appBackground}/> 
-                                        {/* <Text style={{ fontFamily: 'PTSerif-Bold', fontSize: 18, color: 'grey' }}>Price: {item.price} /-</Text> */}
+                                        {/* <Text style={{ fontFamily: 'PTSerif-Bold', fontSize: 18, color: 'grey' }}>Price: {item.discountPrice} /-</Text> */}
                                     </View>
                                 </View>
                             </View>

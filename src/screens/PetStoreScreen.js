@@ -53,8 +53,11 @@ const PetStoreScreen = ({navigation, route}) => {
                 animated: true,
                 viewPosition: 0.5
             })
+            console.log(petStoreCategories[orgs.index])
         let path = ""
-        if (petStoreCategories[orgs.index].name === 'Food') {
+        if (petStoreCategories[orgs.index].name === 'Medicine') {
+            path = "/petMedicineItems"
+        } else if (petStoreCategories[orgs.index].name === 'Food') {
             path = "/petFoodItems"
         } else if (petStoreCategories[orgs.index].name === 'Toys') {
             path = "/petToysItems"
@@ -76,7 +79,9 @@ const PetStoreScreen = ({navigation, route}) => {
     const onChangeSearch = query => {
         setSearchQuery(query)
         let path = ""
-        if (petStoreCategories[selectedCategoryIndex].name === 'Food') {
+        if (petStoreCategories[selectedCategoryIndex].name === 'Medicine') {
+            path = "/petMedicineItems"
+        } else if (petStoreCategories[selectedCategoryIndex].name === 'Food') {
             path = "/petFoodItems"
         } else if (petStoreCategories[selectedCategoryIndex].name === 'Toys') {
             path = "/petToysItems"
@@ -118,7 +123,7 @@ const PetStoreScreen = ({navigation, route}) => {
                 }
             })
         database()
-            .ref('/petFoodItems')
+            .ref('/petMedicineItems')
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     setPetStoreItems(snapshot.val())
@@ -289,7 +294,7 @@ const PetStoreScreen = ({navigation, route}) => {
                                 })}
                                     name={item.name}
                                     image={item.image}
-                                    price={item.price}
+                                    price={item.discountPrice}
                                     index={item.id}
                                     width={Dimensions
                                     .get('screen')

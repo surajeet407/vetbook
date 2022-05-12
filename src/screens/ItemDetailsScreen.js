@@ -29,6 +29,7 @@ import i18n from '../util/i18n';
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ItemDetailScreen = ({navigation, route}) => {
+    console.log(route.params.item)
     const isFocused = useIsFocused();
     const [status,
         setStatus] = useState(route.params.status);
@@ -38,7 +39,7 @@ const ItemDetailScreen = ({navigation, route}) => {
     const [cartItemCount,
         setCartItemCount] = useState('0');
     const [price,
-        setPrice] = useState(route.params.item.price);
+        setPrice] = useState(route.params.item.discountPrice);
     const [numericInputVal,
         setNumericInputVal] = useState(1);
     const animation = useRef(new Animated.Value(0)).current;
@@ -220,7 +221,7 @@ const ItemDetailScreen = ({navigation, route}) => {
 
     const onChangeInput = (value) => {
         setNumericInputVal(value)
-        setPrice(parseInt(value) * parseInt(route.params.item.price));
+        setPrice(parseInt(value) * parseInt(route.params.item.discountPrice));
     }
 
     const getCartItemCount = () => {
@@ -313,14 +314,14 @@ const ItemDetailScreen = ({navigation, route}) => {
                     height: 200
                 }}
                     style={{
-                    fontSize: 25,
+                    fontSize: 16,
                     fontFamily: 'Oswald-Regular'
                 }}
-                    title={"₹ " + route.params.item.price + " /-"}
+                    title={"₹ " + route.params.item.actualPrice + " /- ( " + ((parseInt(route.params.item.actualPrice) - parseInt(route.params.item.discountPrice)) / 100).toFixed(1) + " % off)"}
                     color={Colors.primary}
-                    ratio={0.2}
-                    distance={80}
-                    extent={0}>
+                    ratio={0.5}
+                    distance={120}
+                    extent={0.1}>
                     <AnimatedPagerView
                         initialPage={0}
                         style={{

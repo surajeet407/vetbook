@@ -1,590 +1,27 @@
 {
-  "HomePageCarouselServices" : [ {
-    "buttonText" : "adopt",
-    "id" : "2",
-    "image" : "https://i.ibb.co/TYVyn5k/pet.jpg",
-    "navTo" : "AdoptPet",
-    "title" : "Adopt a Pet"
-  }, {
-    "buttonText" : "enter",
-    "id" : "2",
-    "image" : "https://i.ibb.co/02YWSBs/emergency.jpg",
-    "navTo" : "Emergency",
-    "title" : "Emergency Service"
-  }, {
-    "buttonText" : "report",
-    "id" : "3",
-    "image" : "https://i.ibb.co/v4sbgzM/abuse.jpg",
-    "navTo" : "PetAbuse",
-    "title" : "Report Animal Abuse"
-  } ],
-  "petCategories" : [ {
-    "id" : "1",
-    "image" : "https://i.ibb.co/rGtRddR/dog-icon.png",
-    "name" : "Dogs"
-  }, {
-    "id" : "2",
-    "image" : "https://i.ibb.co/JCX7F92/cat-icon.png",
-    "name" : "Cats"
-  }, {
-    "id" : "3",
-    "image" : "https://i.ibb.co/884QXM7/bird-icon.png",
-    "name" : "Birds"
-  }, {
-    "id" : "4",
-    "image" : "https://i.ibb.co/jwg2CfP/rabbit-icon.png",
-    "name" : "Rabbits"
-  }, {
-    "id" : "5",
-    "image" : "https://i.ibb.co/P6YK96K/cattle-icon.png",
-    "name" : "Cattles"
-  } ],
-  "petDogs" : [ {
-    "color" : "purple",
-    "cost" : "5999",
-    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
-    "details" : [ {
-      "key" : "Breed",
-      "value" : "Brenese"
-    }, {
-      "key" : "Age",
-      "value" : "6 Months"
-    }, {
-      "key" : "Sex",
-      "value" : "Male"
-    } ],
-    "id" : "0",
-    "image" : "https://i.ibb.co/JH4bm8j/lucas.png",
-    "location" : "USA",
-    "name" : "Lucas"
-  }, {
-    "color" : "green",
-    "cost" : "5999",
-    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
-    "details" : [ {
-      "key" : "Breed",
-      "value" : "Brenese"
-    }, {
-      "key" : "Age",
-      "value" : "1.2 Year"
-    }, {
-      "key" : "Sex",
-      "value" : "Female"
-    } ],
-    "id" : "1",
-    "image" : "https://i.ibb.co/hDmHp6R/dexter.png",
-    "location" : "USA",
-    "name" : "Dexter"
-  }, {
-    "color" : "red",
-    "cost" : "5999",
-    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
-    "details" : [ {
-      "key" : "Breed",
-      "value" : "Brenese"
-    }, {
-      "key" : "Age",
-      "value" : "1 Year"
-    }, {
-      "key" : "Sex",
-      "value" : "Male"
-    } ],
-    "id" : "2",
-    "image" : "https://i.ibb.co/HY1GjJY/pomeranian.png",
-    "location" : "USA",
-    "name" : "Pomerian"
-  }, {
-    "color" : "yellow",
-    "cost" : "5999",
-    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
-    "details" : [ {
-      "key" : "Breed",
-      "value" : "Brenese"
-    }, {
-      "key" : "Age",
-      "value" : "8 Months"
-    }, {
-      "key" : "Sex",
-      "value" : "Female"
-    } ],
-    "id" : "3",
-    "image" : "https://i.ibb.co/QvZYVQj/german-shepherd.png",
-    "location" : "USA",
-    "name" : "German Shepard"
-  },{
-    "color" : "green",
-    "cost" : "5999",
-    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
-    "details" : [ {
-      "key" : "Breed",
-      "value" : "Brenese"
-    }, {
-      "key" : "Age",
-      "value" : "2 Year"
-    }, {
-      "key" : "Sex",
-      "value" : "FEMALE"
-    } ],
-    "id" : "4",
-    "image" : "https://i.ibb.co/tKksYYD/border-collie.png",
-    "location" : "JPN",
-    "name" : "Border Collie"
-  },{
-    "color" : "red",
-    "cost" : "5999",
-    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
-    "details" : [ {
-      "key" : "Breed",
-      "value" : "Brenese"
-    }, {
-      "key" : "Age",
-      "value" : "3 Months"
-    }, {
-      "key" : "Sex",
-      "value" : "Male"
-    } ],
-    "id" : "5",
-    "image" : "https://i.ibb.co/4ZsRyDq/bulldog.png",
-    "location" : "GN",
-    "name" : "Bull Dog"
-  },{
-    "color" : "grey",
-    "cost" : "5999",
-    "desc" : "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
-    "details" : [ {
-      "key" : "Breed",
-      "value" : "Brenese"
-    }, {
-      "key" : "Age",
-      "value" : "5 Months"
-    }, {
-      "key" : "Sex",
-      "value" : "FEMALE"
-    } ],
-    "id" : "6",
-    "image" : "https://i.ibb.co/YbTWwkX/king-charles.png",
-    "location" : "EN",
-    "name" : "King Charles"
-  } ],
-  "petStore" : {
-    "buttonText" : "Enter",
-    "image" : "https://i.ibb.co/jwfhdfs/petshop.jpg",
-    "title" : "Pet Store"
-  },
-  "quickService" : [ {
-    "backgroundColor" : "#ea7a72",
-    "desc" : "Book your doctor to keep pet healty...",
-    "id" : "1",
-    "image" : "https://i.ibb.co/VLVHkBp/book.jpg",
-    "navTo" : "Consult",
-    "title" : "Book a Doctor"
-  }, {
-    "backgroundColor" : "#ea7a72",
-    "desc" : "Make sure everything will go well for your pet...",
-    "id" : "2",
-    "image" : "https://i.ibb.co/8rQh9s9/blood-test.jpg",
-    "navTo" : "BloodTest",
-    "title" : "Do a Blood Test"
-  } ],
-  "services" : [ {
-    "backgroundColor" : "#376eb4",
-    "id" : "2",
-    "image" : "https://i.ibb.co/Pwyx09X/doctor.png",
-    "navTo" : "Consult",
-    "title" : "Veterinary"
-  }, {
-    "backgroundColor" : "#961ab3",
-    "id" : "3",
-    "image" : "https://i.ibb.co/v1ysWzQ/training.png",
-    "navTo" : "PetTraining",
-    "title" : "Training"
-  }, {
-    "backgroundColor" : "#4a8f4b",
-    "id" : "4",
-    "image" : "https://i.ibb.co/xfpFRMM/relocation.png",
-    "navTo" : "PetRelocation",
-    "title" : "Relocation"
-  }, {
-    "backgroundColor" : "#ea7a72",
-    "id" : "5",
-    "image" : "https://i.ibb.co/cgscN2Z/gromming.png",
-    "navTo" : "PetGrooming",
-    "title" : "Gromming"
-  } ],
-  "petStoreCategories": [
-    {"id": "1", "name": "Food", "image": "https://i.ibb.co/t4TgFx1/food.jpg"},
-    {"id": "2", "name": "Toys", "image": "https://i.ibb.co/qFZbp7m/toys.webp"},
-    {"id": "3", "name": "Accesorries", "image": "https://i.ibb.co/x7gR9q4/accesorries.jpg"},
-    {"id": "4", "name": "Furniture", "image": "https://i.ibb.co/V2Y7d9h/furniture.jpg"}
-  ],
-  "petFoodItems": [
+  "HomePageCarouselServices": [
     {
-      "id": "0", 
-      "name": "Egg white Stew", 
-      "description": [
-        "These are fresh and human tested",
-        "Easy and ready to eat dog food with freshness in every bite",
-        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
-        "100% Natural and Human Grade",
-        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
-      ], 
-      "price": "299",
-      "image": "https://i.ibb.co/jL8PWYF/eggwhitestew.webp"
-    },
-    {
-      "id": "1",
-      "name": "Chicken Liver Stew",
-      "description": [
-        "These are fresh and human tested",
-        "Easy and ready to eat dog food with freshness in every bite",
-        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
-        "100% Natural and Human Grade",
-        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
-      ], 
-      "price": "299",
-      "image": "https://i.ibb.co/FBXJkxD/Chicken-Liver.webp"
-    },
-    {
-      "id": "2", 
-      "name": "Carrot Stew", 
-      "description": [
-        "These are fresh and human tested",
-        "Easy and ready to eat dog food with freshness in every bite",
-        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
-        "100% Natural and Human Grade",
-        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
-      ], 
-      "price": "299",
-      "image": "https://i.ibb.co/n8BVD2C/carrot.webp"
-    },
-    {
-      "id": "3", 
-      "name": "Fish Stew", 
-      "description": [
-        "These are fresh and human tested",
-        "Easy and ready to eat dog food with freshness in every bite",
-        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
-        "100% Natural and Human Grade",
-        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
-      ], 
-      "price": "299",
-      "image": "https://i.ibb.co/xsL0XJw/fishStew.webp"
-    },
-    {
-      "id": "4", 
-      "name": "Peanut Butter", 
-      "description": [
-        "These are fresh and human tested",
-        "Easy and ready to eat dog food with freshness in every bite",
-        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
-        "100% Natural and Human Grade",
-        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
-      ], 
-      "price": "299",
-      "image": "https://i.ibb.co/686gVjY/Peanut-Butter.webp"
-    }
-  ],
-  "users": {
-    "8900162177": {
-      "notifications": [{
-        "id": "1",
-        "title": "Veterinary",
-        "image": "https://i.ibb.co/Pwyx09X/doctor.png",
-        "desc": "You have an ongoing service order",
-        "time": "15 minitues ago"
-      },{
-        "id": "1",
-        "title": "Training",
-        "image": "https://i.ibb.co/v1ysWzQ/training.png",
-        "desc": "You have an ongoing training request",
-        "time": "5 minitues ago"
-      }],
-      "pastOrders": [
-        {
-          "id": "1",
-          "title": "Veterinary",
-          "image": "https://i.ibb.co/Pwyx09X/doctor.png",
-          "cost": "699",
-          "orderedOn": "06/05/2020"
-        },
-        {
-          "id": "2",
-          "title": "Medicine",
-          "image": "https://i.ibb.co/WFH1sZ3/medicine.png",
-          "cost": "355",
-          "orderedOn": "10/08/2020"
-        },
-        {
-          "id": "3",
-          "title": "Food",
-          "image": "https://i.ibb.co/GM3TJvP/food.png",
-          "cost": "799",
-          "orderedOn": "03/08/2021"
-        },
-        {
-          "id": "4",
-          "title": "Gromming",
-          "image": "https://i.ibb.co/cgscN2Z/gromming.png",
-          "cost": "1299",
-          "orderedOn": "10/12/2022"
-        }
-      ],
-      "addresses": [
-        {
-          "id": "1",
-          "title": "First Item",
-          "desc": "lorem ipsum dolor sit amet"
-        },
-        {
-          "id": "2",
-          "title": "Second Item",
-          "desc": "lorem ipsum dolor sit amet"
-        }
-      ],
-      "cartItems": [
-        {
-          "id": "0", 
-          "name": "Egg white Stew", 
-          "description": [
-            "These are fresh and human tested",
-            "Easy and ready to eat dog food with freshness in every bite",
-            "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
-            "100% Natural and Human Grade",
-            "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
-          ], 
-          "price": "299",
-          "image": "https://i.ibb.co/jL8PWYF/eggwhitestew.webp",
-          "quantity": "2"
-        },
-        {
-          "id": "1",
-          "name": "Chicken Liver Stew",
-          "description": [
-            "These are fresh and human tested",
-            "Easy and ready to eat dog food with freshness in every bite",
-            "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
-            "100% Natural and Human Grade",
-            "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
-          ], 
-          "price": "299",
-          "image": "https://i.ibb.co/FBXJkxD/Chicken-Liver.webp",
-          "quantity": "3"
-        }
-      ],
-      "Services": [{
-        "backgroundColor" : "#376eb4",
-        "id" : "9879675456HLKJFGHGDFHJH",
-        "image" : "https://i.ibb.co/Pwyx09X/doctor.png",
-        "title" : "Pet Doctor",
-        "startTime": "09:00 AM", 
-        "endTime": "11:00 PM",
-        "price": "699"
-      }]
-    }
-  },
-  "stepIndicator": [{
-    "step": "0",
-    "name": "Service Ordered",
-    "desc": "We have received your request."
-  },
-  {
-    "step": "1",
-    "name": "Confirming Your Service",
-    "desc": "We are approching to final confirmation."
-  },
-  {
-    "step": "2",
-    "name": "Service Confirmed",
-    "desc": "Service has been confirmed."
-  },
-  {
-    "step": "3",
-    "name": "Assigning to Doctor",
-    "desc": "Specialised doctor is being assigned."
-  },
-  {
-    "step": "4",
-    "name": "Doctor is on the way",
-    "desc": "Be ready with your pet medical problems."
-  },
-  {
-    "step": "5",
-    "name": "Service provided",
-    "desc": "Hope to see you again."
-  }],
-  "groomingPrice": [{
-    "headerLeftText": "Full Service",
-    "headerRightText": "Starting",
-    "actualPrice": "1999",
-    "discountPrice": "1599",
-    "showNotes": false,
-    "showTag": true,
-    "tagText": "Most Popular",
-    "details":[
-      "Full body Trimming/Styling",
-      "Bath With Shampoo & Conditioner",
-      "Teeth Cleaning/Mouth Spray",
-      "Blow Dry",
-      "Body Massage",
-      "Eye Cleaning",
-      "Nail Clipping",
-      "Paw Massage",
-      "Sanitary Clipping"
-    ]
-  }, {
-    "headerLeftText": "Basic Grooming",
-    "headerRightText": "Starting",
-    "actualPrice": "1499",
-    "discountPrice": "1199",
-    "showNotes": false,
-    "showTag": false,
-    "tagText": "",
-    "details":[
-      "Bath With Shampoo & Conditioner",
-      "Minor Haircutting",
-      "Eye Cleaning",
-      "Teeth Cleaning/Mouth Spray",
-      "Ear Cleaning",
-      "Paw Massage"
-    ]
-  }, {
-    "headerLeftText": "Spa Bath",
-    "headerRightText": "Starting",
-    "actualPrice": "999",
-    "discountPrice": "799",
-    "showNotes": false,
-    "showTag": true,
-    "tagText": "New",
-    "details":[
-      "Bath With Shampoo & Conditioner",
-      "Nail Clipping",
-      "Ear Cleaning",
-      "Blow Dry",
-      "Eyes Cleaning",
-      "Paw Massage"
-    ]
-  }],
-  "trainingPrice":[{
-    "headerLeftText": "Basic Training",
-    "headerRightText": "Starting",
-    "actualPrice": "999",
-    "discountPrice": "799",
-    "showNotes": true,
-    "showTag": false,
-    "tagText": "",
-    "notes": [
-      "* First demo session - ₹500.",
-      "* Training Completion Certificate will be provided.",
-      "Dogs must have their full round of vaccinations prior to starting these sessions."
-    ],
-    "details":[
-      "Loose leash walking",
-      "Polite greeting",
-      "Stand/Stay",
-      "Sit/No Commands",
-      "Diet Chart",
-      "Excessive barking"
-    ]
-  }, {
-    "headerLeftText": "Advanced Training",
-    "headerRightText": "Starting",
-    "actualPrice": "1299",
-    "discountPrice": "999",
-    "showNotes": true,
-    "showTag": false,
-    "tagText": "",
-    "notes": [
-      "* First demo session - ₹500.",
-      "* Training Completion Certificate will be provided.",
-      "Dogs must have their full round of vaccinations prior to starting these sessions."
-    ],
-    "details":[
-      "All Basic Commands",
-      "Heal Walk",
-      "Roll-Over",
-      "Handshake",
-      "Swimming",
-      "Take & Drop it Commands"
-    ]
-  }],
-  "doctorPrice": [{
-    "headerLeftText": "Home Visit",
-    "headerRightText": "Starting",
-    "actualPrice": "899",
-    "discountPrice": "699",
-    "showNotes": true,
-    "showTag": false,
-    "tagText": "",
-    "notes": [
-      "* Based on the situation, we will decide what needs to be done further more...",
-      "* Medications & Surgeroy  cost will be charged as per need."
-    ],
-    "details":[
-      "Home Consultation.",
-      "Full Body Health Check-up.",
-      "Nutration & Food Guidance."
-    ]
-  }],
-  "payMethods": [
-    {
-      "id": "1",
-      "title": "PayTM",
-      "desc": "lorem ipsum dolor sit amet",
-      "image": "https://i.ibb.co/gtssd7b/paytm.jpg"
-    },
-    {
+      "buttonText": "adopt",
       "id": "2",
-      "title": "PhonePe",
-      "desc": "lorem ipsum dolor sit amet",
-      "image": "https://i.ibb.co/YBNHzm0/phonepe.png"
+      "image": "https://i.ibb.co/TYVyn5k/pet.jpg",
+      "navTo": "AdoptPet",
+      "title": "Adopt a Pet"
     },
     {
+      "buttonText": "enter",
+      "id": "2",
+      "image": "https://i.ibb.co/02YWSBs/emergency.jpg",
+      "navTo": "Emergency",
+      "title": "Emergency Service"
+    },
+    {
+      "buttonText": "report",
       "id": "3",
-      "title": "GPay",
-      "desc": "lorem ipsum dolor sit amet",
-      "image": "https://i.ibb.co/g7sy9hP/gpay.png"
+      "image": "https://i.ibb.co/v4sbgzM/abuse.jpg",
+      "navTo": "PetAbuse",
+      "title": "Report Animal Abuse"
     }
   ],
-  "otherPayMethods": {
-    "name": "Pay after service",
-    "image": "https://i.ibb.co/NN1PY2c/payondelivery.jpg"
-  },
-  "splashScreenData": [
-    {
-      "key": "1",
-      "quote": "Until one has loved an animal a part of one's soul remains unawakened.",
-      "quoteBy": "Anatole France",
-      "image": "https://i.ibb.co/sPx0MWC/splash.png",
-      "backgroundColor": "#376eb4",
-      "showButton": false,
-      "buttonText": ""
-    },
-    {
-      "key": "2",
-      "quote": "The better I get to know men, the more I find myself loving dogs.",
-      "quoteBy": "Charles de Gaulle",
-      "image": "https://i.ibb.co/nLmzzGW/splash1.png",
-      "backgroundColor": "#961ab3",
-      "showButton": false,
-      "buttonText": ""
-    },
-    {
-      "key": "3",
-      "quote": "Dogs are our link to paradise. They don’t know evil or jealousy or discontent.",
-      "quoteBy": "Milan Kundera",
-      "image": "https://i.ibb.co/937bVsZ/splash2.png",
-      "backgroundColor": "#1eb091",
-      "showButton": true,
-      "buttonText": "Login"
-    }
-  ],
-  "logScreenData": {
-    "mainImage": "https://i.ibb.co/5BnSSQj/loginscreen.png",
-    "logoImage": "https://i.ibb.co/3sT5fHp/logo.png"
-  },
-  "otpScreenData": {
-    "mainImage": "https://i.ibb.co/GpbP2L6/otp.png"
-  },
   "appBacgroundImages": [
     "https://i.ibb.co/3B6Pcpg/background.png",
     "https://i.ibb.co/myLxcHv/background1.png",
@@ -596,7 +33,1154 @@
     "https://i.ibb.co/LtpCk0F/background5.png",
     "https://i.ibb.co/7rZsy1M/background6.png",
     "https://i.ibb.co/TMwjWv0/background7.png"
-
-  ]
-  
+  ],
+  "doctorPrice": [
+    {
+      "actualPrice": "899",
+      "details": [
+        "Home Consultation.",
+        "Full Body Health Check-up.",
+        "Nutration & Food Guidance."
+      ],
+      "discountPrice": "699",
+      "headerLeftText": "Home Visit",
+      "headerRightText": "Starting",
+      "notes": [
+        "* Based on the situation, we will decide what needs to be done further more...",
+        "* Medications & Surgeroy  cost will be charged as per need."
+      ],
+      "showNotes": true,
+      "showTag": false,
+      "tagText": ""
+    }
+  ],
+  "groomingPrice": [
+    {
+      "actualPrice": "1999",
+      "details": [
+        "Full body Trimming/Styling",
+        "Bath With Shampoo & Conditioner",
+        "Teeth Cleaning/Mouth Spray",
+        "Blow Dry",
+        "Body Massage",
+        "Eye Cleaning",
+        "Nail Clipping",
+        "Paw Massage",
+        "Sanitary Clipping"
+      ],
+      "discountPrice": "1599",
+      "headerLeftText": "Full Service",
+      "headerRightText": "Starting",
+      "showNotes": false,
+      "showTag": true,
+      "tagText": "Most Popular"
+    },
+    {
+      "actualPrice": "1499",
+      "details": [
+        "Bath With Shampoo & Conditioner",
+        "Minor Haircutting",
+        "Eye Cleaning",
+        "Teeth Cleaning/Mouth Spray",
+        "Ear Cleaning",
+        "Paw Massage"
+      ],
+      "discountPrice": "1199",
+      "headerLeftText": "Basic Grooming",
+      "headerRightText": "Starting",
+      "showNotes": false,
+      "showTag": false,
+      "tagText": ""
+    },
+    {
+      "actualPrice": "999",
+      "details": [
+        "Bath With Shampoo & Conditioner",
+        "Nail Clipping",
+        "Ear Cleaning",
+        "Blow Dry",
+        "Eyes Cleaning",
+        "Paw Massage"
+      ],
+      "discountPrice": "799",
+      "headerLeftText": "Spa Bath",
+      "headerRightText": "Starting",
+      "showNotes": false,
+      "showTag": true,
+      "tagText": "New"
+    }
+  ],
+  "logScreenData": {
+    "logoImage": "https://i.ibb.co/3sT5fHp/logo.png",
+    "mainImage": "https://i.ibb.co/5BnSSQj/loginscreen.png"
+  },
+  "otherPayMethods": {
+    "image": "https://i.ibb.co/NN1PY2c/payondelivery.jpg",
+    "name": "Pay after service"
+  },
+  "otpScreenData": {
+    "mainImage": "https://i.ibb.co/GpbP2L6/otp.png"
+  },
+  "payMethods": [
+    {
+      "desc": "lorem ipsum dolor sit amet",
+      "id": "1",
+      "image": "https://i.ibb.co/gtssd7b/paytm.jpg",
+      "title": "PayTM"
+    },
+    {
+      "desc": "lorem ipsum dolor sit amet",
+      "id": "2",
+      "image": "https://i.ibb.co/YBNHzm0/phonepe.png",
+      "title": "PhonePe"
+    },
+    {
+      "desc": "lorem ipsum dolor sit amet",
+      "id": "3",
+      "image": "https://i.ibb.co/g7sy9hP/gpay.png",
+      "title": "GPay"
+    }
+  ],
+  "petCategories": [
+    {
+      "id": "1",
+      "image": "https://i.ibb.co/rGtRddR/dog-icon.png",
+      "name": "Dogs"
+    },
+    {
+      "id": "2",
+      "image": "https://i.ibb.co/JCX7F92/cat-icon.png",
+      "name": "Cats"
+    },
+    {
+      "id": "3",
+      "image": "https://i.ibb.co/884QXM7/bird-icon.png",
+      "name": "Birds"
+    },
+    {
+      "id": "4",
+      "image": "https://i.ibb.co/jwg2CfP/rabbit-icon.png",
+      "name": "Rabbits"
+    }
+  ],
+  "petDogs": [
+    {
+      "color": "purple",
+      "cost": "5999",
+      "desc": "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+      "details": [
+        {
+          "key": "Breed",
+          "value": "Brenese"
+        },
+        {
+          "key": "Age",
+          "value": "6 Months"
+        },
+        {
+          "key": "Sex",
+          "value": "Male"
+        }
+      ],
+      "id": "0",
+      "image": "https://i.ibb.co/JH4bm8j/lucas.png",
+      "location": "USA",
+      "name": "Lucas"
+    },
+    {
+      "color": "green",
+      "cost": "5999",
+      "desc": "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+      "details": [
+        {
+          "key": "Breed",
+          "value": "Brenese"
+        },
+        {
+          "key": "Age",
+          "value": "1.2 Year"
+        },
+        {
+          "key": "Sex",
+          "value": "Female"
+        }
+      ],
+      "id": "1",
+      "image": "https://i.ibb.co/hDmHp6R/dexter.png",
+      "location": "USA",
+      "name": "Dexter"
+    },
+    {
+      "color": "red",
+      "cost": "5999",
+      "desc": "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+      "details": [
+        {
+          "key": "Breed",
+          "value": "Brenese"
+        },
+        {
+          "key": "Age",
+          "value": "1 Year"
+        },
+        {
+          "key": "Sex",
+          "value": "Male"
+        }
+      ],
+      "id": "2",
+      "image": "https://i.ibb.co/HY1GjJY/pomeranian.png",
+      "location": "USA",
+      "name": "Pomerian"
+    },
+    {
+      "color": "yellow",
+      "cost": "5999",
+      "desc": "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+      "details": [
+        {
+          "key": "Breed",
+          "value": "Brenese"
+        },
+        {
+          "key": "Age",
+          "value": "8 Months"
+        },
+        {
+          "key": "Sex",
+          "value": "Female"
+        }
+      ],
+      "id": "3",
+      "image": "https://i.ibb.co/QvZYVQj/german-shepherd.png",
+      "location": "USA",
+      "name": "German Shepard"
+    },
+    {
+      "color": "green",
+      "cost": "5999",
+      "desc": "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+      "details": [
+        {
+          "key": "Breed",
+          "value": "Brenese"
+        },
+        {
+          "key": "Age",
+          "value": "2 Year"
+        },
+        {
+          "key": "Sex",
+          "value": "FEMALE"
+        }
+      ],
+      "id": "4",
+      "image": "https://i.ibb.co/tKksYYD/border-collie.png",
+      "location": "JPN",
+      "name": "Border Collie"
+    },
+    {
+      "color": "red",
+      "cost": "5999",
+      "desc": "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+      "details": [
+        {
+          "key": "Breed",
+          "value": "Brenese"
+        },
+        {
+          "key": "Age",
+          "value": "3 Months"
+        },
+        {
+          "key": "Sex",
+          "value": "Male"
+        }
+      ],
+      "id": "5",
+      "image": "https://i.ibb.co/4ZsRyDq/bulldog.png",
+      "location": "GN",
+      "name": "Bull Dog"
+    },
+    {
+      "color": "grey",
+      "cost": "5999",
+      "desc": "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+      "details": [
+        {
+          "key": "Breed",
+          "value": "Brenese"
+        },
+        {
+          "key": "Age",
+          "value": "5 Months"
+        },
+        {
+          "key": "Sex",
+          "value": "FEMALE"
+        }
+      ],
+      "id": "6",
+      "image": "https://i.ibb.co/YbTWwkX/king-charles.png",
+      "location": "EN",
+      "name": "King Charles"
+    }
+  ],
+  "petFoodItems": [
+    {
+      "actualPrice": "499",
+      "baseQuantity": "500",
+      "description": [
+        "These are fresh and human tested",
+        "Easy and ready to eat dog food with freshness in every bite",
+        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+        "100% Natural and Human Grade",
+        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+      ],
+      "discountPrice": "299",
+      "id": "b666f51f-6243-4349-8566-a888bbe930bb",
+      "image": "https://i.ibb.co/jL8PWYF/eggwhitestew.webp",
+      "name": "Egg white Stew",
+      "unit": "gm"
+    },
+    {
+      "actualPrice": "499",
+      "baseQuantity": "500",
+      "description": [
+        "These are fresh and human tested",
+        "Easy and ready to eat dog food with freshness in every bite",
+        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+        "100% Natural and Human Grade",
+        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+      ],
+      "discountPrice": "299",
+      "id": "e3e41252-8e53-4b4c-af96-e73ef4d7c0d8",
+      "image": "https://i.ibb.co/FBXJkxD/Chicken-Liver.webp",
+      "name": "Chicken Liver Stew",
+      "unit": "gm"
+    },
+    {
+      "actualPrice": "499",
+      "baseQuantity": "500",
+      "description": [
+        "These are fresh and human tested",
+        "Easy and ready to eat dog food with freshness in every bite",
+        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+        "100% Natural and Human Grade",
+        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+      ],
+      "discountPrice": "299",
+      "id": "a1f62457-9140-4942-8563-ee73f7b8fee3",
+      "image": "https://i.ibb.co/n8BVD2C/carrot.webp",
+      "name": "Carrot Stew",
+      "unit": "gm"
+    },
+    {
+      "actualPrice": "499",
+      "baseQuantity": "500",
+      "description": [
+        "These are fresh and human tested",
+        "Easy and ready to eat dog food with freshness in every bite",
+        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+        "100% Natural and Human Grade",
+        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+      ],
+      "discountPrice": "299",
+      "id": "2765cdb6-2a5f-4b93-9c25-6976825d82f2",
+      "image": "https://i.ibb.co/xsL0XJw/fishStew.webp",
+      "name": "Fish Stew",
+      "unit": "gm"
+    },
+    {
+      "actualPrice": "499",
+      "baseQuantity": "500",
+      "description": [
+        "These are fresh and human tested",
+        "Easy and ready to eat dog food with freshness in every bite",
+        "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+        "100% Natural and Human Grade",
+        "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+      ],
+      "discountPrice": "299",
+      "id": "7c315d67-caac-4cd1-888a-ed69fedeac95",
+      "image": "https://i.ibb.co/686gVjY/Peanut-Butter.webp",
+      "name": "Peanut Butter",
+      "unit": "gm"
+    }
+  ],
+  "petMedicineItems": [
+    {
+      "actualPrice": "899",
+      "baseQuantity": "70",
+      "description": [
+        "Hespro Vitality and immunity suppliment",
+        "Food for dogs and cats",
+        "Best suupliment for pets"
+      ],
+      "discountPrice": "789",
+      "id": "d51fa465-3c08-4868-a82a-608200107f77",
+      "image": "https://i.ibb.co/nk8hQ4n/hespro.jpg",
+      "name": "Hespro",
+      "unit": "gm"
+    },
+    {
+      "actualPrice": "25",
+      "baseQuantity": "2.5",
+      "description": [
+        "Minipress XL 2.5mg Tablet may be prescribed alone or in combination with other medicines",
+        "Treatment of Hypertension (high blood pressure)",
+        "Minipress XL 2.5mg Tablet is usually used in the treatment of heart failure when other medicines are no longer working or have not worked at all",
+        " It lowers blood pressure by relaxing blood vessels so that blood can flow more easily through the body"
+      ],
+      "discountPrice": "15",
+      "id": "cec6d89a-8a19-4ad0-9d0f-83adeca47528",
+      "image": "https://i.ibb.co/zxPT4sL/minipress-prazosin-hydrochloride.jpg",
+      "name": "Minipress XL",
+      "unit": "mg"
+    },
+    {
+      "actualPrice": "589",
+      "baseQuantity": "100",
+      "description": [
+        "Resident intestinal microflora, which provides an environment that favors the growth and functioning of beneficial bacteria",
+        "Treatment of Hypertension (high blood pressure)",
+        "Gut associated lymphoid tissue (GALT)"
+      ],
+      "discountPrice": "479",
+      "id": "fae47840-a364-478d-a397-f804e5cdc85b",
+      "image": "https://i.ibb.co/Fq7WcsH/pawgest.jpg",
+      "name": "Pawgest",
+      "unit": "gm"
+    },
+    {
+      "actualPrice": "2849",
+      "baseQuantity": "180",
+      "description": [
+        "Highly palatable liquid suspension, for an easier administration vs. capsules and tablets",
+        "Combination of two intestinal phosphate binders decrease dietary availability of phosphorus",
+        "Natural fish protein hydrosylate is known to contribute to maintaining balanced blood pressure",
+        "The polysaccharides of Astragalus are known to contribute to maintenance of normal kidney architecture"
+      ],
+      "discountPrice": "2600",
+      "id": "3c02c9a0-6a85-4628-8f90-d62405117a28",
+      "image": "https://i.ibb.co/x18KnyZ/virbac-pronefra.jpg",
+      "name": "Virbac Pronefra",
+      "unit": "ml"
+    }
+  ],
+  "petStoreCategories": [
+    {
+      "id": 0,
+      "image": "https://i.ibb.co/jv7nSLv/medicine.jpg",
+      "name": "Medicine"
+    },
+    {
+      "id": 1,
+      "image": "https://i.ibb.co/t4TgFx1/food.jpg",
+      "name": "Food"
+    },
+    {
+      "id": 2,
+      "image": "https://i.ibb.co/qFZbp7m/toys.webp",
+      "name": "Toys"
+    },
+    {
+      "id": 3,
+      "image": "https://i.ibb.co/x7gR9q4/accesorries.jpg",
+      "name": "Accesorries"
+    },
+    {
+      "id": 4,
+      "image": "https://i.ibb.co/V2Y7d9h/furniture.jpg",
+      "name": "Furniture"
+    }
+  ],
+  "quickService": [
+    {
+      "backgroundColor": "#ea7a72",
+      "desc": "Book your doctor to keep pet healty...",
+      "id": "1",
+      "image": "https://i.ibb.co/VLVHkBp/book.jpg",
+      "navTo": "Consult",
+      "title": "Consult"
+    },
+    {
+      "backgroundColor": "#ea7a72",
+      "desc": "Make sure everything will go well for your pet...",
+      "id": "2",
+      "image": "https://i.ibb.co/8rQh9s9/blood-test.jpg",
+      "navTo": "BloodTest",
+      "title": "Blood Test"
+    }
+  ],
+  "services": [
+    {
+      "backgroundColor": "#376eb4",
+      "id": "2",
+      "image": "https://i.ibb.co/Pwyx09X/doctor.png",
+      "navTo": "Consult",
+      "title": "Veterinary"
+    },
+    {
+      "backgroundColor": "#961ab3",
+      "id": "3",
+      "image": "https://i.ibb.co/v1ysWzQ/training.png",
+      "navTo": "PetTraining",
+      "title": "Training"
+    },
+    {
+      "backgroundColor": "#4a8f4b",
+      "id": "4",
+      "image": "https://i.ibb.co/xfpFRMM/relocation.png",
+      "navTo": "PetRelocation",
+      "title": "Relocation"
+    },
+    {
+      "backgroundColor": "#ea7a72",
+      "id": "5",
+      "image": "https://i.ibb.co/cgscN2Z/gromming.png",
+      "navTo": "PetGrooming",
+      "title": "Grooming"
+    }
+  ],
+  "splashScreenData": [
+    {
+      "backgroundColor": "#376eb4",
+      "buttonText": "",
+      "image": "https://i.ibb.co/sPx0MWC/splash.png",
+      "key": "1",
+      "quote": "Until one has loved an animal a part of one's soul remains unawakened.",
+      "quoteBy": "Anatole France",
+      "showButton": false
+    },
+    {
+      "backgroundColor": "#961ab3",
+      "buttonText": "",
+      "image": "https://i.ibb.co/nLmzzGW/splash1.png",
+      "key": "2",
+      "quote": "The better I get to know men, the more I find myself loving dogs.",
+      "quoteBy": "Charles de Gaulle",
+      "showButton": false
+    },
+    {
+      "backgroundColor": "#1eb091",
+      "buttonText": "Login",
+      "image": "https://i.ibb.co/937bVsZ/splash2.png",
+      "key": "3",
+      "quote": "Dogs are our link to paradise. They don’t know evil or jealousy or discontent.",
+      "quoteBy": "Milan Kundera",
+      "showButton": true
+    }
+  ],
+  "trainingPrice": [
+    {
+      "actualPrice": "999",
+      "details": [
+        "Loose leash walking",
+        "Polite greeting",
+        "Stand/Stay",
+        "Sit/No Commands",
+        "Diet Chart",
+        "Excessive barking"
+      ],
+      "discountPrice": "799",
+      "headerLeftText": "Basic Training",
+      "headerRightText": "Starting",
+      "notes": [
+        "* First demo session - ₹500.",
+        "* Training Completion Certificate will be provided.",
+        "Dogs must have their full round of vaccinations prior to starting these sessions."
+      ],
+      "showNotes": true,
+      "showTag": false,
+      "tagText": ""
+    },
+    {
+      "actualPrice": "1299",
+      "details": [
+        "All Basic Commands",
+        "Heal Walk",
+        "Roll-Over",
+        "Handshake",
+        "Swimming",
+        "Take & Drop it Commands"
+      ],
+      "discountPrice": "999",
+      "headerLeftText": "Advanced Training",
+      "headerRightText": "Starting",
+      "notes": [
+        "* First demo session - ₹500.",
+        "* Training Completion Certificate will be provided.",
+        "Dogs must have their full round of vaccinations prior to starting these sessions."
+      ],
+      "showNotes": true,
+      "showTag": false,
+      "tagText": ""
+    }
+  ],
+  "users": {
+    "7001676407": {
+      "active": false
+    },
+    "7550841824": {
+      "active": true,
+      "addresses": [
+        {
+          "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+          "default": true,
+          "floor": "sdfgs",
+          "id": "bd3d7267-91b5-4328-8146-59fe694e6be4",
+          "latitude": 22.608558333333335,
+          "latitudeDelta": 0.0032349810554670455,
+          "longitude": 88.39719166666667,
+          "longitudeDelta": 0.0025001540780067444,
+          "name": "sdfhdfhd",
+          "nearby": "dfshshgs",
+          "pinCode": "252352",
+          "tag": "Work"
+        }
+      ],
+      "orders": [
+        {
+          "address": {
+            "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+            "default": true,
+            "floor": "sdd",
+            "id": "980de35e-079d-498f-b059-8d5925fefd16",
+            "latitude": 22.608558333333335,
+            "latitudeDelta": 0.0032349810554670455,
+            "longitude": 88.39719166666667,
+            "longitudeDelta": 0.0025001540780067444,
+            "name": "qwe",
+            "nearby": "r3ttyy",
+            "pinCode": "ee",
+            "tag": "Home"
+          },
+          "amount": 897,
+          "cartItems": [
+            {
+              "description": [
+                "These are fresh and human tested",
+                "Easy and ready to eat dog food with freshness in every bite",
+                "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+                "100% Natural and Human Grade",
+                "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+              ],
+              "id": "0",
+              "image": "https://i.ibb.co/jL8PWYF/eggwhitestew.webp",
+              "name": "Egg white Stew",
+              "price": "299",
+              "quantity": 3
+            }
+          ],
+          "fromScreen": "Confirm",
+          "id": "6f7891e2-56ab-4c54-acd8-12d117cef00a",
+          "mode": "inprocess",
+          "orderedOn": "2022-05-12",
+          "paymentStatus": "Success",
+          "phoneNo": "7550841824",
+          "serviceType": "None",
+          "tax": 161,
+          "total": 1058,
+          "trackStep": "0",
+          "txnId": "pay_JUBrzH3QH8GBud",
+          "type": "Items",
+          "userStatus": "loggedIn"
+        }
+      ],
+      "services": [
+        {
+          "address": {
+            "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+            "default": true,
+            "floor": "sdd",
+            "id": "980de35e-079d-498f-b059-8d5925fefd16",
+            "latitude": 22.608558333333335,
+            "latitudeDelta": 0.0032349810554670455,
+            "longitude": 88.39719166666667,
+            "longitudeDelta": 0.0025001540780067444,
+            "name": "qwe",
+            "nearby": "r3ttyy",
+            "pinCode": "ee",
+            "tag": "Home"
+          },
+          "backgroundColor": "#376eb4",
+          "fromScreen": "Confirm",
+          "id": "f27b6095-5725-4dde-95f0-dd441475ad6c",
+          "image": "https://i.ibb.co/Pwyx09X/doctor.png",
+          "mode": "cancelled",
+          "navTo": "Consult",
+          "notes": "",
+          "orderedOn": "2022-05-12",
+          "paymentStatus": "Success",
+          "petDetails": [
+            {
+              "name": "Type of your Pet",
+              "value": "Dog"
+            },
+            {
+              "name": "Breed",
+              "value": "kmimio"
+            },
+            {
+              "name": "Age",
+              "value": "Upto 6 Months"
+            },
+            {
+              "name": "Gender",
+              "value": "Male"
+            },
+            {
+              "name": "Pet's medical problem",
+              "value": "sfgdgd"
+            }
+          ],
+          "phoneNo": "7550841824",
+          "reasonForCancellation": "Price is not reasonable",
+          "selectedDate": "2022-05-13",
+          "serviceType": "Consult",
+          "timeSlot": {
+            "endTime": "11:00 PM",
+            "startTime": "09:00 AM"
+          },
+          "title": "Veterinary",
+          "total": "699",
+          "trackStep": "4",
+          "txnId": "pay_JUBopVClHuTf58",
+          "type": "Service",
+          "userStatus": "loggedIn"
+        },
+        {
+          "address": {
+            "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+            "default": true,
+            "floor": "sdfgs",
+            "id": "bd3d7267-91b5-4328-8146-59fe694e6be4",
+            "latitude": 22.608558333333335,
+            "latitudeDelta": 0.0032349810554670455,
+            "longitude": 88.39719166666667,
+            "longitudeDelta": 0.0025001540780067444,
+            "name": "sdfhdfhd",
+            "nearby": "dfshshgs",
+            "pinCode": "252352",
+            "tag": "Work"
+          },
+          "backgroundColor": "#376eb4",
+          "fromScreen": "Confirm",
+          "id": "0811afb5-6139-43c2-9a55-edf880cf373b",
+          "image": "https://i.ibb.co/Pwyx09X/doctor.png",
+          "mode": "ongoing",
+          "navTo": "Consult",
+          "notes": "",
+          "orderedOn": "2022-05-12",
+          "paymentStatus": "Success",
+          "petDetails": [
+            {
+              "name": "Type of your Pet",
+              "value": "Dog"
+            },
+            {
+              "name": "Breed",
+              "value": "asfdasf"
+            },
+            {
+              "name": "Age",
+              "value": "Upto 6 Months"
+            },
+            {
+              "name": "Gender",
+              "value": "Male"
+            },
+            {
+              "name": "Pet's medical problem",
+              "value": "zxvzxb"
+            }
+          ],
+          "phoneNo": "7550841824",
+          "selectedDate": "2022-05-12",
+          "serviceType": "Consult",
+          "timeSlot": {
+            "endTime": "02:00 PM",
+            "startTime": "12:00 PM"
+          },
+          "title": "Veterinary",
+          "total": "699",
+          "trackStep": "0",
+          "txnId": "pay_JUCEv1nG08FgEK",
+          "type": "Service",
+          "userStatus": "loggedIn"
+        }
+      ]
+    },
+    "8900162177": {
+      "active": false,
+      "addresses": [
+        {
+          "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+          "default": false,
+          "floor": "XXdad",
+          "id": "db871880-40fc-4d1f-8933-95ab95c1fe5a",
+          "latitude": 22.608558333333335,
+          "latitudeDelta": 0.0032349810554670455,
+          "longitude": 88.39719166666667,
+          "longitudeDelta": 0.0025001540780067444,
+          "name": "ADd ASDa",
+          "nearby": "ASa",
+          "pinCode": "e2`2`2",
+          "tag": "Work"
+        },
+        {
+          "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+          "default": false,
+          "floor": "zcvxcvxz",
+          "id": "06c43bc4-6cbf-498d-808b-f7761f5bb1d8",
+          "latitude": 22.608558333333335,
+          "latitudeDelta": 0.0032349810554670455,
+          "longitude": 88.39719166666667,
+          "longitudeDelta": 0.0025001540780067444,
+          "name": "zgzgf GG",
+          "nearby": "czxcvzxvc",
+          "pinCode": "241251",
+          "tag": "Other"
+        },
+        {
+          "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+          "default": true,
+          "floor": "asfdasfaadsf",
+          "id": "7fb9cd27-c1c9-4b5a-b55b-94d78abca3a7",
+          "latitude": 22.608558333333335,
+          "latitudeDelta": 0.0032349810554670455,
+          "longitude": 88.39719166666667,
+          "longitudeDelta": 0.0025001540780067444,
+          "name": "cvzxvzx zcxvzvz",
+          "nearby": "asdfaf",
+          "pinCode": "243235",
+          "tag": "Work"
+        }
+      ],
+      "orders": [
+        {
+          "address": {
+            "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+            "default": true,
+            "floor": "SDad",
+            "id": "840d56bb-e9cf-4f4d-99f0-5cf201b06a9b",
+            "latitude": 22.608558333333335,
+            "latitudeDelta": 0.0032349810554670455,
+            "longitude": 88.39719166666667,
+            "longitudeDelta": 0.0025001540780067444,
+            "name": "sdgasf adsgag",
+            "nearby": "zxfcz",
+            "pinCode": "555555",
+            "tag": "Home"
+          },
+          "amount": 1196,
+          "cartItems": [
+            {
+              "description": [
+                "These are fresh and human tested",
+                "Easy and ready to eat dog food with freshness in every bite",
+                "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+                "100% Natural and Human Grade",
+                "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+              ],
+              "id": "0",
+              "image": "https://i.ibb.co/jL8PWYF/eggwhitestew.webp",
+              "name": "Egg white Stew",
+              "price": "299",
+              "quantity": "4"
+            }
+          ],
+          "fromScreen": "Confirm",
+          "id": "b2acdadf-b550-4bbd-ab91-813b98b55e19",
+          "mode": "inprocess",
+          "orderedOn": "2022-05-10",
+          "paymentStatus": "Success",
+          "phoneNo": "8900162177",
+          "reasonForCancellation": "Found from local store",
+          "serviceType": "None",
+          "tax": 215,
+          "total": 1411,
+          "trackStep": "0",
+          "txnId": "pay_JTVFP4yb1IIVn1",
+          "type": "Items",
+          "userStatus": "loggedIn"
+        },
+        {
+          "address": {
+            "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+            "default": true,
+            "floor": "SDad",
+            "id": "840d56bb-e9cf-4f4d-99f0-5cf201b06a9b",
+            "latitude": 22.608558333333335,
+            "latitudeDelta": 0.0032349810554670455,
+            "longitude": 88.39719166666667,
+            "longitudeDelta": 0.0025001540780067444,
+            "name": "sdgasf adsgag",
+            "nearby": "zxfcz",
+            "pinCode": "555555",
+            "tag": "Home"
+          },
+          "amount": 897,
+          "cartItems": [
+            {
+              "description": [
+                "These are fresh and human tested",
+                "Easy and ready to eat dog food with freshness in every bite",
+                "Egg White Stew are high in protein which promotes muscle growth and helps strengthen the hair and tissues of your dog",
+                "100% Natural and Human Grade",
+                "An absolute favourite amongst many pooches, your dog would definitely love it too and leave them feeling both full and happy!"
+              ],
+              "id": "0",
+              "image": "https://i.ibb.co/jL8PWYF/eggwhitestew.webp",
+              "name": "Egg white Stew",
+              "price": "299",
+              "quantity": 3
+            }
+          ],
+          "fromScreen": "Confirm",
+          "id": "76eed6cc-998a-4aea-a2ea-e9b4228f3a06",
+          "mode": "inprocess",
+          "orderedOn": "2022-05-10",
+          "paymentStatus": "Success",
+          "phoneNo": "8900162177",
+          "reasonForCancellation": [
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            }
+          ],
+          "serviceType": "None",
+          "tax": 161,
+          "total": 1058,
+          "trackStep": "0",
+          "txnId": "pay_JTWOaA6idOuOU5",
+          "type": "Items",
+          "userStatus": "loggedIn"
+        },
+        {
+          "address": {
+            "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+            "default": true,
+            "floor": "SDad",
+            "id": "840d56bb-e9cf-4f4d-99f0-5cf201b06a9b",
+            "latitude": 22.608558333333335,
+            "latitudeDelta": 0.0032349810554670455,
+            "longitude": 88.39719166666667,
+            "longitudeDelta": 0.0025001540780067444,
+            "name": "sdgasf adsgag",
+            "nearby": "zxfcz",
+            "pinCode": "555555",
+            "tag": "Home"
+          },
+          "color": "purple",
+          "cost": "5999",
+          "desc": "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+          "details": [
+            {
+              "key": "Breed",
+              "value": "Brenese"
+            },
+            {
+              "key": "Age",
+              "value": "6 Months"
+            },
+            {
+              "key": "Sex",
+              "value": "Male"
+            }
+          ],
+          "fromScreen": "Confirm",
+          "id": "e3f684e0-2a87-4405-94f5-62ae7c919ade",
+          "image": "https://i.ibb.co/JH4bm8j/lucas.png",
+          "location": "USA",
+          "mode": "cancelled",
+          "name": "Lucas",
+          "orderedOn": "2022-05-11",
+          "paymentStatus": "Success",
+          "phoneNo": "8900162177",
+          "reasonForCancellation": "Found anywhere else",
+          "serviceType": "Adopt",
+          "trackStep": "0",
+          "txnId": "pay_JTpKCoyLWIBj2f",
+          "type": "Adopt",
+          "userStatus": "loggedIn"
+        },
+        {
+          "address": {
+            "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+            "default": true,
+            "floor": "sfdasdfa",
+            "id": "14dedd44-7b0d-453f-ac2c-067ea8fb93b2",
+            "latitude": 22.60923846478926,
+            "latitudeDelta": 0.003250159958952281,
+            "longitude": 88.39699639007449,
+            "longitudeDelta": 0.0025001540779925335,
+            "name": "asdfadsf afsdfadv",
+            "nearby": "asdfas",
+            "pinCode": "154243",
+            "tag": "Other"
+          },
+          "color": "purple",
+          "cost": "5999",
+          "desc": "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
+          "details": [
+            {
+              "key": "Breed",
+              "value": "Brenese"
+            },
+            {
+              "key": "Age",
+              "value": "6 Months"
+            },
+            {
+              "key": "Sex",
+              "value": "Male"
+            }
+          ],
+          "fromScreen": "Confirm",
+          "id": "8e331a51-2ad4-4e7b-95ae-8cff9d3c77e3",
+          "image": "https://i.ibb.co/JH4bm8j/lucas.png",
+          "location": "USA",
+          "mode": "cancelled",
+          "name": "Lucas",
+          "orderedOn": "2022-05-11",
+          "paymentStatus": "Success",
+          "phoneNo": "8900162177",
+          "reasonForCancellation": "Don't want to mention",
+          "serviceType": "Adopt",
+          "trackStep": "0",
+          "txnId": "pay_JTyeEW9b5sMyWQ",
+          "type": "Adopt",
+          "userStatus": "loggedIn"
+        }
+      ],
+      "services": [
+        {
+          "address": {
+            "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+            "default": true,
+            "floor": "SDad",
+            "id": "840d56bb-e9cf-4f4d-99f0-5cf201b06a9b",
+            "latitude": 22.608558333333335,
+            "latitudeDelta": 0.0032349810554670455,
+            "longitude": 88.39719166666667,
+            "longitudeDelta": 0.0025001540780067444,
+            "name": "sdgasf adsgag",
+            "nearby": "zxfcz",
+            "pinCode": "555555",
+            "tag": "Home"
+          },
+          "backgroundColor": "#376eb4",
+          "fromScreen": "Confirm",
+          "id": "5a2c0572-397a-4374-a15d-bc07a2cc24ac",
+          "image": "https://i.ibb.co/Pwyx09X/doctor.png",
+          "mode": "cancelled",
+          "navTo": "Consult",
+          "notes": "",
+          "orderedOn": "2022-05-10",
+          "paymentStatus": "Success",
+          "petDetails": [
+            {
+              "name": "Type of your Pet",
+              "value": "Dog"
+            },
+            {
+              "name": "Breed",
+              "value": "qqq"
+            },
+            {
+              "name": "Age",
+              "value": "Upto 6 Months"
+            },
+            {
+              "name": "Gender",
+              "value": "Male"
+            },
+            {
+              "name": "Pet's medical problem",
+              "value": "qqqq"
+            }
+          ],
+          "phoneNo": "8900162177",
+          "reasonForCancellation": "Price is not reasonable",
+          "selectedDate": "2022-05-10",
+          "serviceType": "Consult",
+          "timeSlot": {
+            "endTime": "02:00 PM",
+            "startTime": "12:00 PM"
+          },
+          "title": "Veterinary",
+          "total": "699",
+          "trackStep": "0",
+          "txnId": "pay_JTUwzl4NfTUrAp",
+          "type": "Service",
+          "userStatus": "loggedIn"
+        },
+        {
+          "address": {
+            "address": "Barrackpur - II, North 24 Parganas district, West Bengal, India, ",
+            "default": true,
+            "floor": "sfdasdfa",
+            "id": "14dedd44-7b0d-453f-ac2c-067ea8fb93b2",
+            "latitude": 22.60923846478926,
+            "latitudeDelta": 0.003250159958952281,
+            "longitude": 88.39699639007449,
+            "longitudeDelta": 0.0025001540779925335,
+            "name": "asdfadsf afsdfadv",
+            "nearby": "asdfas",
+            "pinCode": "154243",
+            "tag": "Other"
+          },
+          "backgroundColor": "#376eb4",
+          "fromScreen": "Confirm",
+          "id": "951d4081-74a3-4970-97fa-1023a2918f9a",
+          "image": "https://i.ibb.co/Pwyx09X/doctor.png",
+          "mode": "cancelled",
+          "navTo": "Consult",
+          "notes": "",
+          "orderedOn": "2022-05-11",
+          "paymentStatus": "Success",
+          "petDetails": [
+            {
+              "name": "Type of your Pet",
+              "value": "Dog"
+            },
+            {
+              "name": "Breed",
+              "value": "ssd"
+            },
+            {
+              "name": "Age",
+              "value": "6 - 18 Months"
+            },
+            {
+              "name": "Gender",
+              "value": "Male"
+            },
+            {
+              "name": "Pet's medical problem",
+              "value": "qsd"
+            }
+          ],
+          "phoneNo": "8900162177",
+          "reasonForCancellation": "Found local doctor",
+          "selectedDate": "2022-05-11",
+          "serviceType": "Consult",
+          "timeSlot": {
+            "endTime": "02:00 PM",
+            "startTime": "12:00 PM"
+          },
+          "title": "Veterinary",
+          "total": "699",
+          "trackStep": "1",
+          "txnId": "pay_JTwb89RpgO6Uck",
+          "type": "Service",
+          "userStatus": "loggedIn"
+        }
+      ]
+    }
+  }
 }

@@ -30,8 +30,10 @@ import uuid from 'react-native-uuid';
 import i18n from '../util/i18n';
 
 const PetStoreScreen = ({navigation, route}) => {
+    console.log(route.params)
     const isFocused = useIsFocused();
-    const [homeAddress, setHomeAddress] = useState("")
+    const [homeAddress,
+        setHomeAddress] = useState("")
     const [status,
         setStatus] = useState(route.params.status);
     const [cartItemCount,
@@ -114,16 +116,17 @@ const PetStoreScreen = ({navigation, route}) => {
     const onPressRightIcon = () => {
         navigation.navigate("Cart", {status: status});
     }
-    const getData = () => {
+    const getData = (path) => {
         database()
             .ref('/petStoreCategories')
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     setPetStoreCategories(snapshot.val())
+
                 }
             })
         database()
-            .ref('/petMedicineItems')
+            .ref(path)
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     setPetStoreItems(snapshot.val())
@@ -168,12 +171,25 @@ const PetStoreScreen = ({navigation, route}) => {
             AsyncStorage
                 .getItem("homeAddress")
                 .then((homeAddress, msg) => {
-                setHomeAddress(JSON.parse(homeAddress))
-            })
+                    setHomeAddress(JSON.parse(homeAddress))
+                })
             getCartItems()
-            getData();
+            let path
+            if (selectedCategoryIndex  === 0) {
+                path = "/petMedicineItems"
+            } else if (selectedCategoryIndex === 1) {
+                path = "/petFoodItems"
+            } else if (selectedCategoryIndex === 2) {
+                path = "/petToysItems"
+            } else if (selectedCategoryIndex === 3) {
+                path = "/petAccItems"
+            } else {
+                path = "/petFurItems"
+            }
+            getData(path);
         }
         
+
     }, [isFocused]);
 
     return (
@@ -182,7 +198,10 @@ const PetStoreScreen = ({navigation, route}) => {
             flex: 1,
             backgroundColor: Colors.appBackground
         }}>
-            <LandingHeader homeAddress={homeAddress} status={status} navigation={navigation}/>
+            <LandingHeader
+                homeAddress={homeAddress}
+                status={status}
+                navigation={navigation}/>
             <View
                 style={{
                 borderTopLeftRadius: 50,
@@ -275,37 +294,41 @@ const PetStoreScreen = ({navigation, route}) => {
                     <View style={{
                         marginTop: 30
                     }}>
-                    {petStoreItems.length > 0?
-                        <RNMasonryScroll
-                            removeClippedSubviews={true}
-                            columns={2}
-                            oddColumnStyle={{
-                            marginTop: 30
-                        }}
-                            horizontal={false}
-                            showsVerticalScrollIndicator={false}
-                            keyExtractor={(item) => item.id}>
-                            {petStoreItems.map((item, index) => <View key={index}>
-                                <StoreItems
-                                    animationStyle="fadeInUp"
-                                    navToDetail={() => navigation.navigate("ItemDetails", {
-                                    item: item,
-                                    status: status
-                                })}
-                                    name={item.name}
-                                    image={item.image}
-                                    price={item.discountPrice}
-                                    index={item.id}
-                                    width={Dimensions
-                                    .get('screen')
-                                    .width / 2 - 40}/>
-                            </View>)}
-                        </RNMasonryScroll>
-                    :
-                    <View style={{alignItems: 'center', marginTop: 20}}>
-                        <Title label="No items are found..." size={20} color={Colors.darkGray}/>
-                    </View>
-                    }
+                        {petStoreItems.length > 0
+                            ? <RNMasonryScroll
+                                    removeClippedSubviews={true}
+                                    columns={2}
+                                    oddColumnStyle={{
+                                    marginTop: 30
+                                }}
+                                    horizontal={false}
+                                    showsVerticalScrollIndicator={false}
+                                    keyExtractor={(item) => item.id}>
+                                    {petStoreItems.map((item, index) => <View key={index}>
+                                        <StoreItems
+                                            animationStyle="fadeInUp"
+                                            navToDetail={() => navigation.navigate("ItemDetails", {
+                                            item: item,
+                                            status: status,
+                                            type: petStoreCategories[selectedCategoryIndex].name
+                                        })}
+                                            name={item.name}
+                                            image={item.image}
+                                            price={item.discountPrice}
+                                            index={item.id}
+                                            width={Dimensions
+                                            .get('screen')
+                                            .width / 2 - 40}/>
+                                    </View>)}
+                                </RNMasonryScroll>
+                            : <View
+                                style={{
+                                alignItems: 'center',
+                                marginTop: 20
+                            }}>
+                                <Title label="No items are found..." size={20} color={Colors.darkGray}/>
+                            </View>
+}
                     </View>
                 </ScrollView>
             </View>

@@ -29,6 +29,7 @@ import i18n from '../util/i18n';
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ItemDetailScreen = ({navigation, route}) => {
+    console.log(route.params)
     const isFocused = useIsFocused();
     const [status,
         setStatus] = useState(route.params.status);
@@ -297,7 +298,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                 leftIconSize={45}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
-                onPressLeft={() => navigation.goBack()}/>
+                onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "PetStore", status: status, type: route.params.type})}/>
             <View
                 style={{
                 marginTop: 30,
@@ -464,7 +465,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                             color: Colors.Bg9,
                             fontSize: 18,
                             fontFamily: 'Oswald-Medium'
-                        }}>Quantity: {route.params.item.baseQuantity} {route.params.item.unit}</Text>
+                        }}>Unit: {route.params.item.baseQuantity} {route.params.item.unit}</Text>
                         <Text
                             style={{
                             color: Colors.Bg9,

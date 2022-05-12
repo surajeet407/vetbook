@@ -29,7 +29,6 @@ import i18n from '../util/i18n';
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ItemDetailScreen = ({navigation, route}) => {
-    console.log(route.params.item)
     const isFocused = useIsFocused();
     const [status,
         setStatus] = useState(route.params.status);
@@ -415,11 +414,11 @@ const ItemDetailScreen = ({navigation, route}) => {
                                 style={{
                                 marginRight: 10,
                                 marginTop: 5,
-                                fontSize: 20
+                                fontSize: 18
                             }}
                                 name={'dot-fill'}
                                 color={Colors.secondary}/>
-                            <Title size={18} bold={true} label={item}/>
+                            <Title size={16} bold={true} label={item}/>
                         </Animatable.View>)}
                 </ScrollView>
                 <View
@@ -466,7 +465,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                             color: Colors.Bg9,
                             fontSize: 18,
                             fontFamily: 'Oswald-Medium'
-                        }}>Quantity: 500 gm</Text>
+                        }}>Quantity: {route.params.item.baseQuantity} {route.params.item.unit}</Text>
                         <Text
                             style={{
                             color: Colors.Bg9,

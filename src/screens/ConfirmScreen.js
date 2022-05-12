@@ -178,7 +178,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
   }
 
   const onPressMakePayment = () => {
-    console.log(defaltAddress)
+    // console.log(defaltAddress)
     if(defaltAddress) {
       if (route.params.details.serviceType === "None" ) {
         _initializePayment("", "", "Item Total");
@@ -271,7 +271,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
           
           {route.params.details.serviceType === "None"?
             <View style={{flex: 1}}>  
-              <DefaltAddressComponent updateDefaltAddress={updateDefaltAddress} navigation={navigation} params={route.params.details} />
+              <DefaltAddressComponent selectedAddress={route.params.details.address} updateDefaltAddress={updateDefaltAddress} navigation={navigation} params={route.params.details} />
               <View style={{marginTop: 10, marginBottom: 10}}>
                 <SectionBanner fontSize={20} title={"Items (" + cartItems.length + ")"} borderColor={Colors.primary} borderWidth={100} titleColor={Colors.mediumDark}/>
               </View>
@@ -309,7 +309,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
           :
           <ScrollView scrollEventThrottle={16}
               showsVerticalScrollIndicator={false}>
-            <DefaltAddressComponent updateDefaltAddress={updateDefaltAddress}  navigation={navigation} params={route.params.details} />
+            <DefaltAddressComponent selectedAddress={route.params.details.address} updateDefaltAddress={updateDefaltAddress}  navigation={navigation} params={route.params.details} />
             {route.params.details.serviceType === "BloodTest" && (
             <View style={{marginTop: 20,  alignItems: 'center', height: 320, padding: 5}}>
                 <Label

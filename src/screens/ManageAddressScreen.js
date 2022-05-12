@@ -127,14 +127,13 @@ import i18n from '../util/i18n';
                   for (let i = 0; i < ar.length; i++) {
                     if(ar[i].id === checked) {
                         path = i
-                        ar[i].default = true
-                    } else {
-                      ar[i].default = false
-                    }
-                  }
+                    }                  }
                   database()
                   .ref('/users/' + phoneNo + "/addresses").set(ar)
-                  navigation.navigate("Confirm", {details: route.params.details})
+                  navigation.navigate("Confirm", {details: {
+                    ...route.params.details,
+                    address: ar[path]
+                  }})
                 }
               })
             }
@@ -148,9 +147,6 @@ import i18n from '../util/i18n';
               for (let i = 0; i < ar.length; i++) {
                 if(ar[i].id === checked) {
                     path = i
-                    ar[i].default = true
-                } else {
-                  ar[i].default = false
                 }
               }
               AsyncStorage

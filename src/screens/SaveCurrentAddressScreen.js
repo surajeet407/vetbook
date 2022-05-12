@@ -30,7 +30,7 @@ import React, {useEffect, useState, useRef} from 'react';
  
  const AddressScreen = ({navigation, route}) => {
    const region = route.params.region
-   const [checked, setChecked] = useState('0');
+   const [checked, setChecked] = useState("true");
   const [status, setStatus] = useState('')
   const defaultOptions = ["true", "false"]
    const tags = ['Home', 'Work', 'Other'];
@@ -66,7 +66,6 @@ import React, {useEffect, useState, useRef} from 'react';
     //   error => Alert.alert('Error', JSON.stringify(error)),
     //   {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     // );
-    setChecked((defaultOptions[0]));
     AsyncStorage.getItem('userStatus', (error, result) => {
       setStatus(result)
     })
@@ -84,7 +83,7 @@ import React, {useEffect, useState, useRef} from 'react';
         if(address === "") {
           text = "Please enter complete address";
         } else if(floor === "") {
-          text = "Please enter floor/ appartment";
+          text = "Please enter floor / appartment";
         } else if(nearby === "") {
           text = "Please enter nearby"
         } else if(tag === "") {
@@ -119,7 +118,7 @@ import React, {useEffect, useState, useRef} from 'react';
                     ...region, 
                     id: uuid.v4(),
                     tag: tag,
-                    default: checked === "true"? true:false,
+                    default: checked === "true"?true:false ,
                     address: address,
                     floor: floor,
                     nearby: nearby,
@@ -129,8 +128,10 @@ import React, {useEffect, useState, useRef} from 'react';
                   }, ar = [];
                   if (data && JSON.parse(data).length > 0) {
                     let actData = JSON.parse(data)
-                    for(var i = 0; i < actData.length; i++) {
-                      actData[i].default = false
+                    if(checked === "true") {
+                      for(var i = 0; i < actData.length; i++) {
+                        actData[i].default = false
+                      }
                     }
                     ar = actData
                     ar.push(obj)
@@ -179,8 +180,10 @@ import React, {useEffect, useState, useRef} from 'react';
                                 }, ar = [];
                                 if (snapshot.val()) {
                                     let actData = snapshot.val()
-                                    for(var i = 0; i < actData.length; i++) {
-                                      actData[i].default = false
+                                    if(checked === "true") {
+                                      for(var i = 0; i < actData.length; i++) {
+                                        actData[i].default = false
+                                      }
                                     }
                                     ar = actData;
                                     ar.push(data)

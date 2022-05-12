@@ -12,7 +12,7 @@ import i18n from '../util/i18n';
 const DefaltAddressComponent = (props) => {
     const isFocused = useIsFocused();
     const [showAddress, setShowAddress] = useState(false)
-    const [address, setAddress] = useState({})
+    const [address, setAddress] = useState(props.params.address)
     const [status, setStatus]  = useState();
     const onPressAddAddress = () => { 
         props
@@ -21,24 +21,54 @@ const DefaltAddressComponent = (props) => {
         
     }
     useEffect(() => {
+        // console.log(props.params)
         if (isFocused) {
-            AsyncStorage.getItem('userStatus').then((status) => {
-                setStatus(status)
-                
-                if(status === 'loggedIn') {
-                    AsyncStorage
-                    .getItem('phoneNo')
-                    .then((phoneNo, msg) => {
-                        if (phoneNo) {
-                        database()
-                        .ref('/users/' + phoneNo + "/addresses")
-                        .on("value", snapshot => {
-                            if(snapshot.val()) {
+            if(props.selectedAddress) {
+                setAddress(props.selectedAddress)
+                props.updateDefaltAddress(props.selectedAddress)
+            } else {
+                AsyncStorage.getItem('userStatus').then((status) => {
+                    setStatus(status)
+                    
+                    if(status === 'loggedIn') {
+                        AsyncStorage
+                        .getItem('phoneNo')
+                        .then((phoneNo, msg) => {
+                            if (phoneNo) {
+                            database()
+                            .ref('/users/' + phoneNo + "/addresses")
+                            .on("value", snapshot => {
+                                if(snapshot.val()) {
+                                    let count = 0
+                                    for(let i = 0; i < snapshot.val().length; i++) {
+                                        if(snapshot.val()[i].default) {
+                                            setAddress(snapshot.val()[i])
+                                            props.updateDefaltAddress(snapshot.val()[i])
+                                            count++
+                                        } 
+                                    } 
+                                    if (count === 0) {
+                                        setShowAddress(false)
+                                    } else {
+                                        setShowAddress(true) 
+                                    }
+                                } else {
+                                    setShowAddress(false)
+                                }
+                            })
+                            }
+                        })
+                    } else {
+                        AsyncStorage
+                            .getItem('AsynchronousAddresses')
+                            .then((data) => {
+                            if (data && JSON.parse(data).length > 0) {
+                                
                                 let count = 0
-                                for(let i = 0; i < snapshot.val().length; i++) {
-                                    if(snapshot.val()[i].default) {
-                                        setAddress(snapshot.val()[i])
-                                        props.updateDefaltAddress(snapshot.val()[i])
+                                for(let i = 0; i < JSON.parse(data).length; i++) {
+                                    if(JSON.parse(data)[i].default) {
+                                        props.updateDefaltAddress(JSON.parse(data)[i])
+                                        setAddress(JSON.parse(data)[i])
                                         count++
                                     } 
                                 } 
@@ -50,33 +80,11 @@ const DefaltAddressComponent = (props) => {
                             } else {
                                 setShowAddress(false)
                             }
-                        })
-                        }
-                    })
-                } else {
-                    AsyncStorage
-                        .getItem('AsynchronousAddresses')
-                        .then((data) => {
-                        if (data && JSON.parse(data).length > 0) {
-                            
-                            let count = 0
-                            for(let i = 0; i < JSON.parse(data).length; i++) {
-                                if(JSON.parse(data)[i].default) {
-                                    setAddress(JSON.parse(data)[i])
-                                    count++
-                                } 
-                            } 
-                            if (count === 0) {
-                                setShowAddress(false)
-                            } else {
-                                setShowAddress(true) 
-                            }
-                        } else {
-                            setShowAddress(false)
-                        }
-                    });
-                }
-            })
+                        });
+                    }
+                })
+            }
+            
         }
     }, [isFocused])
 
@@ -109,7 +117,9 @@ const DefaltAddressComponent = (props) => {
                         marginLeft: 5,
                         paddingHorizontal: 5
                     }}>
+                    {address.default && (
                         <Title color={Colors.appBackground} size={10} bold={true} label={'Default'}/>
+                    )}
                     </View>
                 </View>
                 <Title

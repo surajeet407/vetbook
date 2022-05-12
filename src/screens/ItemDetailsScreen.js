@@ -15,31 +15,29 @@ import Button from '../reusable_elements/Button';
 import Colors from '../util/Colors';
 import Toast from 'react-native-toast-message';
 import PagerView from 'react-native-pager-view';
-import RNBounceable from "@freakycoder/react-native-bounceable";
-import NumericInput from 'react-native-numeric-input'
 import {ExpandingDot} from 'react-native-animated-pagination-dots';
 import * as Animatable from 'react-native-animatable';
-import SectionBanner from '../reusable_elements/SectionBanner';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import database from '@react-native-firebase/database';
 import Label, {Orientation} from "react-native-label";
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import Review from "react-native-customer-review-bars";
+import {Rating} from 'react-native-ratings';
+import RBSheet from "react-native-raw-bottom-sheet";
 import i18n from '../util/i18n';
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ItemDetailScreen = ({navigation, route}) => {
-    console.log(route.params)
-    const reviews = [
-        { value: 10000 },
-        { value: 500 },
-        { value: 456 },
-        { value: 350 },
-        { value: 500 }
-    ];
+    const [reviews, 
+        setReviews] = useState(route.params.item.review? route.params.item.review:[]);
+    const refRBSheet = useRef(null)
     const isFocused = useIsFocused();
+    const [ratingCountInd,
+        setRatingCountInd] = useState(0)
+    const [phoneNo,
+        setPhoneNo] = useState("");
     const [catIndex,
         setCatIndex] = useState(0);
     const [status,
@@ -250,6 +248,7 @@ const ItemDetailScreen = ({navigation, route}) => {
             AsyncStorage
                 .getItem('phoneNo')
                 .then((data, msg) => {
+                    setPhoneNo(data)
                     if (data) {
                         database()
                             .ref('/users/' + data + "/cartItems")
@@ -269,6 +268,89 @@ const ItemDetailScreen = ({navigation, route}) => {
 
     const handleCustomIndexSelect = (index) => {
         setCatIndex(index)
+    }
+
+    const onPressRateItem = () => {
+        refRBSheet.current.open()
+    }
+    const onPressSubmit = () => {
+        if(ratingCountInd === 0) {
+            Toast.show({
+                type: 'customToast',
+                text1: "Select at least one start to rate...",
+                position: 'bottom',
+                visibilityTime: 1500,
+                bottomOffset: 220,
+                props: {
+                    backgroundColor: '#ea5e48'
+                }
+            })
+        } else {
+            refRBSheet.current.close()
+            let path
+            if (route.params.type  === "Medicine") {
+                path = "/petMedicineItems"
+            } else if (route.params.type === "Food") {
+                path = "/petFoodItems"
+            } else if (route.params.type === "Toys") {
+                path = "/petToysItems"
+            } else if (route.params.type === "Accesorries") {
+                path = "/petAccItems"
+            } else {
+                path = "/petFurItems"
+            }
+            database()
+            .ref(path)
+            .once('value')
+            .then(snapshot => {
+                if(snapshot.val()) {
+                    let key
+                    snapshot.forEach((child) => {
+                        if(child.val().id === route.params.item.id) {
+                            // console.log(child.val().review)
+                            let ar;
+                            if(child.val().review) {
+                                ar = child.val().review
+                                if(ratingCountInd === 1) {
+                                    ar[4].value = parseInt(ar[4].value) + 1
+                                } else if(ratingCountInd === 2) {
+                                    ar[3].value = parseInt(ar[3].value) + 1
+                                } else if(ratingCountInd === 3) {
+                                    ar[2].value = parseInt(ar[2].value) + 1
+                                } else if(ratingCountInd === 4) {
+                                    ar[1].value = parseInt(ar[1].value) + 1
+                                } else if(ratingCountInd === 5){
+                                    ar[0].value = parseInt(ar[0].value) + 1
+                                }
+                            } else {
+                                ar = [{value: 0},{value: 0},{value: 0},{value: 0},{value: 0}]
+                                if(ratingCountInd === 1) {
+                                    ar[4].value = 1
+                                } else if(ratingCountInd === 2) {
+                                    ar[3].value = 1
+                                } else if(ratingCountInd === 3) {
+                                    ar[2].value = 1
+                                } else if(ratingCountInd === 4) {
+                                    ar[1].value = 1
+                                } else if(ratingCountInd === 5) {
+                                    ar[0].value = 1
+                                }
+                            }
+                            setRatingCountInd(0)
+                            child.child("review").ref.set(ar)
+                            setReviews(ar)
+                            return
+                        }
+                    })
+                }
+            })
+        }
+        
+    }
+
+    const onRatingCompleted = (ratingCountInd) => {
+        setRatingCountInd(ratingCountInd)
+        console.log(ratingCountInd)
     }
 
     useEffect(() => {
@@ -302,7 +384,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={60}
+                headerHeight={100}
                 headerText={route.params.item.name}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}
@@ -316,17 +398,15 @@ const ItemDetailScreen = ({navigation, route}) => {
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "PetStore", status: status, type: route.params.type})}/>
             <View
                 style={{
-                marginTop: 30,
-                flex: 1,
                 width: '100%',
+                height: 250,
                 backgroundColor: Colors.appBackground,
                 alignItems: 'center'
             }}>
                 <Label
                     orientation={Orientation.TOP_RIGHT}
                     containerStyle={{
-                    width: "80%",
-                    height: 200
+                    width: "90%"
                 }}
                     style={{
                     fontSize: 16,
@@ -341,7 +421,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                         initialPage={0}
                         style={{
                         width: "100%",
-                        height: 300
+                        height: 250
                     }}
                         onPageScroll={Animated.event([
                         {
@@ -384,20 +464,15 @@ const ItemDetailScreen = ({navigation, route}) => {
                     expandingDotWidth={30}
                     scrollX={translateX}
                     inActiveDotOpacity={0.6}
-                    inActiveDotColor={Colors.darkGray}
-                    activeDotColor={Colors.primary}
+                    inActiveDotColor={Colors.accent}
+                    activeDotColor={Colors.secondary}
                     containerStyle={{
-                    bottom: "45%",
-                    right: -20,
-                    transform: [
-                        {
-                            rotate: '90deg'
-                        }
-                    ]
+                    bottom: 10,
+                    left: "40%",
                 }}
                     dotStyle={{
-                    width: 10,
-                    height: 10,
+                    width: 12,
+                    height: 8,
                     borderRadius: 5,
                     marginHorizontal: 5
                 }}/>
@@ -406,7 +481,6 @@ const ItemDetailScreen = ({navigation, route}) => {
                 style={{
                 flex: 1,
                 paddingHorizontal: 20,
-                marginTop: 50,
                 backgroundColor: Colors.appBackground,
                 justifyContent: 'space-around'
             }}>
@@ -425,6 +499,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                 <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
                     {catIndex === 0? 
                     <View style={{marginTop: 10}}>
+                        
                         {route
                             .params
                             .item
@@ -450,63 +525,47 @@ const ItemDetailScreen = ({navigation, route}) => {
                         </Animatable.View>)}
                     </View>
                     :
-                    <Review reviews={reviews} />
+                    <View style={{marginTop: 5}}>
+                        {reviews.length > 0 && (
+                        <View>
+                            <View style={{marginBottom: 10, alignItems: 'center'}}>
+                                <View style={{alignItems: 'center', borderBottomColor: Colors.darkGray, borderBottomWidth: 2, width: 160, paddingVertical: 5}}>
+                                    <Title size={18} bold={true} label={"Customer Ratings"}/>
+                                </View>
+                            </View>
+                            <Review rightTextStyle={{
+                                color: Colors.secondary,
+                                fontSize: 12,
+                                fontFamily: 'Oswald-Medium'
+                            }} reviewTypeStyle={{
+                                color: Colors.darkGray,
+                                fontSize: 15,
+                                fontFamily: 'Oswald-Medium'
+                            }} barFillStyle={{
+                                marginRight: -5,
+                                height: 10
+                            }} showCount={true} reviews={reviews} />
+                            
+                        </View>
+                        )}
+                        {route.params.status === 'loggedIn' && (
+                        <View style={{alignItems: 'center', margin: 10}}>
+                            <Button
+                                iconColor={Colors.primary}
+                                iconPostionRight={true}
+                                backgroundColor={Colors.white}
+                                textColor={Colors.primary}
+                                useIcon={true}
+                                title="Rate"
+                                icon="long-arrow-right"
+                                onPress={onPressRateItem}/>
+                        </View>
+                        )}
+                        
+                    </View>
                     }
                 </ScrollView>
-                <View
-                    style={{
-                    flexDirection: 'row',
-                    height: 80,
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <NumericInput
-                        totalWidth={100}
-                        totalHeight={40}
-                        iconSize={25}
-                        initValue={numericInputVal}
-                        value={numericInputVal}
-                        onChange={onChangeInput}
-                        rounded
-                        minValue={1}
-                        validateOnBlur
-                        maxValue={5}
-                        onLimitReached={(isMax, msg) => Toast.show({
-                        type: 'customToast',
-                        text1: msg,
-                        position: 'bottom',
-                        visibilityTime: 1000,
-                        bottomOffset: 100,
-                        props: {
-                            backgroundColor: '#ea5e48'
-                        }
-                    })}
-                        textColor={Colors.black}
-                        iconStyle={{
-                        color: Colors.primary,
-                        fontSize: 20
-                    }}
-                        rightButtonBackgroundColor={Colors.appBackground}
-                        leftButtonBackgroundColor={Colors.appBackground}/>
-                    <View
-                        style={{
-                        alignItems: 'flex-end'
-                    }}>
-                        <Text
-                            style={{
-                            color: Colors.Bg9,
-                            fontSize: 18,
-                            fontFamily: 'Oswald-Medium'
-                        }}>Unit: {route.params.item.baseQuantity} {route.params.item.unit}</Text>
-                        <Text
-                            style={{
-                            color: Colors.Bg9,
-                            fontSize: 18,
-                            fontFamily: 'Oswald-Medium'
-                        }}>Price: ₹ {price}
-                            /-</Text>
-                    </View>
-                </View>
+                
             </View>
             <Animatable.View animation={'fadeInUp'}>
                 <ImageBackground
@@ -538,29 +597,67 @@ const ItemDetailScreen = ({navigation, route}) => {
                     </View>
                 </ImageBackground>
             </Animatable.View>
+            <RBSheet
+                height={200}
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                customStyles={{
+                container: {
+                    backgroundColor: Colors.white,
+                    borderTopLeftRadius: 50,
+                    borderTopRightRadius: 50,
+                    elevation: 10,
+                    overflow: 'hidden',
+                    paddingHorizontal: 20
+                },
+                wrapper: {
+                    backgroundColor: "transparent",
+                },
+                draggableIcon: {
+                    backgroundColor: Colors.secondary
+                }
+                }}
+                >
+                <View style={{marginTop: 10}}>
+                    <View
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                    }}>
+                        <View style={{marginBottom: 10}}>
+                            <Title size={20} bold={true} label={"Rate " + route.params.item.name + ": "}/>
+                        </View>
+                        <Rating
+                            type='custom'
+                            ratingColor={Colors.red}
+                            ratingBackgroundColor='#c8c7c8'
+                            ratingCount={5}
+                            imageSize={40}
+                            minValue={0}
+                            startingValue={0}
+                            jumpValue={1}
+                            showRating={false}
+                            style={{ paddingHorizontal: 40 }}
+                            onFinishRating={onRatingCompleted}/>
+                    </View>  
+                    <View style={{alignItems: 'center', margin: 20}}>
+                        <View style={{width: '50%'}}>
+                            <Button
+                                iconPostionLeft={true}
+                                backgroundColor={Colors.primary}
+                                useIcon={true}
+                                title="Submit"
+                                icon="save"
+                                onPress={onPressSubmit}/>
+                        </View>
+                    </View>
+                </View>
+            </RBSheet>
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    reviewContainer: {
-        backgroundColor: "#FFFFFF",
-        borderRadius: 10,
-        paddingHorizontal: 30,
-        paddingVertical: 40,
-        minWidth: "80%",
-        shadowOffset: { width: 0, height: 5 },
-        shadowOpacity: 1.0,
-        shadowRadius: 2,
-        shadowColor: "rgba(193, 211, 251, 0.5)",
-        elevation: 5,
-      },
-      title: {
-        fontWeight: "bold",
-        fontSize: 20,
-        color: "#323357",
-        textAlign: "center",
-      },
-});
+const styles = StyleSheet.create({});
 
 export default ItemDetailScreen;

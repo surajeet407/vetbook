@@ -24,13 +24,24 @@ import GeneralHeader from '../reusable_elements/GeneralHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import database from '@react-native-firebase/database';
 import Label, {Orientation} from "react-native-label";
+import SegmentedControlTab from 'react-native-segmented-control-tab'
+import Review from "react-native-customer-review-bars";
 import i18n from '../util/i18n';
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ItemDetailScreen = ({navigation, route}) => {
     console.log(route.params)
+    const reviews = [
+        { value: 10000 },
+        { value: 500 },
+        { value: 456 },
+        { value: 350 },
+        { value: 500 }
+    ];
     const isFocused = useIsFocused();
+    const [catIndex,
+        setCatIndex] = useState(0);
     const [status,
         setStatus] = useState(route.params.status);
     const width = Dimensions
@@ -256,6 +267,10 @@ const ItemDetailScreen = ({navigation, route}) => {
 
     }
 
+    const handleCustomIndexSelect = (index) => {
+        setCatIndex(index)
+    }
+
     useEffect(() => {
         if (isFocused) {
             getCartItemCount()
@@ -395,31 +410,48 @@ const ItemDetailScreen = ({navigation, route}) => {
                 backgroundColor: Colors.appBackground,
                 justifyContent: 'space-around'
             }}>
+                <SegmentedControlTab
+                    values={["Details", "Ratings"]}
+                    borderRadius={0}
+                    tabsContainerStyle={{ height: 50, backgroundColor: Colors.white }}
+                    tabStyle={{ backgroundColor: Colors.darkGray, borderColor: Colors.green, borderWidth: 2 }}
+                    activeTabStyle={{ backgroundColor: Colors.green }}
+                    tabTextStyle={{ color: '#444444', fontFamily: 'Oswald-Medium' }}
+                    activeTabTextStyle={{ color: Colors.white }}
+                    selectedIndex={catIndex}
+                    onTabPress={handleCustomIndexSelect}
+                />
 
                 <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-                    {route
-                        .params
-                        .item
-                        .description
-                        .map((item, index) => <Animatable.View
-                            delay={index * 100}
-                            animation={'slideInLeft'}
-                            key={index}
-                            style={{
-                            flexDirection: 'row',
-                            marginBottom: 5
-                        }}>
-                            <Icon
-                                type={Icons.Octicons}
+                    {catIndex === 0? 
+                    <View style={{marginTop: 10}}>
+                        {route
+                            .params
+                            .item
+                            .description
+                            .map((item, index) => <Animatable.View
+                                delay={index * 100}
+                                animation={'slideInLeft'}
+                                key={index}
                                 style={{
-                                marginRight: 10,
-                                marginTop: 5,
-                                fontSize: 18
-                            }}
-                                name={'dot-fill'}
-                                color={Colors.secondary}/>
-                            <Title size={16} bold={true} label={item}/>
+                                flexDirection: 'row',
+                                marginBottom: 5
+                            }}>
+                                <Icon
+                                    type={Icons.Octicons}
+                                    style={{
+                                    marginRight: 10,
+                                    marginTop: 5,
+                                    fontSize: 18
+                                }}
+                                    name={'dot-fill'}
+                                    color={Colors.secondary}/>
+                                <Title size={16} bold={true} label={item}/>
                         </Animatable.View>)}
+                    </View>
+                    :
+                    <Review reviews={reviews} />
+                    }
                 </ScrollView>
                 <View
                     style={{
@@ -510,6 +542,25 @@ const ItemDetailScreen = ({navigation, route}) => {
     );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    reviewContainer: {
+        backgroundColor: "#FFFFFF",
+        borderRadius: 10,
+        paddingHorizontal: 30,
+        paddingVertical: 40,
+        minWidth: "80%",
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 1.0,
+        shadowRadius: 2,
+        shadowColor: "rgba(193, 211, 251, 0.5)",
+        elevation: 5,
+      },
+      title: {
+        fontWeight: "bold",
+        fontSize: 20,
+        color: "#323357",
+        textAlign: "center",
+      },
+});
 
 export default ItemDetailScreen;

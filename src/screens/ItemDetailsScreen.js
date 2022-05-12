@@ -348,7 +348,6 @@ const ItemDetailScreen = ({navigation, route}) => {
                             });
                             return (<Animated.Image
                                 key={index}
-                                blurRadius={3}
                                 style={{
                                 opacity: opacity,
                                 transform: [

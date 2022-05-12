@@ -26,6 +26,7 @@ import LandingHeader from '../reusable_elements/LandingHeader';
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Title from '../reusable_elements/Title';
+import uuid from 'react-native-uuid';
 import i18n from '../util/i18n';
 
 const PetStoreScreen = ({navigation, route}) => {
@@ -53,7 +54,6 @@ const PetStoreScreen = ({navigation, route}) => {
                 animated: true,
                 viewPosition: 0.5
             })
-            console.log(petStoreCategories[orgs.index])
         let path = ""
         if (petStoreCategories[orgs.index].name === 'Medicine') {
             path = "/petMedicineItems"

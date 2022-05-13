@@ -243,7 +243,7 @@ import LottieView from 'lottie-react-native';
                 </Animatable.View>
                 :
                 <View style={{flex: 1}}>
-                  <Swiper showsPagination={true} autoplayTimeout={5} autoplay={true} dotColor={Colors.darkGray} activeDotColor={Colors.primary} activeDotStyle={{paddingHorizontal: 10}} style={{height: 165}}>
+                  <Swiper showsPagination={true} autoplayTimeout={5} autoplay={true} dotColor={Colors.primary} activeDotColor={Colors.white} activeDotStyle={{width: 40}} style={{height: 150}}>
                       {homePageCarouselServices.map((item, index) =>
                       <ImageBackground key={index} source={{uri: item.image}} style={styles.itemContainer}  blurRadius={5}>
                           <Text style={{fontFamily: 'Oswald-SemiBold', fontSize: 20, marginBottom: 10, color: Colors.appBackground}}>{item.title}</Text>
@@ -252,7 +252,12 @@ import LottieView from 'lottie-react-native';
                       )}   
                   </Swiper>
       
-                  <SectionBanner fontSize={18} title={i18n.homeScreenServiceBannerTitle} borderColor={Colors.darkGray} borderWidth={80} titleColor={Colors.secondary}/>
+                  <SectionBanner 
+                      title={i18n.homeScreenServiceBannerTitle} 
+                      borderWidth={80} 
+                      fontSize={16}
+                      borderColor={Colors.white}
+                      titleColor={Colors.white}/>
                   <View style={{marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', width: "100%"}}>
                       <RNMasonryScroll
                           columns={2}
@@ -276,9 +281,9 @@ import LottieView from 'lottie-react-native';
                           )}
                       </RNMasonryScroll>
                   </View> 
-                  <View style={{paddingHorizontal: 5}}>
+                  <View style={{paddingHorizontal: 2, marginBottom: 5}}>
                     {quickService.map((item, index) => 
-                    <View key={index} style={{marginTop: 20, marginBottom: 5, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: Colors.appBackground, borderRadius: 10, elevation: 2}}>
+                    <View key={index} style={{marginTop: 20, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: Colors.appBackground, borderRadius: 10, elevation: 2}}>
                       <TouchableRipple key={index} style={{width: '100%'}} onPress={() => onPressNavToService(item)}>
                         <ImageBackground blurRadius={5} source={require('../assets/images/background3.png')} style={{ width: '100%', height: 100, padding: 10}}>
                           <View style={{flexDirection: 'row'}}>
@@ -319,7 +324,7 @@ import LottieView from 'lottie-react-native';
  
  const styles = StyleSheet.create({
   itemContainer: {
-    height: 120,
+    height: 130,
     marginHorizontal: 2,
     justifyContent: 'center',
     alignItems: 'center',

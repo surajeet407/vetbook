@@ -73,16 +73,15 @@ const SettingsScreen = ({navigation, route}) => {
 
                     <View >
                         <SectionBanner
-                            fontSize={18}
                             title={i18n.firstSectionTitle}
-                            borderColor={Colors.darkGray}
                             borderWidth={80}
-                            titleColor={Colors.secondary}/>
+                            fontSize={16}
+                            borderColor={Colors.white}
+                            titleColor={Colors.white}/>
                         <Animatable.View
                             delay={100}
                             animation={'fadeInLeft'}
                             style={{
-                            marginTop: 5
                         }}>
                             <TouchableOpacity
                                 style={{
@@ -111,7 +110,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         marginTop: 10
                                     }}>{i18n.uploadedPescription}</Text>
                                 </View>
@@ -148,7 +147,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         marginTop: 10
                                     }}>{i18n.orders}</Text>
                                 </View>
@@ -188,7 +187,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18
+                                        fontSize: 16
                                     }}>{i18n.manageAddress}</Text>
                                 </View>
                                 <Icon
@@ -225,7 +224,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         marginTop: 10
                                     }}>{i18n.services}</Text>
                                 </View>
@@ -262,7 +261,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         marginTop: 10
                                     }}>{i18n.relocations}</Text>
                                 </View>
@@ -279,16 +278,15 @@ const SettingsScreen = ({navigation, route}) => {
                         marginTop: 20
                     }}>
                         <SectionBanner
-                            fontSize={18}
                             title={i18n.secondSectionTitle}
-                            borderColor={Colors.darkGray}
                             borderWidth={80}
-                            titleColor={Colors.secondary}/>
+                            fontSize={16}
+                            borderColor={Colors.white}
+                            titleColor={Colors.white}/>
                         <Animatable.View
                             delay={100}
                             animation={'fadeInLeft'}
                             style={{
-                            marginTop: 5
                         }}>
                             <TouchableOpacity
                                 style={{
@@ -317,7 +315,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18
+                                        fontSize: 16
                                     }}>{i18n.contactUs}</Text>
                                 </View>
                                 <Icon
@@ -337,16 +335,15 @@ const SettingsScreen = ({navigation, route}) => {
                             .width - 40
                     }}>
                         <SectionBanner
-                            fontSize={18}
                             title={i18n.thirdSectionTitle}
-                            borderColor={Colors.darkGray}
                             borderWidth={50}
-                            titleColor={Colors.secondary}/>
+                            fontSize={16}
+                            borderColor={Colors.white}
+                            titleColor={Colors.white}/>
                         <Animatable.View
                             delay={100}
                             animation={'fadeInLeft'}
                             style={{
-                            marginTop: 5
                         }}>
                             <TouchableOpacity
                                 style={{
@@ -375,7 +372,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         marginTop: 10
                                     }}>{i18n.terms}</Text>
                                 </View>
@@ -419,7 +416,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         marginTop: 10
                                     }}>{status === 'loggedIn'
                                             ? i18n.logOut

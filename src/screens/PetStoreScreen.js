@@ -31,6 +31,7 @@ import * as Animatable from 'react-native-animatable';
 import RBSheet from "react-native-raw-bottom-sheet";
 import Button from '../reusable_elements/Button';
 import ImgToBase64 from 'react-native-image-base64';
+import RNFetchBlob from 'rn-fetch-blob';
 import moment from 'moment';
 import DocumentPicker, {
     DirectoryPickerResponse,
@@ -184,10 +185,10 @@ const PetStoreScreen = ({navigation, route}) => {
     }
     const onPressUpload = () => {
         DocumentPicker.pickSingle({
+            type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
             presentationStyle: 'fullScreen',
             copyTo: 'cachesDirectory',
         }).then((result) => {
-            console.log(result)
             setSingleFile(result)
         })
     }
@@ -205,14 +206,17 @@ const PetStoreScreen = ({navigation, route}) => {
             const data = new FormData();
             data.append('name', 'Image Upload');
             data.append('file_attachment', fileToUpload);
-            ImgToBase64.getBase64String(singleFile.fileCopyUri)
+            RNFetchBlob.fs
+                .readFile(singleFile.fileCopyUri, 'base64')
                 .then(async base64String => {
+                    console.log(base64String)
                     let phoneNo = await AsyncStorage.getItem("phoneNo")
                     let ar = [], obj ={
                         phoneNo: phoneNo,
                         image: base64String,
                         fileDetails: singleFile,
-                        date: moment().format('yyyy-MM-DD').toString()
+                        date: moment().format('yyyy-MM-DD').toString(),
+                        active: true
                     }
                     database()
                     .ref("/users/" + phoneNo + "/pescription")
@@ -224,10 +228,29 @@ const PetStoreScreen = ({navigation, route}) => {
                         ar.push(obj)
                         database()
                             .ref("/users/" + phoneNo + "/pescription").set(ar)
+                        Toast.show({
+                            type: 'customToast',
+                            text1: "We will contact you within few minitues...",
+                            position: 'bottom',
+                            visibilityTime: 1500,
+                            bottomOffset: 80,
+                            props: {
+                                backgroundColor: Colors.green3
+                            }
+                        });
                     })
+                }).catch((err) => {
+                    Toast.show({
+                        type: 'customToast',
+                        text1: "Failed to decode bitmap...",
+                        position: 'bottom',
+                        visibilityTime: 1500,
+                        bottomOffset: 80,
+                        props: {
+                            backgroundColor: Colors.error_toast_color
+                        }
+                    });
                 })
-                .catch(err => console.log(err));
-            
         } else {
             Toast.show({
                 type: 'customToast',

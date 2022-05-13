@@ -5,7 +5,8 @@ import {
     ScrollView,
     ImageBackground,
     Image,
-    Dimensions
+    Dimensions,
+    PermissionsAndroid
 } from 'react-native';
 import Colors from '../util/Colors';
 import Title from '../reusable_elements/Title';
@@ -41,11 +42,9 @@ const PescriptionsScreen = ({navigation}) => {
                                 for(let i = 0; i < data.length; i++) {
                                     if(data[i].fileDetails.type.split("/")[0] === 'image') {
                                         data[i].document = "data:image/png;base64," + data[i].image 
-                                    } else if (data[i].fileDetails.type === 'application/pdf') {
-                                        data[i].document = "data:application/pdf;base64," + data[i].image
                                     } else {
-                                        data[i].document = "data:application/msword;base64," + data[i].image
-                                    }
+                                        data[i].document = "data:application/pdf;base64," + data[i].image
+                                    } 
                                 }
                                 setDetails(data)
                             }
@@ -56,9 +55,8 @@ const PescriptionsScreen = ({navigation}) => {
 
     const onPressDownload = (item) => {
         var Base64Code = item.image; 
-        const dirs = RNFetchBlob.fs.dirs;
-        var path = dirs.DCIMDir + "/image.png";
-        RNFetchBlob.fs.writeFile(path, Base64Code, 'base64')
+        let location = RNFetchBlob.fs.dirs.DocumentDir + '/' + item.name;
+        RNFetchBlob.fs.writeFile(location, RNFetchBlob.base64.encode(Base64Code), 'base64')
         .then((res) => {
             Toast.show({
                 type: 'customToast',
@@ -74,6 +72,20 @@ const PescriptionsScreen = ({navigation}) => {
     }
 
     useEffect(() => {
+        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE).then((status) => {
+            if(status != "granted"){
+                Toast.show({
+                    type: 'customToast',
+                    text1: "Storage permission is not granted...",
+                    position: 'bottom',
+                    visibilityTime: 1500,
+                    bottomOffset: 10,
+                    props: {
+                        backgroundColor: Colors.error_toast_color
+                    }
+                });
+            }
+        })
         getData();
     }, []);
 
@@ -116,7 +128,8 @@ const PescriptionsScreen = ({navigation}) => {
                 alignItems: 'flex-start'
             }}>
                 <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-                    {details.map((item, index) => <View
+                    {details.map((item, index) => 
+                    <View
                         key={index}
                         style={{
                         backgroundColor: Colors.appBackground,
@@ -149,6 +162,7 @@ const PescriptionsScreen = ({navigation}) => {
                                     borderWidth: 1
                                 }}>
                                     <ImageBackground style={{
+                                        backgroundColor: Colors.secondary,
                                         borderRadius: 0,
                                         width: 80,
                                         height: 60,
@@ -170,7 +184,14 @@ const PescriptionsScreen = ({navigation}) => {
                                     marginLeft: 10,
                                     alignItems: 'flex-start'
                                 }}>
-                                    <Title size={15} label={item.fileDetails.name} bold={true} color={Colors.darkGray}/>
+                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                        <Title size={15} label={item.fileDetails.name} bold={true} color={Colors.darkGray}/>
+                                        {item.active && (
+                                            <View style={{marginLeft: 5, backgroundColor: Colors.red, paddingHorizontal: 10, borderRadius: 5, elevation: 5}}>
+                                                <Title size={10} label={'Active'} bold={true} color={Colors.white}/>
+                                            </View>
+                                        )}
+                                    </View>
                                     <Title size={12} label={"Uploaded on: " + item.date} bold={true} color={Colors.secondary}/>
                                 </View>
                             </RNBounceable>

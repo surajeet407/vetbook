@@ -19,7 +19,7 @@ const SectionBanner = (props) => {
             width: '100%',
             borderRadius: 10
         }}
-            colors={[Colors.primary, Colors.gray]}>
+            colors={[Colors.secondary, Colors.darkGray]}>
             <View
                 style={{
                 alignItems: 'center',
@@ -39,7 +39,7 @@ const SectionBanner = (props) => {
                     borderColor: props.borderColor
                         ? props.borderColor
                         : Colors.primary,
-                    borderBottomWidth: 3,
+                    borderBottomWidth: 2,
                     width: props.borderWidth,
                     marginTop: 5
                 }}></View>

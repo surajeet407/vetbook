@@ -198,71 +198,55 @@ const PetStoreScreen = ({navigation, route}) => {
 
     const onPressSubmit = () => {
         refRBSheet.current.close()
-        if(singleFile) {
-            refRBSheet
-            .current
-            .close()
-            const fileToUpload = singleFile;
-            const data = new FormData();
-            data.append('name', 'Image Upload');
-            data.append('file_attachment', fileToUpload);
-            RNFetchBlob.fs
-                .readFile(singleFile.fileCopyUri, 'base64')
-                .then(async base64String => {
-                    console.log(base64String)
-                    let phoneNo = await AsyncStorage.getItem("phoneNo")
-                    let ar = [], obj ={
-                        phoneNo: phoneNo,
-                        image: base64String,
-                        fileDetails: singleFile,
-                        date: moment().format('yyyy-MM-DD').toString(),
-                        active: true
+        const fileToUpload = singleFile;
+        const data = new FormData();
+        data.append('name', 'Image Upload');
+        data.append('file_attachment', fileToUpload);
+        RNFetchBlob.fs
+            .readFile(singleFile.fileCopyUri, 'base64')
+            .then(async base64String => {
+                console.log(base64String)
+                let phoneNo = await AsyncStorage.getItem("phoneNo")
+                let ar = [], obj ={
+                    phoneNo: phoneNo,
+                    image: base64String,
+                    fileDetails: singleFile,
+                    date: moment().format('yyyy-MM-DD').toString(),
+                    active: true
+                }
+                database()
+                .ref("/users/" + phoneNo + "/pescriptions")
+                    .once('value')
+                    .then(snapshot => {
+                    if (snapshot.val()) {
+                        ar = snapshot.val()
                     }
+                    ar.push(obj)
                     database()
-                    .ref("/users/" + phoneNo + "/pescription")
-                        .once('value')
-                        .then(snapshot => {
-                        if (snapshot.val()) {
-                            ar = snapshot.val()
-                        }
-                        ar.push(obj)
-                        database()
-                            .ref("/users/" + phoneNo + "/pescription").set(ar)
-                        Toast.show({
-                            type: 'customToast',
-                            text1: "We will contact you within few minitues...",
-                            position: 'bottom',
-                            visibilityTime: 1500,
-                            bottomOffset: 80,
-                            props: {
-                                backgroundColor: Colors.green3
-                            }
-                        });
-                    })
-                }).catch((err) => {
+                        .ref("/users/" + phoneNo + "/pescriptions").set(ar)
                     Toast.show({
                         type: 'customToast',
-                        text1: "Failed to decode bitmap...",
+                        text1: "We will contact you within few minitues...",
                         position: 'bottom',
                         visibilityTime: 1500,
                         bottomOffset: 80,
                         props: {
-                            backgroundColor: Colors.error_toast_color
+                            backgroundColor: Colors.green3
                         }
                     });
                 })
-        } else {
-            Toast.show({
-                type: 'customToast',
-                text1: "Upload one file first...",
-                position: 'bottom',
-                visibilityTime: 1500,
-                bottomOffset: 80,
-                props: {
-                    backgroundColor: Colors.error_toast_color
-                }
-            });
-        }  
+            }).catch((err) => {
+                Toast.show({
+                    type: 'customToast',
+                    text1: "Failed to decode bitmap...",
+                    position: 'bottom',
+                    visibilityTime: 1500,
+                    bottomOffset: 80,
+                    props: {
+                        backgroundColor: Colors.error_toast_color
+                    }
+                });
+        })
     
     }
 
@@ -312,7 +296,8 @@ const PetStoreScreen = ({navigation, route}) => {
                 borderRadius: 50,
                 elevation: 10
                 }}>
-                <Icon onPress={onPressFileUploadButton} type={Icons.MaterialIcons} name="upload-file" color={Colors.white} size={35} />
+                <Icon onPress={onPressFileUploadButton} type={Icons.MaterialIcons} name="upload-file" color={Colors.white} size={25} />
+                <Title label="Upload" size={10} color={Colors.darkGray}/>
             </Animatable.View>
             )}
             <LandingHeader
@@ -475,10 +460,10 @@ const PetStoreScreen = ({navigation, route}) => {
                     <View
                         style={{
                             alignItems: 'center',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
                     }}>
-                        <View style={{marginBottom: 10, borderBottomColor: Colors.darkGray, borderBottomWidth: 1, padding: 5}}>
-                            <Title size={20} bold={true} label={"Upload doctor's pescription"}/>
+                        <View style={{marginBottom: 10, borderBottomColor: Colors.darkGray, borderBottomWidth: 1, padding: 5, paddingHorizontal: 20}}>
+                            <Text style={{fontSize: 24, fontFamily: 'Redressed-Regular', color: Colors.darkGray}}>Upload doctor's pescription</Text>
                         </View>
                         {singleFile && (
                             <View style={{marginTop: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
@@ -502,24 +487,23 @@ const PetStoreScreen = ({navigation, route}) => {
                         
                     </View>  
                     <View style={{alignItems: 'center', margin: 20}}>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Button
-                                iconPostionRight={true}
-                                backgroundColor={Colors.secondary}
-                                useIcon={true}
-                                title="Upload"
-                                icon="save"
-                                onPress={onPressUpload}/>
-                            <View style={{marginLeft: 15}}>
-                                <Button
-                                    iconPostionLeft={true}
-                                    backgroundColor={Colors.green3}
-                                    useIcon={true}
-                                    title="Submit"
-                                    icon="save"
-                                    onPress={onPressSubmit}/>
-                            </View>
-                        </View>
+                        {singleFile?
+                        <Button
+                            iconPostionLeft={true}
+                            backgroundColor={Colors.green3}
+                            useIcon={true}
+                            title="Submit"
+                            icon="save"
+                            onPress={onPressSubmit}/>
+                        :
+                        <Button
+                            iconPostionRight={true}
+                            backgroundColor={Colors.secondary}
+                            useIcon={true}
+                            title="Upload"
+                            icon="save"
+                            onPress={onPressUpload}/>
+                        }
                     </View>
                 </View>
             </RBSheet>

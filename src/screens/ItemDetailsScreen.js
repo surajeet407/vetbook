@@ -8,7 +8,7 @@ import {
     Animated,
     ImageBackground
 } from 'react-native';
-import {useIsFocused} from "@react-navigation/native";
+import {useIsFocused, useLinkBuilder} from "@react-navigation/native";
 import Icon, {Icons} from '../util/Icons';
 import Title from '../reusable_elements/Title';
 import Button from '../reusable_elements/Button';
@@ -24,8 +24,9 @@ import Label, {Orientation} from "react-native-label";
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import Review from "react-native-customer-review-bars";
 import {Rating} from 'react-native-ratings';
-import RBSheet from "react-native-raw-bottom-sheet";
 import NumericInput from 'react-native-numeric-input'
+import uuid from 'react-native-uuid';
+import moment from 'moment';
 import i18n from '../util/i18n';
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
@@ -33,7 +34,6 @@ const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 const ItemDetailScreen = ({navigation, route}) => {
     const [reviews, 
         setReviews] = useState(route.params.item.review? route.params.item.review:[]);
-    const refRBSheet = useRef(null)
     const isFocused = useIsFocused();
     const [ratingCountInd,
         setRatingCountInd] = useState(0)
@@ -271,9 +271,6 @@ const ItemDetailScreen = ({navigation, route}) => {
         setCatIndex(index)
     }
 
-    const onPressRateItem = () => {
-        refRBSheet.current.open()
-    }
     const onPressSubmit = () => {
         if(ratingCountInd === 0) {
             Toast.show({
@@ -287,75 +284,170 @@ const ItemDetailScreen = ({navigation, route}) => {
                 }
             })
         } else {
-            refRBSheet.current.close()
-            let path
-            if (route.params.type  === "Medicine") {
-                path = "/petMedicineItems"
-            } else if (route.params.type === "Food") {
-                path = "/petFoodItems"
-            } else if (route.params.type === "Toys") {
-                path = "/petToysItems"
-            } else if (route.params.type === "Accesorries") {
-                path = "/petAccItems"
-            } else {
-                path = "/petFurItems"
-            }
             database()
-            .ref(path)
+            .ref("/reviews")
             .once('value')
             .then(snapshot => {
                 if(snapshot.val()) {
-                    let key
-                    snapshot.forEach((child) => {
-                        if(child.val().id === route.params.item.id) {
-                            // console.log(child.val().review)
-                            let ar;
-                            if(child.val().review) {
-                                ar = child.val().review
-                                if(ratingCountInd === 1) {
-                                    ar[4].value = parseInt(ar[4].value) + 1
-                                } else if(ratingCountInd === 2) {
-                                    ar[3].value = parseInt(ar[3].value) + 1
-                                } else if(ratingCountInd === 3) {
-                                    ar[2].value = parseInt(ar[2].value) + 1
-                                } else if(ratingCountInd === 4) {
-                                    ar[1].value = parseInt(ar[1].value) + 1
-                                } else if(ratingCountInd === 5){
-                                    ar[0].value = parseInt(ar[0].value) + 1
-                                }
-                            } else {
-                                ar = [{value: 0},{value: 0},{value: 0},{value: 0},{value: 0}]
-                                if(ratingCountInd === 1) {
-                                    ar[4].value = 1
-                                } else if(ratingCountInd === 2) {
-                                    ar[3].value = 1
-                                } else if(ratingCountInd === 3) {
-                                    ar[2].value = 1
-                                } else if(ratingCountInd === 4) {
-                                    ar[1].value = 1
-                                } else if(ratingCountInd === 5) {
-                                    ar[0].value = 1
-                                }
-                            }
-                            setRatingCountInd(0)
-                            child.child("review").ref.set(ar)
-                            setReviews(ar)
-                            return
+                    let reviewData, mainData = snapshot.val(), path, count = 0
+                    for(let i = 0; i < mainData.length; i++) {
+                        if(mainData[i].id === route.params.item.id) {
+                            count++
+                            path = i;
+                            reviewData = mainData[i]
                         }
+                    }
+                    if(count > 0) {
+                        if(ratingCountInd === 1) {
+                            reviewData.reviews[4].value = parseInt(ar[4].value) + 1
+                            if(reviewData.reviews[3].value >= 1) {
+                                reviewData.reviews[3].value = parseInt(ar[4].value) - 1
+                            }
+                            if(reviewData.reviews[2].value >= 1) {
+                                reviewData.reviews[2].value = parseInt(ar[4].value) - 1
+                            } 
+                            if(reviewData.reviews[1].value >= 1) {
+                                reviewData.reviews[1].value = parseInt(ar[4].value) - 1
+                            } 
+                            if(reviewData.reviews[0].value >= 1) {
+                                reviewData.reviews[0].value = parseInt(ar[4].value) - 1
+                            }
+                        } else if(ratingCountInd === 2) {
+                            reviewData.reviews[3].value = parseInt(ar[3].value) + 1
+                            if(reviewData.reviews[4].value >= 1) {
+                                reviewData.reviews[4].value = parseInt(ar[4].value) - 1
+                            }
+                            if(reviewData.reviews[2].value >= 1) {
+                                reviewData.reviews[2].value = parseInt(ar[4].value) - 1
+                            } 
+                            if(reviewData.reviews[1].value >= 1) {
+                                reviewData.reviews[1].value = parseInt(ar[4].value) - 1
+                            } 
+                            if(reviewData.reviews[0].value >= 1) {
+                                reviewData.reviews[0].value = parseInt(ar[4].value) - 1
+                            }
+                        } else if(ratingCountInd === 3) {
+                            reviewData.reviews[2].value = parseInt(ar[2].value) + 1
+                            if(reviewData.reviews[3].value >= 1) {
+                                reviewData.reviews[3].value = parseInt(ar[4].value) - 1
+                            }
+                            if(reviewData.reviews[4].value >= 1) {
+                                reviewData.reviews[4].value = parseInt(ar[4].value) - 1
+                            } 
+                            if(reviewData.reviews[1].value >= 1) {
+                                reviewData.reviews[1].value = parseInt(ar[4].value) - 1
+                            } 
+                            if(reviewData.reviews[0].value >= 1) {
+                                reviewData.reviews[0].value = parseInt(ar[4].value) - 1
+                            }
+                        } else if(ratingCountInd === 4) {
+                            reviewData.reviews[1].value = parseInt(ar[1].value) + 1
+                            if(reviewData.reviews[3].value >= 1) {
+                                reviewData.reviews[3].value = parseInt(ar[4].value) - 1
+                            }
+                            if(reviewData.reviews[2].value >= 1) {
+                                reviewData.reviews[2].value = parseInt(ar[4].value) - 1
+                            } 
+                            if(reviewData.reviews[4].value >= 1) {
+                                reviewData.reviews[4].value = parseInt(ar[4].value) - 1
+                            } 
+                            if(reviewData.reviews[0].value >= 1) {
+                                reviewData.reviews[0].value = parseInt(ar[4].value) - 1
+                            }
+                        } else if(ratingCountInd === 5){
+                            reviewData.reviews[0].value = parseInt(ar[0].value) + 1
+                            if(reviewData.reviews[3].value >= 1) {
+                                reviewData.reviews[3].value = parseInt(ar[4].value) - 1
+                            }
+                            if(reviewData.reviews[2].value >= 1) {
+                                reviewData.reviews[2].value = parseInt(ar[4].value) - 1
+                            } 
+                            if(reviewData.reviews[1].value >= 1) {
+                                reviewData.reviews[1].value = parseInt(ar[4].value) - 1
+                            } 
+                            if(reviewData.reviews[4].value >= 1) {
+                                reviewData.reviews[4].value = parseInt(ar[4].value) - 1
+                            }
+                        }
+                        mainData[path].reviews = reviewData.reviews
+                    } else {
+                        let updatedData = snapshot.val()
+                        for(let i = 0; i < updatedData.length; i++) {
+                            if(updatedData[i].id === route.params.item.id) {
+                                updatedData[i].phoneNo.push(phoneNo)
+                                if(ratingCountInd === 1) {
+                                    updatedData[i].reviews[4].value = 1
+                                } else if(ratingCountInd === 2) {
+                                    updatedData[i].reviews[3].value = 1
+                                } else if(ratingCountInd === 3) {
+                                    updatedData[i].reviews[2].value = 1
+                                } else if(ratingCountInd === 4) {
+                                    updatedData[i].reviews[1].value = 1
+                                } else if(ratingCountInd === 5) {
+                                    updatedData[i].reviews[0].value = 1
+                                }
+                                break;
+                            } 
+                        }
+                        database()
+                            .ref("/reviews").set(data).then(() => {
+                                getReviews()
+                        })
+                    }
+                } else {
+                    let phoneNoAr = []
+                    phoneNoAr.push(phoneNo)
+                    let data = {
+                        reviewId: uuid.v4(),
+                        itemId: route.params.item.id,
+                        phonNo: phoneNoAr,
+                        date: moment().format('yyyy-MM-DD').toString(),
+                        reviews: [{value: 0},{value: 0},{value: 0},{value: 0},{value: 0}]
+                    }
+                    if(ratingCountInd === 1) {
+                        data.reviews[4].value = 1
+                    } else if(ratingCountInd === 2) {
+                        data.reviews[3].value = 1
+                    } else if(ratingCountInd === 3) {
+                        data.reviews[2].value = 1
+                    } else if(ratingCountInd === 4) {
+                        data.reviews[1].value = 1
+                    } else if(ratingCountInd === 5) {
+                        data.reviews[0].value = 1
+                    }
+                    database()
+                        .ref("/reviews").set(data).then(() => {
+                            getReviews()
                     })
                 }
             })
         }
         
     }
+    const getReviews = () => {
+        database()
+            .ref("/reviews")
+            .once('value')
+            .then(snapshot => {
+                if(snapshot.val()) {
+                    for(let i = 0; i < snapshot.val().length; i++) {
+                        if(snapshot.val()[i].id === route.params.item.id) {
+                            setReviews(snapshot.val()[i].reviews)
+                        }
+                    }
+                } else {
+                    setReviews([])
+                }
+        })
+    }
 
     const onRatingCompleted = (ratingCountInd) => {
         setRatingCountInd(ratingCountInd)
-        console.log(ratingCountInd)
     }
 
     useEffect(() => {
         if (isFocused) {
+            getReviews()
             getCartItemCount()
         }
     }, [isFocused]);
@@ -513,11 +605,11 @@ const ItemDetailScreen = ({navigation, route}) => {
                                     backgroundColor: Colors.gray,
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    width: 80,
-                                    height: 80
+                                    width: 100,
+                                    height: 60
                                 }}>
-                                    <Title color={Colors.primary} size={18} bold={true} label={'Price'}/>
-                                    <Title color={Colors.secondary} size={14} bold={true} label={price + " /-"}/>
+                                    <Title color={Colors.primary} size={14} bold={true} label={'Price'}/>
+                                    <Title color={Colors.secondary} size={15} bold={true} label={price + " /-"}/>
                                 </Animatable.View>
                                 <Animatable.View delay={200} animation={'fadeInLeft'} style={{
                                     marginLeft: 20
@@ -559,12 +651,12 @@ const ItemDetailScreen = ({navigation, route}) => {
                                     backgroundColor: Colors.gray,
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    width: 80,
-                                    height: 80,
+                                    width: 100,
+                                    height: 60,
                                     marginLeft: 20
                                 }}>
-                                    <Title color={Colors.primary} size={18} bold={true} label={'Unit'}/>
-                                    <Title color={Colors.secondary} size={14} bold={true} label={route.params.item.baseQuantity + " " + route.params.item.unit}/>
+                                    <Title color={Colors.primary} size={14} bold={true} label={'Unit'}/>
+                                    <Title color={Colors.secondary} size={15} bold={true} label={route.params.item.baseQuantity + " " + route.params.item.unit}/>
                                 </Animatable.View>
                             </View>
                         </View>
@@ -617,16 +709,39 @@ const ItemDetailScreen = ({navigation, route}) => {
                         </View>
                         )}
                         {route.params.status === 'loggedIn'?
-                        <View style={{alignItems: 'center', margin: 10}}>
-                            <Button
-                                iconColor={Colors.primary}
-                                iconPostionRight={true}
-                                backgroundColor={Colors.white}
-                                textColor={Colors.primary}
-                                useIcon={true}
-                                title="Rate"
-                                icon="long-arrow-right"
-                                onPress={onPressRateItem}/>
+                        <View style={{marginTop: 10}}>
+                            <View
+                                style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                            }}>
+                                <View style={{marginBottom: 10}}>
+                                    <Title size={20} bold={true} label={"Rate " + route.params.item.name + ": "}/>
+                                </View>
+                                <Rating
+                                    type='custom'
+                                    ratingColor={Colors.green3}
+                                    ratingBackgroundColor={Colors.darkGray}
+                                    ratingCount={5}
+                                    imageSize={40}
+                                    minValue={0}
+                                    startingValue={ratingCountInd}
+                                    jumpValue={1}
+                                    showRating={false}
+                                    style={{ paddingHorizontal: 40 }}
+                                    onFinishRating={onRatingCompleted}/>
+                            </View>  
+                            <View style={{alignItems: 'center', margin: 20}}>
+                                <View style={{width: '50%'}}>
+                                    <Button
+                                        iconPostionLeft={true}
+                                        backgroundColor={Colors.primary}
+                                        useIcon={true}
+                                        title="Submit"
+                                        icon="save"
+                                        onPress={onPressSubmit}/>
+                                </View>
+                            </View>
                         </View>
                         :
                         <View style={{alignItems: 'center', margin: 10}}>
@@ -669,63 +784,6 @@ const ItemDetailScreen = ({navigation, route}) => {
                     </View>
                 </ImageBackground>
             </Animatable.View>
-            <RBSheet
-                height={200}
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={true}
-                customStyles={{
-                container: {
-                    backgroundColor: Colors.white,
-                    borderTopLeftRadius: 50,
-                    borderTopRightRadius: 50,
-                    elevation: 10,
-                    overflow: 'hidden',
-                    paddingHorizontal: 20
-                },
-                wrapper: {
-                    backgroundColor: "transparent",
-                },
-                draggableIcon: {
-                    backgroundColor: Colors.secondary
-                }
-                }}
-                >
-                <View style={{marginTop: 10}}>
-                    <View
-                        style={{
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                    }}>
-                        <View style={{marginBottom: 10}}>
-                            <Title size={20} bold={true} label={"Rate " + route.params.item.name + ": "}/>
-                        </View>
-                        <Rating
-                            type='custom'
-                            ratingColor={Colors.green3}
-                            ratingBackgroundColor={Colors.darkGray}
-                            ratingCount={5}
-                            imageSize={40}
-                            minValue={0}
-                            startingValue={0}
-                            jumpValue={1}
-                            showRating={false}
-                            style={{ paddingHorizontal: 40 }}
-                            onFinishRating={onRatingCompleted}/>
-                    </View>  
-                    <View style={{alignItems: 'center', margin: 20}}>
-                        <View style={{width: '50%'}}>
-                            <Button
-                                iconPostionLeft={true}
-                                backgroundColor={Colors.primary}
-                                useIcon={true}
-                                title="Submit"
-                                icon="save"
-                                onPress={onPressSubmit}/>
-                        </View>
-                    </View>
-                </View>
-            </RBSheet>
         </View>
     );
 };

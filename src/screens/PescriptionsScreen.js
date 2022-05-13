@@ -35,7 +35,7 @@ const PescriptionsScreen = ({navigation}) => {
             .then((number, msg) => {
                 if (number) {
                     database()
-                        .ref('/users/' + number + '/pescription')
+                        .ref('/users/' + number + '/pescriptions')
                         .on('value', snapshot => {
                             if (snapshot.val()) {
                                 let data = snapshot.val()

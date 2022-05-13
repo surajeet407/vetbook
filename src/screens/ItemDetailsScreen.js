@@ -25,6 +25,7 @@ import SegmentedControlTab from 'react-native-segmented-control-tab'
 import Review from "react-native-customer-review-bars";
 import {Rating} from 'react-native-ratings';
 import RBSheet from "react-native-raw-bottom-sheet";
+import NumericInput from 'react-native-numeric-input'
 import i18n from '../util/i18n';
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
@@ -498,8 +499,75 @@ const ItemDetailScreen = ({navigation, route}) => {
 
                 <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
                     {catIndex === 0? 
-                    <View style={{marginTop: 10}}>
-                        
+                        <View style={{marginTop: 10}}>
+                            <View
+                            style={{
+                                marginBottom: 10
+                            }}>
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                <Animatable.View
+                                    delay={300}
+                                    animation={'fadeInLeft'}
+                                    style={{
+                                    borderRadius: 5,
+                                    backgroundColor: Colors.gray,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: 80,
+                                    height: 80
+                                }}>
+                                    <Title color={Colors.primary} size={18} bold={true} label={'Price'}/>
+                                    <Title color={Colors.secondary} size={14} bold={true} label={price + " /-"}/>
+                                </Animatable.View>
+                                <Animatable.View delay={200} animation={'fadeInLeft'} style={{
+                                    marginLeft: 20
+                                    }}>
+                                    <NumericInput
+                                        totalWidth={100}
+                                        totalHeight={40}
+                                        iconSize={25}
+                                        initValue={numericInputVal}
+                                        value={numericInputVal}
+                                        onChange={onChangeInput}
+                                        rounded
+                                        minValue={1}
+                                        validateOnBlur
+                                        maxValue={5}
+                                        onLimitReached={(isMax, msg) => Toast.show({
+                                        type: 'customToast',
+                                        text1: msg,
+                                        position: 'bottom',
+                                        visibilityTime: 1000,
+                                        bottomOffset: 100,
+                                        props: {
+                                            backgroundColor: '#ea5e48'
+                                        }
+                                    })}
+                                        textColor={Colors.black}
+                                        iconStyle={{
+                                        color: Colors.primary,
+                                        fontSize: 20
+                                    }}
+                                        rightButtonBackgroundColor={Colors.appBackground}
+                                        leftButtonBackgroundColor={Colors.appBackground}/>
+                                </Animatable.View>
+                                <Animatable.View
+                                    delay={100}
+                                    animation={'fadeInLeft'}
+                                    style={{
+                                    borderRadius: 5,
+                                    backgroundColor: Colors.gray,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: 80,
+                                    height: 80,
+                                    marginLeft: 20
+                                }}>
+                                    <Title color={Colors.primary} size={18} bold={true} label={'Unit'}/>
+                                    <Title color={Colors.secondary} size={14} bold={true} label={route.params.item.baseQuantity + " " + route.params.item.unit}/>
+                                </Animatable.View>
+                            </View>
+                        </View>
                         {route
                             .params
                             .item
@@ -548,7 +616,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                             
                         </View>
                         )}
-                        {route.params.status === 'loggedIn' && (
+                        {route.params.status === 'loggedIn'?
                         <View style={{alignItems: 'center', margin: 10}}>
                             <Button
                                 iconColor={Colors.primary}
@@ -560,7 +628,11 @@ const ItemDetailScreen = ({navigation, route}) => {
                                 icon="long-arrow-right"
                                 onPress={onPressRateItem}/>
                         </View>
-                        )}
+                        :
+                        <View style={{alignItems: 'center', margin: 10}}>
+                            <Title size={18} bold={true} label={"Please Login to rate..."}/>
+                        </View>
+                        }
                         
                     </View>
                     }
@@ -630,8 +702,8 @@ const ItemDetailScreen = ({navigation, route}) => {
                         </View>
                         <Rating
                             type='custom'
-                            ratingColor={Colors.red}
-                            ratingBackgroundColor='#c8c7c8'
+                            ratingColor={Colors.green3}
+                            ratingBackgroundColor={Colors.darkGray}
                             ratingCount={5}
                             imageSize={40}
                             minValue={0}

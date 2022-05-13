@@ -26,12 +26,24 @@ import LandingHeader from '../reusable_elements/LandingHeader';
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Title from '../reusable_elements/Title';
+import Icon, {Icons} from '../util/Icons';
+import * as Animatable from 'react-native-animatable';
+import RBSheet from "react-native-raw-bottom-sheet";
+import Button from '../reusable_elements/Button';
+import DocumentPicker, {
+    DirectoryPickerResponse,
+    DocumentPickerResponse,
+    isInProgress,
+    types,
+} from 'react-native-document-picker'
+import axios from 'axios';
 import uuid from 'react-native-uuid';
 import i18n from '../util/i18n';
 
 const PetStoreScreen = ({navigation, route}) => {
-    console.log(route.params)
+    const refRBSheet = useRef(null)
     const isFocused = useIsFocused();
+    const [singleFile, setSingleFile] = useState(null);
     const [homeAddress,
         setHomeAddress] = useState("")
     const [status,
@@ -165,6 +177,53 @@ const PetStoreScreen = ({navigation, route}) => {
         }
 
     }
+    const onPressFileUploadButton = () => {
+        refRBSheet.current.open()
+    }
+    const onPressUpload = () => {
+        DocumentPicker.pickSingle({
+            presentationStyle: 'fullScreen',
+            copyTo: 'cachesDirectory',
+        }).then((result) => {
+            console.log(result)
+            setSingleFile(result)
+        })
+    }
+    const onPressDeleteIcon = () => {
+        setSingleFile(null)
+    }
+
+    const onPressSubmit = () => {
+        refRBSheet.current.close()
+        if(singleFile) {
+            refRBSheet
+            .current
+            .close()
+            const fileToUpload = singleFile;
+            const data = new FormData();
+            data.append('name', 'Image Upload');
+            data.append('file_attachment', fileToUpload);
+            axios.post('/user', data)
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+        } else {
+            Toast.show({
+                type: 'customToast',
+                text1: "Upload one file first...",
+                position: 'bottom',
+                visibilityTime: 1500,
+                bottomOffset: 80,
+                props: {
+                    backgroundColor: Colors.error_toast_color
+                }
+            });
+        }  
+    
+    }
 
     useEffect(() => {
         if (isFocused) {
@@ -198,6 +257,23 @@ const PetStoreScreen = ({navigation, route}) => {
             flex: 1,
             backgroundColor: Colors.appBackground
         }}>
+            {selectedCategoryIndex === 0 && ( 
+            <Animatable.View animation={'fadeInUp'} style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 60,
+                height: 60,
+                position: 'absolute',
+                zIndex: 1,
+                bottom: 15,
+                right: 10,
+                backgroundColor: Colors.primary,
+                borderRadius: 50,
+                elevation: 10
+                }}>
+                <Icon onPress={onPressFileUploadButton} type={Icons.MaterialIcons} name="upload-file" color={Colors.white} size={35} />
+            </Animatable.View>
+            )}
             <LandingHeader
                 homeAddress={homeAddress}
                 status={status}
@@ -332,6 +408,80 @@ const PetStoreScreen = ({navigation, route}) => {
                     </View>
                 </ScrollView>
             </View>
+            <RBSheet
+                height={220}
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                customStyles={{
+                container: {
+                    backgroundColor: Colors.white,
+                    borderTopLeftRadius: 50,
+                    borderTopRightRadius: 50,
+                    elevation: 10,
+                    overflow: 'hidden',
+                    paddingHorizontal: 20
+                },
+                wrapper: {
+                    backgroundColor: "transparent",
+                },
+                draggableIcon: {
+                    backgroundColor: Colors.secondary
+                }
+                }}
+                >
+                <View style={{justifyContent: 'space-evenly'}}>
+                    <View
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                    }}>
+                        <View style={{marginBottom: 10, borderBottomColor: Colors.darkGray, borderBottomWidth: 1, padding: 5}}>
+                            <Title size={20} bold={true} label={"Upload doctor's pescription"}/>
+                        </View>
+                        {singleFile && (
+                            <View style={{marginTop: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                {singleFile.type.split("/")[0] === 'image' && (
+                                    <Image style={{width: 50, height: 50}} source={{uri: singleFile.fileCopyUri}}/>
+                                )}
+                                {singleFile.type === 'application/pdf' && (
+                                    <Icon type={Icons.FontAwesome} name="file-pdf-o" size={40} color={Colors.darkOverlayColor2}/>
+                                )}
+                                {singleFile.type === 'application/msword' && (
+                                    <Icon type={Icons.FontAwesome} name="file-word-o" size={40} color={Colors.darkOverlayColor2}/>
+                                )}
+                                <View>
+                                    <Text style={{marginLeft: 10, fontSize: 16, fontFamily: 'Redressed-Regular', color: Colors.darkGray}}>{singleFile.name}</Text>
+                                </View>
+                                <View style={{marginLeft: 5}}>
+                                    <Icon onPress={onPressDeleteIcon} type={Icons.MaterialCommunityIcons} name="delete" size={25} color={Colors.red}/>
+                                </View>
+                            </View>
+                        )}
+                        
+                    </View>  
+                    <View style={{alignItems: 'center', margin: 20}}>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Button
+                                iconPostionRight={true}
+                                backgroundColor={Colors.secondary}
+                                useIcon={true}
+                                title="Upload"
+                                icon="save"
+                                onPress={onPressUpload}/>
+                            <View style={{marginLeft: 15}}>
+                                <Button
+                                    iconPostionLeft={true}
+                                    backgroundColor={Colors.green3}
+                                    useIcon={true}
+                                    title="Submit"
+                                    icon="save"
+                                    onPress={onPressSubmit}/>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </RBSheet>
         </View>
     );
 };

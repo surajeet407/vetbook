@@ -69,7 +69,7 @@ const HorizontalCategoryList = (props) => {
                         ? Colors.primary
                         : Colors.darkGray,
                     fontSize: 15,
-                    fontFamily: 'PTSerif-Bold'
+                    fontFamily: 'Redressed-Regular'
                 }}>{props.categoryTitle}</Text>
             </View>
         </Animatable.View>

@@ -5,7 +5,7 @@ const Title = (props) => {
     return (
         <Text
             style={{
-            fontFamily: 'Oswald-Medium',
+            fontFamily: props.fontFamily? props.fontFamily:'Oswald-Medium',
             color: props.color,
             fontSize: props.size
         }}>{props.label}</Text>

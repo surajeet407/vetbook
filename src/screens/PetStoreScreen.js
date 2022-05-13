@@ -297,7 +297,7 @@ const PetStoreScreen = ({navigation, route}) => {
                 elevation: 10
                 }}>
                 <Icon onPress={onPressFileUploadButton} type={Icons.MaterialIcons} name="upload-file" color={Colors.white} size={25} />
-                <Title label="Upload" size={10} color={Colors.darkGray}/>
+                <Title label="Upload" size={10} color={Colors.darkOverlayColor}/>
             </Animatable.View>
             )}
             <LandingHeader

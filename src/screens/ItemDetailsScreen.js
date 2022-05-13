@@ -32,8 +32,8 @@ import i18n from '../util/i18n';
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ItemDetailScreen = ({navigation, route}) => {
-    const [reviews, 
-        setReviews] = useState(route.params.item.review? route.params.item.review:[]);
+    const [ratings, 
+        setRatings] = useState(route.params.item.review? route.params.item.review:[]);
     const isFocused = useIsFocused();
     const [ratingCountInd,
         setRatingCountInd] = useState(0)
@@ -278,7 +278,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                 text1: "Select at least one start to rate...",
                 position: 'bottom',
                 visibilityTime: 1500,
-                bottomOffset: 220,
+                bottomOffset: 120,
                 props: {
                     backgroundColor: '#ea5e48'
                 }
@@ -289,154 +289,136 @@ const ItemDetailScreen = ({navigation, route}) => {
             .once('value')
             .then(snapshot => {
                 if(snapshot.val()) {
-                    let reviewData, mainData = snapshot.val(), path, count = 0
+                    let mainData = snapshot.val()
                     for(let i = 0; i < mainData.length; i++) {
-                        if(mainData[i].id === route.params.item.id) {
-                            count++
-                            path = i;
-                            reviewData = mainData[i]
-                        }
-                    }
-                    if(count > 0) {
-                        if(ratingCountInd === 1) {
-                            reviewData.reviews[4].value = parseInt(ar[4].value) + 1
-                            if(reviewData.reviews[3].value >= 1) {
-                                reviewData.reviews[3].value = parseInt(ar[4].value) - 1
-                            }
-                            if(reviewData.reviews[2].value >= 1) {
-                                reviewData.reviews[2].value = parseInt(ar[4].value) - 1
-                            } 
-                            if(reviewData.reviews[1].value >= 1) {
-                                reviewData.reviews[1].value = parseInt(ar[4].value) - 1
-                            } 
-                            if(reviewData.reviews[0].value >= 1) {
-                                reviewData.reviews[0].value = parseInt(ar[4].value) - 1
-                            }
-                        } else if(ratingCountInd === 2) {
-                            reviewData.reviews[3].value = parseInt(ar[3].value) + 1
-                            if(reviewData.reviews[4].value >= 1) {
-                                reviewData.reviews[4].value = parseInt(ar[4].value) - 1
-                            }
-                            if(reviewData.reviews[2].value >= 1) {
-                                reviewData.reviews[2].value = parseInt(ar[4].value) - 1
-                            } 
-                            if(reviewData.reviews[1].value >= 1) {
-                                reviewData.reviews[1].value = parseInt(ar[4].value) - 1
-                            } 
-                            if(reviewData.reviews[0].value >= 1) {
-                                reviewData.reviews[0].value = parseInt(ar[4].value) - 1
-                            }
-                        } else if(ratingCountInd === 3) {
-                            reviewData.reviews[2].value = parseInt(ar[2].value) + 1
-                            if(reviewData.reviews[3].value >= 1) {
-                                reviewData.reviews[3].value = parseInt(ar[4].value) - 1
-                            }
-                            if(reviewData.reviews[4].value >= 1) {
-                                reviewData.reviews[4].value = parseInt(ar[4].value) - 1
-                            } 
-                            if(reviewData.reviews[1].value >= 1) {
-                                reviewData.reviews[1].value = parseInt(ar[4].value) - 1
-                            } 
-                            if(reviewData.reviews[0].value >= 1) {
-                                reviewData.reviews[0].value = parseInt(ar[4].value) - 1
-                            }
-                        } else if(ratingCountInd === 4) {
-                            reviewData.reviews[1].value = parseInt(ar[1].value) + 1
-                            if(reviewData.reviews[3].value >= 1) {
-                                reviewData.reviews[3].value = parseInt(ar[4].value) - 1
-                            }
-                            if(reviewData.reviews[2].value >= 1) {
-                                reviewData.reviews[2].value = parseInt(ar[4].value) - 1
-                            } 
-                            if(reviewData.reviews[4].value >= 1) {
-                                reviewData.reviews[4].value = parseInt(ar[4].value) - 1
-                            } 
-                            if(reviewData.reviews[0].value >= 1) {
-                                reviewData.reviews[0].value = parseInt(ar[4].value) - 1
-                            }
-                        } else if(ratingCountInd === 5){
-                            reviewData.reviews[0].value = parseInt(ar[0].value) + 1
-                            if(reviewData.reviews[3].value >= 1) {
-                                reviewData.reviews[3].value = parseInt(ar[4].value) - 1
-                            }
-                            if(reviewData.reviews[2].value >= 1) {
-                                reviewData.reviews[2].value = parseInt(ar[4].value) - 1
-                            } 
-                            if(reviewData.reviews[1].value >= 1) {
-                                reviewData.reviews[1].value = parseInt(ar[4].value) - 1
-                            } 
-                            if(reviewData.reviews[4].value >= 1) {
-                                reviewData.reviews[4].value = parseInt(ar[4].value) - 1
-                            }
-                        }
-                        mainData[path].reviews = reviewData.reviews
-                    } else {
-                        let updatedData = snapshot.val()
-                        for(let i = 0; i < updatedData.length; i++) {
-                            if(updatedData[i].id === route.params.item.id) {
-                                updatedData[i].phoneNo.push(phoneNo)
-                                if(ratingCountInd === 1) {
-                                    updatedData[i].reviews[4].value = 1
-                                } else if(ratingCountInd === 2) {
-                                    updatedData[i].reviews[3].value = 1
-                                } else if(ratingCountInd === 3) {
-                                    updatedData[i].reviews[2].value = 1
-                                } else if(ratingCountInd === 4) {
-                                    updatedData[i].reviews[1].value = 1
-                                } else if(ratingCountInd === 5) {
-                                    updatedData[i].reviews[0].value = 1
+                        if(mainData[i].itemId === route.params.item.id) {
+                            if(ratingCountInd === 1) {
+                                mainData[i].ratings[4].value = parseInt(mainData[i].ratings[4].value) + 1
+                                if(mainData[i].ratings[3].value >= 1) {
+                                    mainData[i].ratings[3].value = parseInt(mainData[i].ratings[4].value) - 1
                                 }
-                                break;
-                            } 
+                                if(mainData[i].ratings[2].value >= 1) {
+                                    mainData[i].ratings[2].value = parseInt(mainData[i].ratings[2].value) - 1
+                                } 
+                                if(mainData[i].ratings[1].value >= 1) {
+                                    mainData[i].ratings[1].value = parseInt(mainData[i].ratings[1].value) - 1
+                                } 
+                                if(mainData[i].ratings[0].value >= 1) {
+                                    mainData[i].ratings[0].value = parseInt(mainData[i].ratings[0].value) - 1
+                                }
+                            } else if(ratingCountInd === 2) {
+                                mainData[i].ratings[3].value = parseInt(mainData[i].ratings[3].value) + 1
+                                if(mainData[i].ratings[4].value >= 1) {
+                                    mainData[i].ratings[4].value = parseInt(mainData[i].ratings[4].value) - 1
+                                }
+                                if(mainData[i].ratings[2].value >= 1) {
+                                    mainData[i].ratings[2].value = parseInt(mainData[i].ratings[2].value) - 1
+                                } 
+                                if(mainData[i].ratings[1].value >= 1) {
+                                    mainData[i].ratings[1].value = parseInt(mainData[i].ratings[1].value) - 1
+                                } 
+                                if(mainData[i].ratings[0].value >= 1) {
+                                    mainData[i].ratings[0].value = parseInt(mainData[i].ratings[0].value) - 1
+                                }
+                            } else if(ratingCountInd === 3) {
+                                mainData[i].ratings[2].value = parseInt(mainData[i].ratings[2].value) + 1
+                                if(mainData[i].ratings[3].value >= 1) {
+                                    mainData[i].ratings[3].value = parseInt(mainData[i].ratings[3].value) - 1
+                                }
+                                if(mainData[i].ratings[4].value >= 1) {
+                                    mainData[i].ratings[4].value = parseInt(mainData[i].ratings[4].value) - 1
+                                } 
+                                if(mainData[i].ratings[1].value >= 1) {
+                                    mainData[i].ratings[1].value = parseInt(mainData[i].ratings[1].value) - 1
+                                } 
+                                if(mainData[i].ratings[0].value >= 1) {
+                                    mainData[i].ratings[0].value = parseInt(mainData[i].ratings[0].value) - 1
+                                }
+                            } else if(ratingCountInd === 4) {
+                                mainData[i].ratings[1].value = parseInt(mainData[i].ratings[1].value) + 1
+                                if(mainData[i].ratings[3].value >= 1) {
+                                    mainData[i].ratings[3].value = parseInt(mainData[i].ratings[3].value) - 1
+                                }
+                                if(mainData[i].ratings[2].value >= 1) {
+                                    mainData[i].ratings[2].value = parseInt(mainData[i].ratings[2].value) - 1
+                                } 
+                                if(mainData[i].ratings[4].value >= 1) {
+                                    mainData[i].ratings[4].value = parseInt(mainData[i].ratings[4].value) - 1
+                                } 
+                                if(mainData[i].ratings[0].value >= 1) {
+                                    mainData[i].ratings[0].value = parseInt(mainData[i].ratings[0].value) - 1
+                                }
+                            } else if(ratingCountInd === 5){
+                                mainData[i].ratings[0].value = parseInt(mainData[i].ratings[0].value) + 1
+                                if(mainData[i].ratings[3].value >= 1) {
+                                    mainData[i].ratings[3].value = parseInt(mainData[i].ratings[3].value) - 1
+                                }
+                                if(mainData[i].ratings[2].value >= 1) {
+                                    mainData[i].ratings[2].value = parseInt(mainData[i].ratings[2].value) - 1
+                                } 
+                                if(mainData[i].ratings[1].value >= 1) {
+                                    mainData[i].ratings[1].value = parseInt(mainData[i].ratings[1].value) - 1
+                                } 
+                                if(mainData[i].ratings[4].value >= 1) {
+                                    mainData[i].ratings[4].value = parseInt(mainData[i].ratings[4].value) - 1
+                                }
+                            }
+                            break
                         }
-                        database()
-                            .ref("/reviews").set(data).then(() => {
-                                getReviews()
-                        })
-                    }
-                } else {
-                    let phoneNoAr = []
-                    phoneNoAr.push(phoneNo)
-                    let data = {
-                        reviewId: uuid.v4(),
-                        itemId: route.params.item.id,
-                        phonNo: phoneNoAr,
-                        date: moment().format('yyyy-MM-DD').toString(),
-                        reviews: [{value: 0},{value: 0},{value: 0},{value: 0},{value: 0}]
-                    }
-                    if(ratingCountInd === 1) {
-                        data.reviews[4].value = 1
-                    } else if(ratingCountInd === 2) {
-                        data.reviews[3].value = 1
-                    } else if(ratingCountInd === 3) {
-                        data.reviews[2].value = 1
-                    } else if(ratingCountInd === 4) {
-                        data.reviews[1].value = 1
-                    } else if(ratingCountInd === 5) {
-                        data.reviews[0].value = 1
                     }
                     database()
-                        .ref("/reviews").set(data).then(() => {
-                            getReviews()
+                        .ref("/reviews").set(mainData).then(() => {
+                            getRatingAndReviews()
+                    })
+                } else {
+                    let reviewsAr = [],
+                        data = {
+                            id: uuid.v4(),
+                            itemId: route.params.item.id,
+                            reviews: [{
+                                phoneNo: phoneNo,
+                                comment: ""
+                            }],
+                            date: moment().format('yyyy-MM-DD').toString(),
+                            ratings: [{value: 0},{value: 0},{value: 0},{value: 0},{value: 0}]
+                        }
+                    if(ratingCountInd === 1) {
+                        data.ratings[4].value = 1
+                    } else if(ratingCountInd === 2) {
+                        data.ratings[3].value = 1
+                    } else if(ratingCountInd === 3) {
+                        data.ratings[2].value = 1
+                    } else if(ratingCountInd === 4) {
+                        data.ratings[1].value = 1
+                    } else if(ratingCountInd === 5) {
+                        data.ratings[0].value = 1
+                    }
+                    reviewsAr.push(data)
+                    database()
+                        .ref("/reviews").set(reviewsAr).then(() => {
+                            getRatingAndReviews()
                     })
                 }
             })
         }
         
     }
-    const getReviews = () => {
+    const getRatingAndReviews = () => {
         database()
             .ref("/reviews")
             .once('value')
             .then(snapshot => {
+                console.log(snapshot.val())
                 if(snapshot.val()) {
+                    console.log(snapshot.val())
                     for(let i = 0; i < snapshot.val().length; i++) {
-                        if(snapshot.val()[i].id === route.params.item.id) {
-                            setReviews(snapshot.val()[i].reviews)
+                        if(snapshot.val()[i].itemId === route.params.item.id) {
+                            console.log(snapshot.val()[i].ratings)
+                            setRatings(snapshot.val()[i].ratings)
                         }
                     }
                 } else {
-                    setReviews([])
+                    setRatings([])
                 }
         })
     }
@@ -447,7 +429,7 @@ const ItemDetailScreen = ({navigation, route}) => {
 
     useEffect(() => {
         if (isFocused) {
-            getReviews()
+            getRatingAndReviews()
             getCartItemCount()
         }
     }, [isFocused]);
@@ -686,7 +668,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                     </View>
                     :
                     <View style={{marginTop: 5}}>
-                        {reviews.length > 0 && (
+                        {ratings.length > 0 && (
                         <View>
                             <View style={{marginBottom: 10, alignItems: 'center'}}>
                                 <View style={{alignItems: 'center', borderBottomColor: Colors.darkGray, borderBottomWidth: 2, width: 160, paddingVertical: 5}}>
@@ -694,7 +676,6 @@ const ItemDetailScreen = ({navigation, route}) => {
                                 </View>
                             </View>
                             <Review rightTextStyle={{
-                                color: Colors.secondary,
                                 fontSize: 12,
                                 fontFamily: 'Oswald-Medium'
                             }} reviewTypeStyle={{
@@ -704,7 +685,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                             }} barFillStyle={{
                                 marginRight: -5,
                                 height: 10
-                            }} showCount={true} reviews={reviews} />
+                            }} showCount={true} reviews={ratings} />
                             
                         </View>
                         )}

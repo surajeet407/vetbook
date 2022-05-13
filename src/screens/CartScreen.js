@@ -13,6 +13,7 @@ import {
     ImageBackground
 } from 'react-native';
 
+import { CommonActions } from '@react-navigation/native';
 import Colors from '../util/Colors';
 import Button from '../reusable_elements/Button';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
@@ -123,10 +124,15 @@ const CartScreen = ({navigation, route}) => {
     }
     const onPressButton = () => {
         if (total === 0) {
-            navigation.navigate(navigation.navigate("HomeBottomTabBar", {
-                screen: "PetStore",
-                status: status
-            }));
+            navigation.dispatch(
+                CommonActions.navigate({
+                  name: 'HomeBottomTabBar',
+                  screen: "PetStore",
+                  params: {
+                    status: status
+                  },
+                })
+            );
         } else {
             navigation.navigate("Confirm", {
                 details: {

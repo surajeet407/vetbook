@@ -333,7 +333,7 @@ const CartScreen = ({navigation, route}) => {
                                                 fontFamily: 'Oswald-Medium',
                                                 fontSize: 20,
                                                 color: Colors.darkGray
-                                            }}>{item.quantity}</Text>
+                                            }}>{item.quantity} (Unit)</Text>
                                         </View>
                                         <NumericInput
                                             totalWidth={100}
@@ -348,11 +348,11 @@ const CartScreen = ({navigation, route}) => {
                                             maxValue={5}
                                             textColor={Colors.black}
                                             iconStyle={{
-                                            color: Colors.primary,
+                                            color: Colors.white,
                                             fontSize: 20
                                         }}
-                                            rightButtonBackgroundColor={Colors.appBackground}
-                                            leftButtonBackgroundColor={Colors.appBackground}/> 
+                                            rightButtonBackgroundColor={Colors.green3}
+                                            leftButtonBackgroundColor={Colors.red}/> 
                                         {/* <Text style={{ fontFamily: 'PTSerif-Bold', fontSize: 18, color: 'grey' }}>Price: {item.discountPrice} /-</Text> */}
                                     </View>
                                 </View>

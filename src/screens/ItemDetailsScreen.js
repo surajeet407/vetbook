@@ -619,11 +619,11 @@ const ItemDetailScreen = ({navigation, route}) => {
                                     })}
                                         textColor={Colors.black}
                                         iconStyle={{
-                                        color: Colors.primary,
+                                        color: Colors.white,
                                         fontSize: 20
                                     }}
-                                        rightButtonBackgroundColor={Colors.appBackground}
-                                        leftButtonBackgroundColor={Colors.appBackground}/>
+                                        rightButtonBackgroundColor={Colors.green3}
+                                        leftButtonBackgroundColor={Colors.red}/>
                                 </Animatable.View>
                                 <Animatable.View
                                     delay={100}

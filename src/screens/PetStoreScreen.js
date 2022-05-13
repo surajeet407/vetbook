@@ -435,7 +435,7 @@ const PetStoreScreen = ({navigation, route}) => {
                 </ScrollView>
             </View>
             <RBSheet
-                height={220}
+                height={status === 'loggedIn'? 220: 280}
                 ref={refRBSheet}
                 closeOnDragDown={true}
                 closeOnPressMask={true}

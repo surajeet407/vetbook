@@ -93,10 +93,7 @@ const SettingsScreen = ({navigation, route}) => {
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                             }}
-                                onPress={() => navigation.navigate("ManageAddress", {
-                                showSelection: false,
-                                status: status
-                            })}>
+                                onPress={() => navigation.navigate("Pescriptions", {status: status})}>
                                 <View
                                     style={{
                                     flexDirection: 'row',
@@ -105,26 +102,25 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Icon
                                         style={{
                                         marginRight: 10,
-                                        marginTop: 5
+                                        marginTop: 10
                                     }}
-                                        type={Icons.Entypo}
-                                        name={'address'}
+                                        type={Icons.AntDesign}
+                                        name={'filetext1'}
                                         size={20}
                                         color={Colors.primary}/>
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 18
-                                    }}>{i18n.manageAddress}</Text>
+                                        fontSize: 18,
+                                        marginTop: 10
+                                    }}>{i18n.uploadedPescription}</Text>
                                 </View>
                                 <Icon
                                     type={Icons.MaterialIcons}
                                     name={'keyboard-arrow-right'}
                                     size={20}
                                     color={Colors.secondary}/>
-
                             </TouchableOpacity>
-
                             <TouchableOpacity
                                 style={{
                                 paddingVertical: 8,
@@ -143,7 +139,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Icon
                                         style={{
                                         marginRight: 10,
-                                        marginTop: 5
+                                        marginTop: 10
                                     }}
                                         type={Icons.Octicons}
                                         name={'list-ordered'}
@@ -171,6 +167,46 @@ const SettingsScreen = ({navigation, route}) => {
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                             }}
+                                onPress={() => navigation.navigate("ManageAddress", {
+                                showSelection: false,
+                                status: status
+                            })}>
+                                <View
+                                    style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
+                                }}>
+                                    <Icon
+                                        style={{
+                                        marginRight: 10,
+                                        marginTop: 10
+                                    }}
+                                        type={Icons.Entypo}
+                                        name={'address'}
+                                        size={20}
+                                        color={Colors.primary}/>
+                                    <Text
+                                        style={{
+                                        fontFamily: 'PTSerif-Bold',
+                                        fontSize: 18
+                                    }}>{i18n.manageAddress}</Text>
+                                </View>
+                                <Icon
+                                    type={Icons.MaterialIcons}
+                                    name={'keyboard-arrow-right'}
+                                    size={20}
+                                    color={Colors.secondary}/>
+
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                paddingVertical: 8,
+                                borderColor: Colors.gray,
+                                borderBottomWidth: 1,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}
                                 onPress={() => navigation.navigate("ServicesBottomTabBar", {screen: "Services"})}>
                                 <View
                                     style={{
@@ -180,7 +216,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Icon
                                         style={{
                                         marginRight: 10,
-                                        marginTop: 5
+                                        marginTop: 10
                                     }}
                                         type={Icons.Ionicons}
                                         name={'bicycle'}
@@ -217,7 +253,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Icon
                                         style={{
                                         marginRight: 10,
-                                        marginTop: 5
+                                        marginTop: 10
                                     }}
                                         type={Icons.Ionicons}
                                         name={'location-sharp'}

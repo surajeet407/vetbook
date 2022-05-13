@@ -30,6 +30,8 @@ import Icon, {Icons} from '../util/Icons';
 import * as Animatable from 'react-native-animatable';
 import RBSheet from "react-native-raw-bottom-sheet";
 import Button from '../reusable_elements/Button';
+import ImgToBase64 from 'react-native-image-base64';
+import moment from 'moment';
 import DocumentPicker, {
     DirectoryPickerResponse,
     DocumentPickerResponse,
@@ -203,13 +205,29 @@ const PetStoreScreen = ({navigation, route}) => {
             const data = new FormData();
             data.append('name', 'Image Upload');
             data.append('file_attachment', fileToUpload);
-            axios.post('/user', data)
-              .then(function (response) {
-                console.log(response);
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
+            ImgToBase64.getBase64String(singleFile.fileCopyUri)
+                .then(async base64String => {
+                    let phoneNo = await AsyncStorage.getItem("phoneNo")
+                    let ar = [], obj ={
+                        phoneNo: phoneNo,
+                        image: base64String,
+                        fileDetails: singleFile,
+                        date: moment().format('yyyy-MM-DD').toString()
+                    }
+                    database()
+                    .ref("/users/" + phoneNo + "/pescription")
+                        .once('value')
+                        .then(snapshot => {
+                        if (snapshot.val()) {
+                            ar = snapshot.val()
+                        }
+                        ar.push(obj)
+                        database()
+                            .ref("/users/" + phoneNo + "/pescription").set(ar)
+                    })
+                })
+                .catch(err => console.log(err));
+            
         } else {
             Toast.show({
                 type: 'customToast',
@@ -257,7 +275,7 @@ const PetStoreScreen = ({navigation, route}) => {
             flex: 1,
             backgroundColor: Colors.appBackground
         }}>
-            {selectedCategoryIndex === 0 && ( 
+            {(selectedCategoryIndex === 0 && status === 'loggedIn') && ( 
             <Animatable.View animation={'fadeInUp'} style={{
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -404,7 +422,7 @@ const PetStoreScreen = ({navigation, route}) => {
                             }}>
                                 <Title label="No items are found..." size={20} color={Colors.darkGray}/>
                             </View>
-}
+                        }
                     </View>
                 </ScrollView>
             </View>

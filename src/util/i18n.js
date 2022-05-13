@@ -24,6 +24,7 @@ export default {
     thirdSectionTitle : "Legal",
     manageAddress : "Manage Address",
     trackService : "Track Service",
+    uploadedPescription: "Uploaded Pescription",
     orders : "Orders",
     services : "Services",
     relocations : "Relocations",

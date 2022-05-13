@@ -19,6 +19,18 @@
         android:name="com.google.android.geo.API_KEY"
         android:value="API_KEY"/>
 
+        
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+
+    <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+
+    <application
+      android:requestLegacyExternalStorage="true"
+    
+
 6.set up firebase project follow https://www.youtube.com/watch?v=_msNczBgHUE
 
 7.run this command 

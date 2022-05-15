@@ -276,9 +276,10 @@ const ItemDetailScreen = ({navigation, route}) => {
             .once('value')
             .then(snapshot => {
                 if(snapshot.val()) {
-                    let ratingsArray, exeCount = 0, goodCount = 0, averageCount = 0, belowAverageCount = 0, poorCount = 0
+                    let ratingsArray, ratingCount = 0, exeCount = 0, goodCount = 0, averageCount = 0, belowAverageCount = 0, poorCount = 0
                     for(let i = 0; i < snapshot.val().length; i++) {
                         if(snapshot.val()[i].itemId === route.params.item.id) {
+                            ratingCount++
                             if(snapshot.val()[i].ratings === 5) {
                                 exeCount++
                             } else if(snapshot.val()[i].ratings === 4) {
@@ -292,21 +293,26 @@ const ItemDetailScreen = ({navigation, route}) => {
                             }
                         }
                     }
-                    ratingsArray = [
-                        {
-                            value: exeCount
-                        }, {
-                            value: goodCount
-                        }, {
-                            value: averageCount
-                        }, {
-                            value: belowAverageCount
-                        }, {
-                            value: poorCount
-                        }
-                    ]
-                    console.log(ratingsArray)
-                    setRatings(ratingsArray)
+                    if(ratingCount > 0) {
+                        ratingsArray = [
+                            {
+                                value: exeCount
+                            }, {
+                                value: goodCount
+                            }, {
+                                value: averageCount
+                            }, {
+                                value: belowAverageCount
+                            }, {
+                                value: poorCount
+                            }
+                        ]
+                        console.log(ratingsArray)
+                        setRatings(ratingsArray)
+                    } else {
+                        setRatings([])
+                    }
+                    
                 } else {
                     setRatings([])
                 }
@@ -609,13 +615,14 @@ const ItemDetailScreen = ({navigation, route}) => {
                     </View>
                     :
                     <View style={{marginTop: 5}}>
-                        {ratings.length > 0 && (
+                        
                         <View>
                             <View style={{marginBottom: 10, alignItems: 'center'}}>
                                 <View style={{alignItems: 'center', borderBottomColor: Colors.darkGray, borderBottomWidth: 2, width: 160, paddingVertical: 5}}>
                                     <Title size={18} bold={true} label={"Customer Ratings"}/>
                                 </View>
                             </View>
+                            {ratings.length > 0? 
                             <Review rightTextStyle={{
                                 fontSize: 12,
                                 fontFamily: 'Oswald-Medium'
@@ -627,9 +634,12 @@ const ItemDetailScreen = ({navigation, route}) => {
                                 marginRight: -5,
                                 height: 10
                             }} showCount={true} reviews={ratings} />
-                            
+                            :
+                            <View style={{marginBottom: 10, alignItems: 'center'}}>
+                                <Title fontFamily={'Redressed-Regular'} color={Colors.secondary} size={15} bold={true} label={"There is no ratings on this item..., be the first to rate"}/>
+                            </View>
+                            }
                         </View>
-                        )}
                         {route.params.status === 'loggedIn'?
                         <View style={{marginTop: 10, marginBottom: 10}}>
                             <View

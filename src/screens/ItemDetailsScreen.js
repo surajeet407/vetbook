@@ -246,23 +246,16 @@ const ItemDetailScreen = ({navigation, route}) => {
                     }
                 })
         } else {
-            AsyncStorage
-                .getItem('phoneNo')
-                .then((data, msg) => {
-                    setPhoneNo(data)
-                    if (data) {
-                        database()
-                            .ref('/users/' + data + "/cartItems")
-                            .once('value')
-                            .then(snapshot => {
-                                if (snapshot.val()) {
-                                    setCartItemCount(snapshot.val().length)
-                                } else {
-                                    setCartItemCount("0")
-                                }
-                            })
+            database()
+                .ref('/users/' + phoneNo + "/cartItems")
+                .once('value')
+                .then(snapshot => {
+                    if (snapshot.val()) {
+                        setCartItemCount(snapshot.val().length)
+                    } else {
+                        setCartItemCount("0")
                     }
-                })
+            })
         }
 
     }
@@ -279,6 +272,9 @@ const ItemDetailScreen = ({navigation, route}) => {
                     let ratingsArray, ratingCount = 0, exeCount = 0, goodCount = 0, averageCount = 0, belowAverageCount = 0, poorCount = 0
                     for(let i = 0; i < snapshot.val().length; i++) {
                         if(snapshot.val()[i].itemId === route.params.item.id) {
+                            if(snapshot.val()[i].userId === phoneNo) {
+                               setRatingCountInd(snapshot.val()[i].ratings) 
+                            }
                             ratingCount++
                             if(snapshot.val()[i].ratings === 5) {
                                 exeCount++
@@ -307,7 +303,6 @@ const ItemDetailScreen = ({navigation, route}) => {
                                 value: poorCount
                             }
                         ]
-                        console.log(ratingsArray)
                         setRatings(ratingsArray)
                     } else {
                         setRatings([])
@@ -376,7 +371,14 @@ const ItemDetailScreen = ({navigation, route}) => {
 
     useEffect(() => {
         if (isFocused) {
-            getRatingAndReviews()
+            if(status === 'loggedIn') {
+                AsyncStorage
+                    .getItem('phoneNo')
+                    .then((phoneNo, msg) => {
+                        setPhoneNo(phoneNo)
+                        getRatingAndReviews()
+                })
+            }
             getCartItemCount()
         }
     }, [isFocused]);

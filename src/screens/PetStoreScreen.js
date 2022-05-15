@@ -416,7 +416,8 @@ const PetStoreScreen = ({navigation, route}) => {
                                         })}
                                             name={item.name}
                                             image={item.image}
-                                            price={item.discountPrice}
+                                            actualPrice={item.actualPrice}
+                                            discountPrice={item.discountPrice}
                                             index={item.id}
                                             width={Dimensions
                                             .get('screen')

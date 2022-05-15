@@ -270,153 +270,43 @@ const ItemDetailScreen = ({navigation, route}) => {
     const handleCustomIndexSelect = (index) => {
         setCatIndex(index)
     }
-
-    const onPressSubmit = () => {
-        if(ratingCountInd === 0) {
-            Toast.show({
-                type: 'customToast',
-                text1: "Select at least one start to rate...",
-                position: 'bottom',
-                visibilityTime: 1500,
-                bottomOffset: 120,
-                props: {
-                    backgroundColor: '#ea5e48'
-                }
-            })
-        } else {
-            database()
-            .ref("/reviews")
-            .once('value')
-            .then(snapshot => {
-                if(snapshot.val()) {
-                    let mainData = snapshot.val()
-                    for(let i = 0; i < mainData.length; i++) {
-                        if(mainData[i].itemId === route.params.item.id) {
-                            if(ratingCountInd === 1) {
-                                mainData[i].ratings[4].value = parseInt(mainData[i].ratings[4].value) + 1
-                                if(mainData[i].ratings[3].value >= 1) {
-                                    mainData[i].ratings[3].value = parseInt(mainData[i].ratings[4].value) - 1
-                                }
-                                if(mainData[i].ratings[2].value >= 1) {
-                                    mainData[i].ratings[2].value = parseInt(mainData[i].ratings[2].value) - 1
-                                } 
-                                if(mainData[i].ratings[1].value >= 1) {
-                                    mainData[i].ratings[1].value = parseInt(mainData[i].ratings[1].value) - 1
-                                } 
-                                if(mainData[i].ratings[0].value >= 1) {
-                                    mainData[i].ratings[0].value = parseInt(mainData[i].ratings[0].value) - 1
-                                }
-                            } else if(ratingCountInd === 2) {
-                                mainData[i].ratings[3].value = parseInt(mainData[i].ratings[3].value) + 1
-                                if(mainData[i].ratings[4].value >= 1) {
-                                    mainData[i].ratings[4].value = parseInt(mainData[i].ratings[4].value) - 1
-                                }
-                                if(mainData[i].ratings[2].value >= 1) {
-                                    mainData[i].ratings[2].value = parseInt(mainData[i].ratings[2].value) - 1
-                                } 
-                                if(mainData[i].ratings[1].value >= 1) {
-                                    mainData[i].ratings[1].value = parseInt(mainData[i].ratings[1].value) - 1
-                                } 
-                                if(mainData[i].ratings[0].value >= 1) {
-                                    mainData[i].ratings[0].value = parseInt(mainData[i].ratings[0].value) - 1
-                                }
-                            } else if(ratingCountInd === 3) {
-                                mainData[i].ratings[2].value = parseInt(mainData[i].ratings[2].value) + 1
-                                if(mainData[i].ratings[3].value >= 1) {
-                                    mainData[i].ratings[3].value = parseInt(mainData[i].ratings[3].value) - 1
-                                }
-                                if(mainData[i].ratings[4].value >= 1) {
-                                    mainData[i].ratings[4].value = parseInt(mainData[i].ratings[4].value) - 1
-                                } 
-                                if(mainData[i].ratings[1].value >= 1) {
-                                    mainData[i].ratings[1].value = parseInt(mainData[i].ratings[1].value) - 1
-                                } 
-                                if(mainData[i].ratings[0].value >= 1) {
-                                    mainData[i].ratings[0].value = parseInt(mainData[i].ratings[0].value) - 1
-                                }
-                            } else if(ratingCountInd === 4) {
-                                mainData[i].ratings[1].value = parseInt(mainData[i].ratings[1].value) + 1
-                                if(mainData[i].ratings[3].value >= 1) {
-                                    mainData[i].ratings[3].value = parseInt(mainData[i].ratings[3].value) - 1
-                                }
-                                if(mainData[i].ratings[2].value >= 1) {
-                                    mainData[i].ratings[2].value = parseInt(mainData[i].ratings[2].value) - 1
-                                } 
-                                if(mainData[i].ratings[4].value >= 1) {
-                                    mainData[i].ratings[4].value = parseInt(mainData[i].ratings[4].value) - 1
-                                } 
-                                if(mainData[i].ratings[0].value >= 1) {
-                                    mainData[i].ratings[0].value = parseInt(mainData[i].ratings[0].value) - 1
-                                }
-                            } else if(ratingCountInd === 5){
-                                mainData[i].ratings[0].value = parseInt(mainData[i].ratings[0].value) + 1
-                                if(mainData[i].ratings[3].value >= 1) {
-                                    mainData[i].ratings[3].value = parseInt(mainData[i].ratings[3].value) - 1
-                                }
-                                if(mainData[i].ratings[2].value >= 1) {
-                                    mainData[i].ratings[2].value = parseInt(mainData[i].ratings[2].value) - 1
-                                } 
-                                if(mainData[i].ratings[1].value >= 1) {
-                                    mainData[i].ratings[1].value = parseInt(mainData[i].ratings[1].value) - 1
-                                } 
-                                if(mainData[i].ratings[4].value >= 1) {
-                                    mainData[i].ratings[4].value = parseInt(mainData[i].ratings[4].value) - 1
-                                }
-                            }
-                            break
-                        }
-                    }
-                    database()
-                        .ref("/reviews").set(mainData).then(() => {
-                            getRatingAndReviews()
-                    })
-                } else {
-                    let reviewsAr = [],
-                        data = {
-                            id: uuid.v4(),
-                            itemId: route.params.item.id,
-                            reviews: [{
-                                phoneNo: phoneNo,
-                                comment: ""
-                            }],
-                            date: moment().format('yyyy-MM-DD').toString(),
-                            ratings: [{value: 0},{value: 0},{value: 0},{value: 0},{value: 0}]
-                        }
-                    if(ratingCountInd === 1) {
-                        data.ratings[4].value = 1
-                    } else if(ratingCountInd === 2) {
-                        data.ratings[3].value = 1
-                    } else if(ratingCountInd === 3) {
-                        data.ratings[2].value = 1
-                    } else if(ratingCountInd === 4) {
-                        data.ratings[1].value = 1
-                    } else if(ratingCountInd === 5) {
-                        data.ratings[0].value = 1
-                    }
-                    reviewsAr.push(data)
-                    database()
-                        .ref("/reviews").set(reviewsAr).then(() => {
-                            getRatingAndReviews()
-                    })
-                }
-            })
-        }
-        
-    }
     const getRatingAndReviews = () => {
         database()
             .ref("/reviews")
             .once('value')
             .then(snapshot => {
-                console.log(snapshot.val())
                 if(snapshot.val()) {
-                    console.log(snapshot.val())
+                    let ratingsArray, exeCount = 0, goodCount = 0, averageCount = 0, belowAverageCount = 0, poorCount = 0
                     for(let i = 0; i < snapshot.val().length; i++) {
                         if(snapshot.val()[i].itemId === route.params.item.id) {
-                            console.log(snapshot.val()[i].ratings)
-                            setRatings(snapshot.val()[i].ratings)
+                            if(snapshot.val()[i].ratings === 5) {
+                                exeCount++
+                            } else if(snapshot.val()[i].ratings === 4) {
+                                goodCount++
+                            } else if(snapshot.val()[i].ratings === 3) {
+                                averageCount++
+                            } else if(snapshot.val()[i].ratings === 2) {
+                                belowAverageCount++
+                            } else if(snapshot.val()[i].ratings === 1) {
+                                poorCount++
+                            }
                         }
                     }
+                    ratingsArray = [
+                        {
+                            value: exeCount
+                        }, {
+                            value: goodCount
+                        }, {
+                            value: averageCount
+                        }, {
+                            value: belowAverageCount
+                        }, {
+                            value: poorCount
+                        }
+                    ]
+                    console.log(ratingsArray)
+                    setRatings(ratingsArray)
                 } else {
                     setRatings([])
                 }
@@ -425,6 +315,57 @@ const ItemDetailScreen = ({navigation, route}) => {
 
     const onRatingCompleted = (ratingCountInd) => {
         setRatingCountInd(ratingCountInd)
+        database()
+            .ref("/reviews")
+            .once('value')
+            .then(snapshot => {
+                if(snapshot.val()) {
+                    let mainData = snapshot.val(), count = 0
+                    for(let i = 0; i < mainData.length; i++) {
+                        if(mainData[i].itemId === route.params.item.id && mainData[i].userId === phoneNo) {
+                            count++
+                            mainData[i].ratings = ratingCountInd
+                            database()
+                            .ref("/reviews").set(mainData).then(() => {
+                                getRatingAndReviews()
+                            })
+                            break;
+                        }
+                    }
+                    if(count === 0) {
+                        let updatedReviewData = snapshot.val()
+                        let data = {
+                            userId: phoneNo,
+                            id: uuid.v4(),
+                            itemId: route.params.item.id,
+                            reviews: "",
+                            date: moment().format('yyyy-MM-DD').toString(),
+                            ratings: ratingCountInd
+                        }
+                        updatedReviewData.push(data)
+                        database()
+                        .ref("/reviews").set(updatedReviewData).then(() => {
+                            getRatingAndReviews()
+                        })
+                    }
+                    
+                } else {
+                    let ratingsAr = [],
+                    data = {
+                        userId: phoneNo,
+                        id: uuid.v4(),
+                        itemId: route.params.item.id,
+                        reviews: "",
+                        date: moment().format('yyyy-MM-DD').toString(),
+                        ratings: ratingCountInd
+                    }
+                    ratingsAr.push(data)
+                    database()
+                        .ref("/reviews").set(ratingsAr).then(() => {
+                            getRatingAndReviews()
+                    })
+                }
+            })
     }
 
     useEffect(() => {
@@ -690,7 +631,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                         </View>
                         )}
                         {route.params.status === 'loggedIn'?
-                        <View style={{marginTop: 10}}>
+                        <View style={{marginTop: 10, marginBottom: 10}}>
                             <View
                                 style={{
                                     alignItems: 'center',
@@ -711,17 +652,6 @@ const ItemDetailScreen = ({navigation, route}) => {
                                     showRating={false}
                                     style={{ paddingHorizontal: 40 }}
                                     onFinishRating={onRatingCompleted}/>
-                            </View>  
-                            <View style={{alignItems: 'center', margin: 20}}>
-                                <View style={{width: '50%'}}>
-                                    <Button
-                                        iconPostionLeft={true}
-                                        backgroundColor={Colors.primary}
-                                        useIcon={true}
-                                        title="Submit"
-                                        icon="save"
-                                        onPress={onPressSubmit}/>
-                                </View>
                             </View>
                         </View>
                         :

@@ -14,6 +14,8 @@ const StoreItems = (props) => {
             animation={props.animationStyle}
             key={props.index}
             style={{
+            backgroundColor: Colors.white,
+            elevation: 8,
             alignItems: 'center',
             justifyContent: 'space-evenly',
             margin: 10
@@ -27,7 +29,7 @@ const StoreItems = (props) => {
                 fontSize: 15,
                 fontFamily: 'Oswald-Regular'
             }}
-                title={"₹ " + props.price + " /-"}
+                title={"₹ " + props.discountPrice + " /-"}
                 color={Colors.secondary}
                 distance={50}
                 extent={0.1}>
@@ -39,16 +41,18 @@ const StoreItems = (props) => {
                     <Image
                         style={{
                         width: props.width,
-                        height: 150,
-                        borderRadius: 15
+                        height: 120
                     }}
                         source={{
                         uri: props.image
                     }}/>
                 </TouchableOpacity>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Title label={props.name} size={15} color={Colors.primary}/>
-                    <Icon name={'arrowright'} type={Icons.AntDesign} color={Colors.primary} size={20} style={{marginLeft: 5, marginTop: 5}}/>
+                <View style={{alignItems: 'center', justifyContent: 'center', padding: 5}}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Title label={props.name} size={15} color={Colors.primary}/>
+                        <Icon name={'arrowright'} type={Icons.AntDesign} color={Colors.primary} size={20} style={{marginLeft: 5, marginTop: 5}}/>
+                    </View>
+                    <Title label={"₹ " + props.actualPrice + " /- ( " + ((parseInt(props.actualPrice) - parseInt(props.discountPrice)) / 100).toFixed(1) + " % off)"} size={12} color={Colors.darkGray}/>
                 </View>
             </Label>
         </Animatable.View>

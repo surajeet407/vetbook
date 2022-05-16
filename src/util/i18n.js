@@ -29,6 +29,7 @@ export default {
     services : "Services",
     relocations : "Relocations",
     contactUs : "Contact Us",
+    chatWithUs: "Chat with Us",
     writeToUs : "Write to Us",
     terms : "Terms & Conditions",
     logOut : "Log Out",

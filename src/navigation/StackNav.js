@@ -40,8 +40,10 @@ import TrackOrderScreen from '../screens/TrackOrderScreen';
 import ChooseTimeSlotScreen from '../screens/ChooseTimeSlotScreen';
 import PescriptionsScreen from '../screens/PescriptionsScreen';
 import ItemReviewScreen from '../screens/ItemReviewScreen';
+import ChatScreen from '../screens/ChatScreen';
 import database, {firebase} from '@react-native-firebase/database';
 import i18n from '../util/i18n';
+
 
 const Stack = createNativeStackNavigator();
 const config = {
@@ -281,6 +283,12 @@ const StackNav = (params) => {
                 }}
                     name="ItemReview"
                     component={ItemReviewScreen}/>
+                <Stack.Screen
+                    options={{
+                    headerShown: false
+                }}
+                    name="Chat"
+                    component={ChatScreen}/>
                     
             </Stack.Navigator>
         </NavigationContainer>

@@ -342,7 +342,42 @@ const SettingsScreen = ({navigation, route}) => {
                                     size={20}
                                     color={Colors.secondary}/>
                             </TouchableOpacity>
-
+                            <TouchableOpacity
+                                style={{
+                                paddingVertical: 8,
+                                borderColor: Colors.gray,
+                                borderBottomWidth: 1,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}
+                                onPress={() => navigation.navigate("Chat")}>
+                                <View
+                                    style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
+                                }}>
+                                    <Icon
+                                        style={{
+                                        marginRight: 10,
+                                        marginTop: 2
+                                    }}
+                                        type={Icons.Entypo}
+                                        name={'chat'}
+                                        size={20}
+                                        color={Colors.primary}/>
+                                    <Text
+                                        style={{
+                                        fontFamily: 'PTSerif-Bold',
+                                        fontSize: 16
+                                    }}>{i18n.chatWithUs}</Text>
+                                </View>
+                                <Icon
+                                    type={Icons.MaterialIcons}
+                                    name={'keyboard-arrow-right'}
+                                    size={20}
+                                    color={Colors.secondary}/>
+                            </TouchableOpacity>
                         </Animatable.View>
                     </View>
                     <View

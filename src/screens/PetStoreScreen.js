@@ -30,8 +30,8 @@ import Icon, {Icons} from '../util/Icons';
 import * as Animatable from 'react-native-animatable';
 import RBSheet from "react-native-raw-bottom-sheet";
 import Button from '../reusable_elements/Button';
-import ImgToBase64 from 'react-native-image-base64';
 import RNFetchBlob from 'rn-fetch-blob';
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import moment from 'moment';
 import DocumentPicker, {
     DirectoryPickerResponse,
@@ -46,6 +46,7 @@ import i18n from '../util/i18n';
 const PetStoreScreen = ({navigation, route}) => {
     const refRBSheet = useRef(null)
     const isFocused = useIsFocused();
+    const [loadind, setLoading] = useState(true);
     const [singleFile, setSingleFile] = useState(null);
     const [homeAddress,
         setHomeAddress] = useState("")
@@ -144,6 +145,7 @@ const PetStoreScreen = ({navigation, route}) => {
             .ref(path)
             .on('value', snapshot => {
                 if (snapshot.val()) {
+                    setLoading(false);
                     setPetStoreItems(snapshot.val())
                 }
             })
@@ -360,79 +362,106 @@ const PetStoreScreen = ({navigation, route}) => {
                     </RNBounceable>
                 </View>
                 <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-
-                    <FlatList
-                        ref={categoryCarousel}
-                        data={petStoreCategories}
-                        scrollEnabled={true}
-                        keyExtractor={(item) => item.id}
-                        horizontal
-                        pagingEnabled
-                        bounces={false}
-                        showsHorizontalScrollIndicator={false}
-                        ItemSeparatorComponent={() => (<View style={{
-                        marginLeft: 15
-                    }}/>)}
-                        snapToAlignment={'center'}
-                        snapToInterval={Dimensions
-                        .get('window')
-                        .width / 5}
-                        getItemLayout={(data, index) => ({
-                        length: Dimensions
-                            .get('window')
-                            .width / 5,
-                        offset: Dimensions
-                            .get('window')
-                            .width / 5 * index,
-                        index
-                    })}
-                        renderItem={({item, index}) => (<HorizontalCategoryList
-                        categoryTitle={item.name}
-                        onPress={() => onPressCaraousel({index})}
-                        image={item.image}
-                        selectedCategoryIndex={selectedCategoryIndex}
-                        index={index}
-                        animationStyle="fadeInLeft"/>)}/>
-                    <View style={{
-                        marginTop: 30
-                    }}>
-                        {petStoreItems.length > 0
-                            ? <RNMasonryScroll
-                                    removeClippedSubviews={true}
-                                    columns={2}
-                                    oddColumnStyle={{
-                                    marginTop: 30
-                                }}
-                                    horizontal={false}
-                                    showsVerticalScrollIndicator={false}
-                                    keyExtractor={(item) => item.id}>
-                                    {petStoreItems.map((item, index) => <View key={index}>
-                                        <StoreItems
-                                            animationStyle="fadeInUp"
-                                            navToDetail={() => navigation.navigate("ItemDetails", {
-                                            item: item,
-                                            status: status,
-                                            type: petStoreCategories[selectedCategoryIndex].name
-                                        })}
-                                            name={item.name}
-                                            image={item.image}
-                                            actualPrice={item.actualPrice}
-                                            discountPrice={item.discountPrice}
-                                            index={item.id}
-                                            width={Dimensions
-                                            .get('screen')
-                                            .width / 2 - 40}/>
-                                    </View>)}
-                                </RNMasonryScroll>
-                            : <View
-                                style={{
-                                alignItems: 'center',
-                                marginTop: 20
-                            }}>
-                                <Title label="No items are found..." size={20} color={Colors.darkGray}/>
+                    {loadind ? 
+                    <Animatable.View animation={'fadeIn'} >
+                        <SkeletonPlaceholder style={{padding: 20}}>
+                            <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ width: 80, height: 80, borderRadius: 20 }} />
+                                <View style={{ marginLeft: 15, width: 80, height: 80, borderRadius: 20 }} />
+                                <View style={{ marginLeft: 15, width: 80, height: 80, borderRadius: 20 }} />
+                                <View style={{ marginLeft: 15, width: 80, height: 80, borderRadius: 20 }} />
+                                <View style={{ marginLeft: 15, width: 80, height: 80, borderRadius: 20 }} />
                             </View>
-                        }
+                            <View style={{ marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ width: Dimensions.get('screen').width / 2 - 30, height: 160, borderRadius: 20 }} />
+                                <View style={{marginTop: 20, marginLeft: 5, width: Dimensions.get('screen').width / 2 - 30, height: 160, borderRadius: 20 }} />
+                            </View>
+                            <View style={{ marginTop: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ width: Dimensions.get('screen').width / 2 - 30, height: 160, borderRadius: 20 }} />
+                                <View style={{marginTop: 20, marginLeft: 5, width: Dimensions.get('screen').width / 2 - 30, height: 160, borderRadius: 20 }} />
+                            </View>
+                            <View style={{ marginTop: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ width: Dimensions.get('screen').width / 2 - 30, height: 160, borderRadius: 20 }} />
+                                <View style={{marginTop: 20, marginLeft: 5, width: Dimensions.get('screen').width / 2 - 30, height: 160, borderRadius: 20 }} />
+                            </View>
+                        </SkeletonPlaceholder>
+                    </Animatable.View>
+                    :
+                    <View>
+                        <FlatList
+                            ref={categoryCarousel}
+                            data={petStoreCategories}
+                            scrollEnabled={true}
+                            keyExtractor={(item) => item.id}
+                            horizontal
+                            pagingEnabled
+                            bounces={false}
+                            showsHorizontalScrollIndicator={false}
+                            ItemSeparatorComponent={() => (<View style={{
+                            marginLeft: 15
+                        }}/>)}
+                            snapToAlignment={'center'}
+                            snapToInterval={Dimensions
+                            .get('window')
+                            .width / 5}
+                            getItemLayout={(data, index) => ({
+                            length: Dimensions
+                                .get('window')
+                                .width / 5,
+                            offset: Dimensions
+                                .get('window')
+                                .width / 5 * index,
+                            index
+                        })}
+                            renderItem={({item, index}) => (<HorizontalCategoryList
+                            categoryTitle={item.name}
+                            onPress={() => onPressCaraousel({index})}
+                            image={item.image}
+                            selectedCategoryIndex={selectedCategoryIndex}
+                            index={index}
+                            animationStyle="fadeInLeft"/>)}/>
+                        <View style={{
+                            marginTop: 30
+                        }}>
+                            {petStoreItems.length > 0
+                                ? <RNMasonryScroll
+                                        removeClippedSubviews={true}
+                                        columns={2}
+                                        oddColumnStyle={{
+                                        marginTop: 30
+                                    }}
+                                        horizontal={false}
+                                        showsVerticalScrollIndicator={false}
+                                        keyExtractor={(item) => item.id}>
+                                        {petStoreItems.map((item, index) => <View key={index}>
+                                            <StoreItems
+                                                animationStyle="fadeInUp"
+                                                navToDetail={() => navigation.navigate("ItemDetails", {
+                                                item: item,
+                                                status: status,
+                                                type: petStoreCategories[selectedCategoryIndex].name
+                                            })}
+                                                name={item.name}
+                                                image={item.image}
+                                                actualPrice={item.actualPrice}
+                                                discountPrice={item.discountPrice}
+                                                index={item.id}
+                                                width={Dimensions
+                                                .get('screen')
+                                                .width / 2 - 40}/>
+                                        </View>)}
+                                    </RNMasonryScroll>
+                                : <View
+                                    style={{
+                                    alignItems: 'center',
+                                    marginTop: 20
+                                }}>
+                                    <Title label="No items are found..." size={20} color={Colors.darkGray}/>
+                                </View>
+                            }
+                        </View>
                     </View>
+                    }
                 </ScrollView>
             </View>
             <RBSheet

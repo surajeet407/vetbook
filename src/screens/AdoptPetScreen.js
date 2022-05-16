@@ -17,10 +17,14 @@ import database from '@react-native-firebase/database';
 import RNMasonryScroll from "react-native-masonry-scrollview";
 import HorizontalCategoryList from '../reusable_elements/HorizontalCategoryList'
 import * as Animatable from 'react-native-animatable';
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import Icon, {Icons} from '../util/Icons';
+import {Searchbar} from 'react-native-paper';
 import i18n from '../util/i18n';
 
 const AdoptPetScreen = ({navigation}) => {
+    const [loadind,
+        setLoading] = useState(true);
     const [selectedCategoryIndex,
         setSelectedCategoryIndex] = useState(0);
     const [petCategories,
@@ -28,6 +32,9 @@ const AdoptPetScreen = ({navigation}) => {
     const [pets,
         setPets] = useState([]);
     const categoryCarousel = useRef(null);
+    const [searchQuery,
+        setSearchQuery] = React.useState('');
+
     const onPressCaraousel = (orgs) => {
         setSelectedCategoryIndex(orgs.index);
         categoryCarousel
@@ -59,7 +66,36 @@ const AdoptPetScreen = ({navigation}) => {
     const ITEM_SIZE = Dimensions
         .get('window')
         .width / 2 - 15;
-
+    const onChangeSearch = query => {
+        setSearchQuery(query)
+        let path = ""
+        if (petCategories[selectedCategoryIndex].name === 'Dogs') {
+            path = "/petDogs"
+        } else if (petCategories[selectedCategoryIndex].name === 'Cats') {
+            path = "/petCats"
+        } else if (petCategories[selectedCategoryIndex].name === 'Birds') {
+            path = "/petBirds"
+        } else {
+            path = "/petRabbits"
+        }
+        if (query.length > 0) {
+            database()
+                .ref(path)
+                .on('value', snapshot => {
+                    if (snapshot.val()) {
+                        setPets(snapshot.val().filter(item => item.name.toLowerCase().includes(query.toLowerCase())))
+                    }
+                })
+        } else {
+            database()
+                .ref(path)
+                .on('value', snapshot => {
+                    if (snapshot.val()) {
+                        setPets(snapshot.val())
+                    }
+                })
+        }
+    };
     const getData = () => {
         database()
             .ref('/petCategories')
@@ -72,6 +108,7 @@ const AdoptPetScreen = ({navigation}) => {
             .ref('/petDogs')
             .on('value', snapshot => {
                 if (snapshot.val()) {
+                    setLoading(false);
                     setPets(snapshot.val())
                 }
             })
@@ -103,7 +140,7 @@ const AdoptPetScreen = ({navigation}) => {
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={60}
+                headerHeight={100}
                 headerText={'Adopt'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}
@@ -121,147 +158,321 @@ const AdoptPetScreen = ({navigation}) => {
                 backgroundColor: Colors.appBackground,
                 width: '100%'
             }}>
-                <View
-                    style={{
-                    paddingHorizontal: 20,
-                    marginBottom: 140
-                }}>
-                    <FlatList
-                        ref={categoryCarousel}
-                        style={{
-                        marginTop: 20,
-                        height: 120
-                    }}
-                        data={petCategories}
-                        scrollEnabled={true}
-                        keyExtractor={(item) => item.id}
-                        horizontal
-                        pagingEnabled
-                        bounces={false}
-                        showsHorizontalScrollIndicator={false}
-                        ItemSeparatorComponent={() => (<View style={{
-                        marginLeft: 15
-                    }}/>)}
-                        snapToAlignment={'center'}
-                        snapToInterval={Dimensions
-                        .get('window')
-                        .width / 8}
-                        getItemLayout={(data, index) => ({
-                        length: Dimensions
-                            .get('window')
-                            .width / 8,
-                        offset: Dimensions
-                            .get('window')
-                            .width / 8 * index,
-                        index
-                    })}
-                        renderItem={({item, index, separators}) => (<HorizontalCategoryList
-                        categoryTitle={item.name}
-                        onPress={() => onPressCaraousel({index})}
-                        image={item.image}
-                        selectedCategoryIndex={selectedCategoryIndex}
-                        index={index}
-                        animationStyle="fadeInLeft"/>)}/>
-                    {pets.length > 0?
-                    <RNMasonryScroll
-                        style={{
-                        marginTop: 20
-                    }}
-                        removeClippedSubviews={true}
-                        columns={2}
-                        oddColumnStyle={{
-                        marginTop: 30
-                    }}
-                        horizontal={false}
-                        showsVerticalScrollIndicator={false}>
-                        {pets.map((item, index) => <Animatable.View
-                            delay={100 * index}
-                            animation={'fadeInUp'}
-                            key={index}
-                            style={{
-                            backgroundColor: item.color,
-                            borderRadius: 15,
-                            elevation: 5,
-                            overflow: "hidden",
-                            margin: 5
+                <View style={{alignItems: 'center'}}>
+                    <View style={{
+                            width: '90%'
                         }}>
-                            <TouchableOpacity
+                        <Searchbar
+                            placeholder="Search"
+                            onChangeText={onChangeSearch}
+                            value={searchQuery}/>
+                    </View>
+                </View>
+                {loadind
+                    ? <ScrollView>
+                            <Animatable.View
                                 style={{
-                                borderRadius: 15,
-                                alignItems: 'flex-start'
+                                marginTop: 20,
+                                paddingHorizontal: 20
                             }}
-                                onPress={() => navigation.navigate("PetDetail", {item: item})}>
-                                <Image
-                                    blurRadius={3}
+                                animation={'fadeIn'}>
+                                <SkeletonPlaceholder
                                     style={{
-                                    width: ITEM_SIZE - 15,
-                                    height: 180
-                                }}
-                                    source={{
-                                    uri: item.image
-                                }}></Image>
-                            </TouchableOpacity>
-                            <View
-                                style={{
-                                position: 'absolute',
-                                bottom: 10,
-                                left: 10
-                            }}>
-                                <Title color={'#fff'} size={18} bold={true} label={item.name}/>
-                                <View
-                                    style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-evenly'
+                                    padding: 20
                                 }}>
                                     <View
                                         style={{
+                                        marginTop: 10,
                                         flexDirection: 'row',
-                                        alignItems: 'center'
+                                        justifyContent: 'space-between'
                                     }}>
-                                        <Icon
-                                            type={Icons.Ionicons}
+                                        <View
                                             style={{
-                                            marginRight: 5
-                                        }}
-                                            name={'time-outline'}
-                                            color={Colors.appBackground}
-                                            size={20}/>
-                                        <Title color={'#fff'} size={15} bold={true} label={item.details[1].value}/>
+                                            width: 80,
+                                            height: 80,
+                                            borderRadius: 20
+                                        }}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 15,
+                                            width: 80,
+                                            height: 80,
+                                            borderRadius: 20
+                                        }}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 15,
+                                            width: 80,
+                                            height: 80,
+                                            borderRadius: 20
+                                        }}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 15,
+                                            width: 80,
+                                            height: 80,
+                                            borderRadius: 20
+                                        }}/>
+                                        <View
+                                            style={{
+                                            marginLeft: 15,
+                                            width: 80,
+                                            height: 80,
+                                            borderRadius: 20
+                                        }}/>
                                     </View>
                                     <View
                                         style={{
-                                        marginLeft: 15,
+                                        marginTop: 20,
                                         flexDirection: 'row',
-                                        alignItems: 'center'
+                                        justifyContent: 'space-between'
                                     }}>
-                                        <Icon
-                                            type={Icons.Ionicons}
+                                        <View
                                             style={{
-                                            marginRight: 5
-                                        }}
-                                            name={item.details[2].value === 'Male'
-                                            ? 'male'
-                                            : 'female'}
-                                            color={Colors.appBackground}
-                                            size={20}/>
-                                        <Title
-                                            color={'#fff'}
-                                            size={15}
-                                            bold={true}
-                                            label={item.details[2].value === 'Male'
-                                            ? 'boy'
-                                            : 'Girl'}/>
+                                            width: Dimensions
+                                                .get('screen')
+                                                .width / 2 - 30,
+                                            height: 160,
+                                            borderRadius: 20
+                                        }}/>
+                                        <View
+                                            style={{
+                                            marginTop: 20,
+                                            marginLeft: 5,
+                                            width: Dimensions
+                                                .get('screen')
+                                                .width / 2 - 30,
+                                            height: 160,
+                                            borderRadius: 20
+                                        }}/>
                                     </View>
-                                </View>
+                                    <View
+                                        style={{
+                                        marginTop: 5,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between'
+                                    }}>
+                                        <View
+                                            style={{
+                                            width: Dimensions
+                                                .get('screen')
+                                                .width / 2 - 30,
+                                            height: 160,
+                                            borderRadius: 20
+                                        }}/>
+                                        <View
+                                            style={{
+                                            marginTop: 20,
+                                            marginLeft: 5,
+                                            width: Dimensions
+                                                .get('screen')
+                                                .width / 2 - 30,
+                                            height: 160,
+                                            borderRadius: 20
+                                        }}/>
+                                    </View>
+                                    <View
+                                        style={{
+                                        marginTop: 5,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between'
+                                    }}>
+                                        <View
+                                            style={{
+                                            width: Dimensions
+                                                .get('screen')
+                                                .width / 2 - 30,
+                                            height: 160,
+                                            borderRadius: 20
+                                        }}/>
+                                        <View
+                                            style={{
+                                            marginTop: 20,
+                                            marginLeft: 5,
+                                            width: Dimensions
+                                                .get('screen')
+                                                .width / 2 - 30,
+                                            height: 160,
+                                            borderRadius: 20
+                                        }}/>
+                                    </View>
+                                    <View
+                                        style={{
+                                        marginTop: 5,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between'
+                                    }}>
+                                        <View
+                                            style={{
+                                            width: Dimensions
+                                                .get('screen')
+                                                .width / 2 - 30,
+                                            height: 160,
+                                            borderRadius: 20
+                                        }}/>
+                                        <View
+                                            style={{
+                                            marginTop: 20,
+                                            marginLeft: 5,
+                                            width: Dimensions
+                                                .get('screen')
+                                                .width / 2 - 30,
+                                            height: 160,
+                                            borderRadius: 20
+                                        }}/>
+                                    </View>
+                                </SkeletonPlaceholder>
+                            </Animatable.View>
+                        </ScrollView>
+                    : <View
+                        style={{
+                        paddingHorizontal: 20,
+                        marginBottom: 140
+                    }}>
+                        <FlatList
+                            ref={categoryCarousel}
+                            style={{
+                            marginTop: 20,
+                            height: 120
+                        }}
+                            data={petCategories}
+                            scrollEnabled={true}
+                            keyExtractor={(item) => item.id}
+                            horizontal
+                            pagingEnabled
+                            bounces={false}
+                            showsHorizontalScrollIndicator={false}
+                            ItemSeparatorComponent={() => (<View
+                            style={{
+                            marginLeft: 15
+                        }}/>)}
+                            snapToAlignment={'center'}
+                            snapToInterval={Dimensions
+                            .get('window')
+                            .width / 8}
+                            getItemLayout={(data, index) => ({
+                            length: Dimensions
+                                .get('window')
+                                .width / 8,
+                            offset: Dimensions
+                                .get('window')
+                                .width / 8 * index,
+                            index
+                        })}
+                            renderItem={({item, index, separators}) => (
+                            <HorizontalCategoryList
+                                categoryTitle={item.name}
+                                onPress={() => onPressCaraousel({index})}
+                                image={item.image}
+                                selectedCategoryIndex={selectedCategoryIndex}
+                                index={index}
+                                animationStyle="fadeInLeft"/>
+                            )}/> 
+                            {pets.length > 0
+                            ? <RNMasonryScroll
+                                    style={{
+                                    marginTop: 20
+                                }}
+                                    removeClippedSubviews={true}
+                                    columns={2}
+                                    oddColumnStyle={{
+                                    marginTop: 30
+                                }}
+                                    horizontal={false}
+                                    showsVerticalScrollIndicator={false}>
+                                    {pets.map((item, index) => 
+                                    <Animatable.View
+                                        delay={100 * index}
+                                        animation={'fadeInUp'}
+                                        key={index}
+                                        style={{
+                                        backgroundColor: item.color,
+                                        borderRadius: 15,
+                                        elevation: 5,
+                                        overflow: "hidden",
+                                        margin: 5
+                                    }}>
+                                        <TouchableOpacity
+                                            style={{
+                                            borderRadius: 15,
+                                            alignItems: 'flex-start'
+                                        }}
+                                            onPress={() => navigation.navigate("PetDetail", {item: item})}>
+                                            <Image
+                                                blurRadius={3}
+                                                style={{
+                                                width: ITEM_SIZE - 15,
+                                                height: 180
+                                            }}
+                                                source={{
+                                                uri: item.image
+                                            }}></Image>
+                                        </TouchableOpacity>
+                                        <View
+                                            style={{
+                                            position: 'absolute',
+                                            bottom: 10,
+                                            left: 10
+                                        }}>
+                                            <Title color={'#fff'} size={18} bold={true} label={item.name}/>
+                                            <View
+                                                style={{
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-evenly'
+                                            }}>
+                                                <View
+                                                    style={{
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <Icon
+                                                        type={Icons.Ionicons}
+                                                        style={{
+                                                        marginRight: 5
+                                                    }}
+                                                        name={'time-outline'}
+                                                        color={Colors.appBackground}
+                                                        size={20}/>
+                                                    <Title color={'#fff'} size={15} bold={true} label={item.details[1].value}/>
+                                                </View>
+                                                <View
+                                                    style={{
+                                                    marginLeft: 15,
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <Icon
+                                                        type={Icons.Ionicons}
+                                                        style={{
+                                                        marginRight: 5
+                                                    }}
+                                                        name={item.details[2].value === 'Male'
+                                                        ? 'male'
+                                                        : 'female'}
+                                                        color={Colors.appBackground}
+                                                        size={20}/>
+                                                    <Title
+                                                        color={'#fff'}
+                                                        size={15}
+                                                        bold={true}
+                                                        label={item.details[2].value === 'Male'
+                                                        ? 'boy'
+                                                        : 'Girl'}/>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    </Animatable.View>)}
+                                </RNMasonryScroll>
+                            : <View
+                                style={{
+                                alignItems: 'center',
+                                marginTop: 20
+                            }}>
+                                <Title label="No pets are found in here..." size={20} color={Colors.darkGray}/>
                             </View>
-                        </Animatable.View>)}
-                    </RNMasonryScroll>
-                    :
-                    <View style={{alignItems: 'center', marginTop: 20}}>
-                        <Title label="No pets are found in here..." size={20} color={Colors.darkGray}/>
+}
                     </View>
-                    }
-                </View>
+}
             </View>
         </View>
     );

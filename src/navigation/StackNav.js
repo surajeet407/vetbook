@@ -289,7 +289,6 @@ const StackNav = (params) => {
                 }}
                     name="Chat"
                     component={ChatScreen}/>
-                    
             </Stack.Navigator>
         </NavigationContainer>
     );

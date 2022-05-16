@@ -205,7 +205,7 @@ const PetStoreScreen = ({navigation, route}) => {
         RNFetchBlob.fs
             .readFile(singleFile.fileCopyUri, 'base64')
             .then(async base64String => {
-                console.log(base64String)
+                // console.log(base64String)
                 let phoneNo = await AsyncStorage.getItem("phoneNo")
                 let ar = [], obj ={
                     phoneNo: phoneNo,

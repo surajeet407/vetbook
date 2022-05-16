@@ -48,7 +48,6 @@ const ItemReviewScreen = ({navigation, route}) => {
         setRatingCount] = useState(route.params.details.ratingCountInd)
     const [phoneNo,
         setPhoneNo] = useState("");
-        console.log(route.params.details.status)
     const [status,
         setStatus] = useState(route.params.details.status);
 
@@ -205,12 +204,12 @@ const ItemReviewScreen = ({navigation, route}) => {
                 showRigtIcon={true}
                 rightIconType={Icons.MaterialCommunityIcons}
                 rightIconName={'close'}
-                rightSideIconBorderRadius={40}
-                rightSideIconBorderHeight={40}
-                rightSideIconBorderWidth={40}
+                rightIconBorderRadius={40}
+                rightIconHeight={40}
+                rightIconWidth={40}
                 rightIconSize={30}
                 rightIconColor={Colors.appBackground}
-                rightIconBackgroundColor={Colors.red}
+                rightIconBackgroundColor={'#d35500'}
                 onPressRight={() => navigation.goBack()}
                 showBadgeOverRightIcon={false}
                 badgeBackgroundColor={Colors.primary}
@@ -281,7 +280,7 @@ const ItemReviewScreen = ({navigation, route}) => {
                                                     bold={true}
                                                     label={exeCount}/>
                                             </View>
-                                            <ProgressBar progress={exeCount} height={10} backgroundColor="green" />
+                                            <ProgressBar progress={exeCount} height={5} backgroundColor="green" />
                                         </View>
                                         <View>
                                             <View style={{margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -298,7 +297,7 @@ const ItemReviewScreen = ({navigation, route}) => {
                                                     bold={true}
                                                     label={goodCount}/>
                                             </View>
-                                            <ProgressBar progress={goodCount} height={10} backgroundColor="#5397d4" />
+                                            <ProgressBar progress={goodCount} height={5} backgroundColor="#5397d4" />
                                         </View>
                                         <View>
                                             <View style={{margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -315,7 +314,7 @@ const ItemReviewScreen = ({navigation, route}) => {
                                                     bold={true}
                                                     label={averageCount}/>
                                             </View>
-                                            <ProgressBar progress={averageCount} height={10} backgroundColor="#6ecce1" />
+                                            <ProgressBar progress={averageCount} height={5} backgroundColor="#6ecce1" />
                                         </View>
                                         <View>
                                             <View style={{margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -332,7 +331,7 @@ const ItemReviewScreen = ({navigation, route}) => {
                                                     bold={true}
                                                     label={belowAverageCount}/>
                                             </View>
-                                            <ProgressBar progress={belowAverageCount} height={10} backgroundColor="#f6c969" />
+                                            <ProgressBar progress={belowAverageCount} height={5} backgroundColor="#f6c969" />
                                         </View>
                                         <View>
                                             <View style={{margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -349,7 +348,7 @@ const ItemReviewScreen = ({navigation, route}) => {
                                                     bold={true}
                                                     label={poorCount}/>
                                             </View>
-                                            <ProgressBar progress={poorCount} height={10} backgroundColor="#e66858" />
+                                            <ProgressBar progress={poorCount} height={5} backgroundColor="#e66858" />
                                         </View>
                                     </View>
                                     : <View
@@ -389,13 +388,12 @@ const ItemReviewScreen = ({navigation, route}) => {
                                             ratingColor={Colors.green3}
                                             ratingBackgroundColor={Colors.darkGray}
                                             ratingCount={5}
-                                            imageSize={40}
+                                            imageSize={30}
                                             minValue={0}
                                             startingValue={ratingCount}
                                             jumpValue={1}
                                             showRating={false}
                                             style={{
-                                            paddingHorizontal: 40
                                         }}
                                             onFinishRating={onRatingCompleted}/>
                                     </View>
@@ -416,12 +414,40 @@ const ItemReviewScreen = ({navigation, route}) => {
                                 borderColor={Colors.white}
                                 titleColor={Colors.white}/>
                             <View style={{marginTop: 20, backgroundColor: Colors.white, elevation: 5, padding: 10, margin: 2}}>
-                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                                    <Title color={Colors.secondary} size={15} bold={true} label={"Suro Jeet"}/>
-                                    <Title size={15} bold={true} label={"1 day ago"}/>
+                                <View style={{flexDirection: 'row',  justifyContent: 'space-between'}}>
+                                    <Title color={Colors.secondary} size={15} bold={true} label={"Suro Jeet (1 day Ago)"}/>
+                                    <Title fontFamily={'Redressed-Regular'} color={Colors.secondary} size={15} bold={true} label={"Helpful?"}/>
                                 </View>
-                                <Title color={Colors.darkGray} size={14} bold={true} label={"Lorem ipsum dolor sit amet..."}/>
+                                <View style={{width: '100%', flexDirection: 'row',  justifyContent: 'space-between'}}>
+                                    <View style={{width: '80%'}}>
+                                        <Title color={Colors.darkGray} size={14} bold={true} label={"Lorem ipsum dolor sit amet , Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet..."}/>
+                                    </View>
+                                    <View  style={{marginLeft: 10, width: '15%', alignItems: 'center', zIndex: 999, backgroundColor: Colors.white}}>
+                                        <View  style={{flexDirection: 'row', alignItems: 'center'}}>
+                                            <Icon
+                                                type={Icons.Foundation}
+                                                style={{
+                                                marginRight: 10,
+                                                marginTop: 5,
+                                                fontSize: 18
+                                            }}
+                                                name={'like'}
+                                                color={Colors.secondary}/>
+                                            <Icon
+                                                type={Icons.Foundation}
+                                                style={{
+                                                marginRight: 10,
+                                                marginTop: 5,
+                                                fontSize: 18
+                                            }}
+                                                name={'dislike'}
+                                                color={Colors.secondary}/>
+                                        </View>
+                                    </View>
+                                </View>
+                                
                             </View>
+                            
                         </View>
                     </View>
                 </ScrollView>

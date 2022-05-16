@@ -12,7 +12,6 @@ import Colors from '../util/Colors';
 import Title from '../reusable_elements/Title';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
-import RNBounceable from "@freakycoder/react-native-bounceable";
 import * as Animatable from 'react-native-animatable';
 import Icon, {Icons} from '../util/Icons';
 import database from '@react-native-firebase/database';
@@ -120,83 +119,90 @@ const PescriptionsScreen = ({navigation}) => {
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.goBack()}/>
+
             <View
                 style={{
                 marginTop: 20,
                 padding: 10,
-                flex: 1,
-                alignItems: 'flex-start'
+                flex: 1
             }}>
                 <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-                    {details.map((item, index) => 
-                    <View
-                        key={index}
-                        style={{
-                        backgroundColor: Colors.appBackground,
-                        marginHorizontal: 10,
-                        marginVertical: 4,
-                        elevation: 4,
-                        marginBottom: 10,
-                        width: Dimensions
-                            .get("screen")
-                            .width - 40
-                    }}>
-                        <Animatable.View
-                            animation={'fadeInLeft'}
+                    {details.length > 0?
+                    <View>
+                        {details.map((item, index) => 
+                        <View
+                            key={index}
                             style={{
+                            backgroundColor: Colors.appBackground,
+                            marginHorizontal: 10,
+                            marginVertical: 4,
+                            elevation: 4,
+                            marginBottom: 10,
+                            width: Dimensions
+                                .get("screen")
+                                .width - 40
                         }}>
-                            <RNBounceable
-                                onPress={() => navigation.navigate("TrackOrder", {details: {fromScreen: 'Services'}})}
+                            <Animatable.View
+                                animation={'fadeInLeft'}
                                 style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                padding: 10
                             }}>
                                 <View
                                     style={{
+                                    flexDirection: 'row',
                                     alignItems: 'center',
-                                    backgroundColor: Colors.appBackground,
-                                    elevation: 2,
-                                    borderRadius: 50,
-                                    borderColor: Colors.gray,
-                                    borderWidth: 1
+                                    padding: 10
                                 }}>
-                                    <ImageBackground style={{
-                                        backgroundColor: Colors.secondary,
-                                        borderRadius: 0,
-                                        width: 80,
-                                        height: 60,
+                                    <View
+                                        style={{
                                         alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }} source={{
-                                        uri: item.document
+                                        backgroundColor: Colors.appBackground,
+                                        elevation: 2,
+                                        borderRadius: 50,
+                                        borderColor: Colors.gray,
+                                        borderWidth: 1
                                     }}>
-                                        <Icon
-                                            onPress={() => onPressDownload(item)}
-                                            type={Icons.FontAwesome5}
-                                            name={'download'}
-                                            size={30}
-                                            color={Colors.error_toast_color}/>
-                                    </ImageBackground>
-                                </View>
-                                <View
-                                    style={{
-                                    marginLeft: 10,
-                                    alignItems: 'flex-start'
-                                }}>
-                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                        <Title size={15} label={item.fileDetails.name} bold={true} color={Colors.darkGray}/>
-                                        {item.active && (
-                                            <View style={{marginLeft: 5, backgroundColor: Colors.red, paddingHorizontal: 10, borderRadius: 5, elevation: 5}}>
-                                                <Title size={10} label={'Active'} bold={true} color={Colors.white}/>
-                                            </View>
-                                        )}
+                                        <ImageBackground style={{
+                                            backgroundColor: Colors.secondary,
+                                            borderRadius: 0,
+                                            width: 80,
+                                            height: 60,
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }} source={{
+                                            uri: item.document
+                                        }}>
+                                            <Icon
+                                                onPress={() => onPressDownload(item)}
+                                                type={Icons.FontAwesome5}
+                                                name={'download'}
+                                                size={30}
+                                                color={Colors.error_toast_color}/>
+                                        </ImageBackground>
                                     </View>
-                                    <Title size={12} label={"Uploaded on: " + item.date} bold={true} color={Colors.secondary}/>
+                                    <View
+                                        style={{
+                                        marginLeft: 10,
+                                        alignItems: 'flex-start'
+                                    }}>
+                                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                            <Title size={15} label={item.fileDetails.name} bold={true} color={Colors.darkGray}/>
+                                            {item.active && (
+                                                <View style={{marginLeft: 5, backgroundColor: Colors.red, paddingHorizontal: 10, borderRadius: 5, elevation: 5}}>
+                                                    <Title size={10} label={'Active'} bold={true} color={Colors.white}/>
+                                                </View>
+                                            )}
+                                        </View>
+                                        <Title size={12} label={"Uploaded on: " + item.date} bold={true} color={Colors.secondary}/>
+                                    </View>
                                 </View>
-                            </RNBounceable>
-                        </Animatable.View>
-                    </View>)}
+                            </Animatable.View>
+                        </View>)}
+                    </View>
+                    :
+                    <View style={{alignItems: 'center', marginTop: 20}}>
+                        <Title label="No pesriptions are found..." size={20} color={Colors.darkGray}/>
+                    </View>
+                    }
                 </ScrollView>
             </View>
         </View>

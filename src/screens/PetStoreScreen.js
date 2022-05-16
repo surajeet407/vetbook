@@ -313,18 +313,17 @@ const PetStoreScreen = ({navigation, route}) => {
             <Animatable.View animation={'fadeInUp'} style={{
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: 60,
-                height: 60,
+                width: 50,
+                height: 50,
                 position: 'absolute',
                 zIndex: 1,
                 bottom: 15,
-                right: 10,
+                right: 15,
                 backgroundColor: Colors.primary,
                 borderRadius: 50,
                 elevation: 10
                 }}>
                 <Icon onPress={onPressFileUploadButton} type={Icons.MaterialIcons} name="upload-file" color={Colors.white} size={25} />
-                <Title label="Upload" size={10} color={Colors.darkOverlayColor}/>
             </Animatable.View>
             )}
             <LandingHeader
@@ -364,11 +363,11 @@ const PetStoreScreen = ({navigation, route}) => {
                         padding: 10,
                         height: 48,
                         borderRadius: 10,
-                        elevation: 2,
-                        backgroundColor: Colors.secondary,
+                        elevation: 5,
+                        backgroundColor: Colors.white,
                         alignItems: 'center'
                     }}>
-                        <MaterialCommunityIcons name={'cart'} color={Colors.appBackground} size={30}/>
+                        <MaterialCommunityIcons name={'cart'} color={Colors.secondary} size={30}/>
                         <View
                             style={{
                             position: 'absolute',

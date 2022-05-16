@@ -19,10 +19,10 @@ const HorizontalCategoryList = (props) => {
                 style={{
                 borderWidth: 1,
                 borderColor: props.selectedCategoryIndex == props.index
-                    ? Colors.primary
+                    ? Colors.secondary
                     : Colors.darkGray,
                 backgroundColor: props.selectedCategoryIndex == props.index
-                    ? Colors.primary
+                    ? Colors.secondary
                     : Colors.appBackground,
                 elevation: 5,
                 paddingHorizontal: 15,

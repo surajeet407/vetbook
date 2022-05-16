@@ -281,11 +281,12 @@ const CartScreen = ({navigation, route}) => {
                                         height: 80
                                     }}
                                         style={{
-                                        fontSize: 12,
-                                        fontFamily: 'Oswald-Regular'
+                                        fontSize: 10,
+                                        fontFamily: 'Oswald-Regular',
+                                        color: Colors.secondary
                                     }}
                                         title={"₹ " + item.discountPrice + " /-"}
-                                        color={Colors.secondary}
+                                        color={Colors.white}
                                         ratio={0.2}
                                         distance={50}
                                         extent={0}>

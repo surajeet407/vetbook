@@ -26,13 +26,14 @@ const StoreItems = (props) => {
                 width: "100%"
             }}
                 style={{
-                fontSize: 15,
-                fontFamily: 'Oswald-Regular'
+                fontSize: 10,
+                fontFamily: 'Oswald-Regular',
+                color: Colors.secondary
             }}
                 title={"₹ " + props.discountPrice + " /-"}
-                color={Colors.secondary}
+                color={Colors.white}
                 distance={50}
-                extent={0.1}>
+                extent={0}>
                 <TouchableOpacity
                     onPress={props.navToDetail}
                     style={{

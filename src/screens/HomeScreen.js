@@ -311,8 +311,8 @@ import NetInfo from "@react-native-community/netinfo";
                   <Swiper showsPagination={true} autoplayTimeout={5} autoplay={true} dotColor={Colors.primary} activeDotColor={Colors.white} activeDotStyle={{width: 40}} style={{height: 150}}>
                       {homePageCarouselServices.map((item, index) =>
                       <ImageBackground key={index} source={{uri: item.image}} style={styles.itemContainer}  blurRadius={5}>
-                          <Text style={{fontFamily: 'Oswald-SemiBold', fontSize: 20, marginBottom: 10, color: Colors.appBackground}}>{item.title}</Text>
-                          <Button labelStyle={{fontFamily: 'PTSerif-Regular', fontSize: 15, color: Colors.appBackground}} color={Colors.secondary} onPress={() => navigation.navigate(item.navTo)} mode="contained">{item.buttonText}</Button>
+                          <Text style={{marginRight: 20, fontFamily: 'Oswald-SemiBold', fontSize: 20, marginBottom: 10, color: Colors.appBackground}}>{item.title}</Text>
+                          <Button labelStyle={{fontFamily: 'Oswald-Medium', fontSize: 12, color: Colors.darkGray}} color={Colors.white} onPress={() => navigation.navigate(item.navTo)} mode="contained">{item.buttonText}</Button>
                       </ImageBackground>
                       )}   
                   </Swiper>
@@ -391,6 +391,7 @@ import NetInfo from "@react-native-community/netinfo";
   itemContainer: {
     height: 130,
     marginHorizontal: 2,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0,

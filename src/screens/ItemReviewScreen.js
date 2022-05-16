@@ -260,7 +260,7 @@ const ItemReviewScreen = ({navigation, route}) => {
                                         <Star/>
                                         <Star/>
                                     </View>
-                                    <Text>{averageRating} out of 5</Text>
+                                    <Text style={{fontFamily: 'PTSerif-BoldItalic'}}>{averageRating} out of 5</Text>
                                 </View>
                                 <Text style={styles.amountText}>{totalRatingCount} customer ratings</Text>
                                 {ratings.length > 0

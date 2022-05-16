@@ -420,8 +420,8 @@ const ItemDetailScreen = ({navigation, route}) => {
                 rightIconType={Icons.MaterialCommunityIcons}
                 rightIconName={'cart'}
                 rightIconSize={30}
-                rightIconColor={Colors.appBackground}
-                rightIconBackgroundColor={Colors.secondary}
+                rightIconColor={Colors.secondary}
+                rightIconBackgroundColor={Colors.white}
                 onPressRight={() => navigation.navigate("Cart", {status: route.params.status})}
                 showBadgeOverRightIcon={true}
                 badgeBackgroundColor={Colors.primary}
@@ -460,13 +460,14 @@ const ItemDetailScreen = ({navigation, route}) => {
                 }}
                     style={{
                     fontSize: 16,
-                    fontFamily: 'Oswald-Regular'
+                    fontFamily: 'Oswald-Regular',
+                    color: Colors.secondary
                 }}
                     title={"₹ " + route.params.item.actualPrice + " /- ( " + ((parseInt(route.params.item.actualPrice) - parseInt(route.params.item.discountPrice)) / 100).toFixed(1) + " % off)"}
-                    color={Colors.primary}
+                    color={Colors.white}
                     ratio={0.5}
                     distance={120}
-                    extent={0.1}>
+                    extent={0}>
                     <AnimatedPagerView
                         initialPage={0}
                         style={{
@@ -537,8 +538,8 @@ const ItemDetailScreen = ({navigation, route}) => {
                 <SegmentedControlTab
                     values={["Details", "Ratings"]}
                     borderRadius={0}
-                    tabsContainerStyle={{ height: 50, backgroundColor: Colors.white }}
-                    tabStyle={{ backgroundColor: Colors.darkGray, borderColor: Colors.green, borderWidth: 2 }}
+                    tabsContainerStyle={{ height: 50 }}
+                    tabStyle={{ backgroundColor: Colors.darkGray, borderColor: Colors.green, borderWidth: 0 }}
                     activeTabStyle={{ backgroundColor: Colors.green }}
                     tabTextStyle={{ color: '#444444', fontFamily: 'Oswald-Medium' }}
                     activeTabTextStyle={{ color: Colors.white }}
@@ -638,12 +639,11 @@ const ItemDetailScreen = ({navigation, route}) => {
                                 }}
                                     name={'dot-fill'}
                                     color={Colors.secondary}/>
-                                <Title size={16} bold={true} label={item}/>
+                                <Title fontFamily={'PTSerif-Italic'} size={15} bold={true} label={item}/>
                         </Animatable.View>)}
                     </View>
                     :
-                    <View style={{marginTop: 5}}>
-
+                    <View style={{marginTop: 15, marginBottom: 10}}>
                         <View style={{alignItems: 'center'}}>
                             <View style={styles.reviewContainer}>
                                 <Text style={styles.title}>Customer reviews</Text>
@@ -659,39 +659,39 @@ const ItemDetailScreen = ({navigation, route}) => {
                                         <Star />
                                         <Star />
                                     </View>
-                                    <Text>{averageRating} out of 5</Text>
+                                    <Text style={{fontFamily: 'PTSerif-BoldItalic'}}>{averageRating} out of 5</Text>
                                 </View>
                                 <Text style={styles.amountText}>{totalRatingCount} customer ratings</Text>
+                                <TouchableOpacity onPress={() => navigation.navigate("ItemReview", 
+                                    { 
+                                    details: {
+                                        status: status, 
+                                        ratings: ratings, 
+                                        ratingCountInd: ratingCountInd, 
+                                        averageRating: averageRating, 
+                                        totalRatingCount: totalRatingCount, 
+                                        name: route.params.item.name, 
+                                        itemId: route.params.item.id,
+                                        exeCount: exeCount,
+                                        goodCount: goodCount,
+                                        averageCount: averageCount,
+                                        belowAverageCount: belowAverageCount,
+                                        poorCount: poorCount
+                                    }}
+                                    )} style={{marginTop: 10, marginBottom: 10, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', backgroundColor: Colors.white, elevation: 2, paddingVertical: 10}}>
+                                    <Title size={16} bold={true} label={'See all reviews'}/>
+                                    <Icon
+                                            type={Icons.AntDesign}
+                                            style={{
+                                            marginLeft: 10,
+                                            marginTop: 5,
+                                            fontSize: 16
+                                        }}
+                                            name={'arrowright'}
+                                            color={Colors.secondary}/>
+                                </TouchableOpacity>
                             </View>
                         </View>
-                        <TouchableOpacity onPress={() => navigation.navigate("ItemReview", 
-                            { 
-                            details: {
-                                status: status, 
-                                ratings: ratings, 
-                                ratingCountInd: ratingCountInd, 
-                                averageRating: averageRating, 
-                                totalRatingCount: totalRatingCount, 
-                                name: route.params.item.name, 
-                                itemId: route.params.item.id,
-                                exeCount: exeCount,
-                                goodCount: goodCount,
-                                averageCount: averageCount,
-                                belowAverageCount: belowAverageCount,
-                                poorCount: poorCount
-                            }}
-                            )} style={{margin: 10, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', backgroundColor: Colors.white, elevation: 5, paddingVertical: 10}}>
-                            <Title size={16} bold={true} label={'See all reviews'}/>
-                            <Icon
-                                    type={Icons.AntDesign}
-                                    style={{
-                                    marginLeft: 10,
-                                    marginTop: 5,
-                                    fontSize: 16
-                                }}
-                                    name={'arrowright'}
-                                    color={Colors.secondary}/>
-                        </TouchableOpacity>
                         
                     </View>
                     }
@@ -736,20 +736,16 @@ const styles = StyleSheet.create({
     reviewContainer: {
         backgroundColor: "#FFFFFF",
         borderRadius: 10,
-        paddingHorizontal: 30,
-        paddingVertical: 40,
+        paddingHorizontal: 10,
+        paddingVertical: 20,
         minWidth: "99%",
-        shadowOffset: { width: 0, height: 5 },
-        shadowOpacity: 1.0,
-        shadowRadius: 10,
-        shadowColor: "rgba(193, 211, 251, 0.5)",
         elevation: 5,
       },
       title: {
-        fontWeight: "bold",
-        fontSize: 20,
+        fontFamily: 'Oswald-Medium',
+        fontSize: 25,
         color: "#323357",
-        textAlign: "center",
+        textAlign: "center"
       },
         totalWrap: {
           marginTop: 20,
@@ -760,12 +756,13 @@ const styles = StyleSheet.create({
           justifyContent: "space-between",
           flexDirection: "row",
           paddingHorizontal: 15,
-          paddingVertical: 10,
+          paddingVertical: 10
         },
         amountText: {
-          fontSize: 16,
-          color: "#595B71",
+          fontSize: 18,
+          color: Colors.darkGray,
           textAlign: "center",
+          fontFamily: 'Redressed-Regular'
         }
 });
 

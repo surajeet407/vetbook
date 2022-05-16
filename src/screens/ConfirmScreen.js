@@ -267,7 +267,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
             leftIconBackgroundColor={Colors.appBackground}
             onPressLeft={() => navigation.goBack()} 
         />
-        <View style={{backgroundColor: Colors.appBackground, paddingHorizontal: 20, marginBottom: route.params.details.serviceType === "None"? 200:100, flex: 1, width: '100%'}}>
+        <View style={{backgroundColor: Colors.appBackground, paddingHorizontal: 20, marginBottom: route.params.details.serviceType === "None"? 200:80, flex: 1, width: '100%'}}>
           
           {route.params.details.serviceType === "None"?
             <View style={{flex: 1}}>  
@@ -436,7 +436,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
           }
         </View>
         <Animatable.View delay={100} animation={'slideInUp'}>
-          <ImageBackground blurRadius={0} source={require('../assets/images/background6.png')} style={{overflow: 'hidden', position: 'absolute', bottom: 0, width: '100%', alignItems: 'center', justifyContent: 'center', padding: 10, height: route.params.details.serviceType === "None"? 200: 100,  backgroundColor: Colors.secondary, borderTopLeftRadius: 50, elevation: 15, borderTopRightRadius: 50}}>
+          <ImageBackground blurRadius={0} source={require('../assets/images/background6.png')} style={{overflow: 'hidden', position: 'absolute', bottom: 0, width: '100%', alignItems: 'center', justifyContent: 'center', padding: 10, height: route.params.details.serviceType === "None"? 200: 80,  backgroundColor: Colors.secondary, borderTopLeftRadius: 50, elevation: 15, borderTopRightRadius: 50}}>
             <View style={{width: '90%'}}>
               {route.params.details.serviceType === "None" && (
               <View style={{marginBottom: 20}}>

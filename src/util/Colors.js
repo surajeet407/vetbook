@@ -33,5 +33,5 @@ export default {
     greenAlpha : 'rgba(96, 197, 168, 0.15)',
     purpleAlpha : 'rgba(146, 6, 228, 0.15)',
 
-    error_toast_color : '#ea7a72'
+    error_toast_color : '#dc531f'
 }

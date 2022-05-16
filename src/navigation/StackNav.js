@@ -10,6 +10,8 @@ import {
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {CardStyleInterpolators, TransitionPresets} from '@react-navigation/stack';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import database, {firebase} from '@react-native-firebase/database';
+import i18n from '../util/i18n';
 import ServicesBottomTabBarScreen from '../navigation/ServicesBottomTabBarScreen';
 import HomeBottomTabBarScreen from '../navigation/HomeBottomTabBarScreen';
 import SpalshScreen from '../screens/SpalshScreen';
@@ -41,8 +43,8 @@ import ChooseTimeSlotScreen from '../screens/ChooseTimeSlotScreen';
 import PescriptionsScreen from '../screens/PescriptionsScreen';
 import ItemReviewScreen from '../screens/ItemReviewScreen';
 import ChatScreen from '../screens/ChatScreen';
-import database, {firebase} from '@react-native-firebase/database';
-import i18n from '../util/i18n';
+import AccountDeletionScreen from '../screens/AccountDeletionScreen';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -289,6 +291,12 @@ const StackNav = (params) => {
                 }}
                     name="Chat"
                     component={ChatScreen}/>
+                <Stack.Screen
+                    options={{
+                    headerShown: false
+                }}
+                    name="AccountDeletion"
+                    component={AccountDeletionScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

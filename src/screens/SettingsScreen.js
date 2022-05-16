@@ -20,32 +20,50 @@ import database from '@react-native-firebase/database';
 import i18n from '../util/i18n';
 
 const SettingsScreen = ({navigation, route}) => {
+    const [deleteInd,
+        setDeleteInd] = useState(false)
+    const [phoneNo,
+        setPhoneNo] = useState("")
     const [homeAddress,
         setHomeAddress] = useState("")
     const [status,
         setStatus] = useState(route.params.status);
+
     const handleAuthButton = () => {
-        // console.log(status)
         if (status === 'loggedIn') {
-            AsyncStorage
-                .getItem('phoneNo')
-                .then((number, msg) => {
-                    if (number) {
-                        database()
-                            .ref('/users/' + number)
-                            .update({active: false})
-                    }
-                })
+            database()
+                .ref('/users/' + phoneNo)
+                .update({active: false})
             AsyncStorage.removeItem('phoneNo')
             AsyncStorage.setItem("userStatus", 'loggedOut');
         }
         navigation.navigate('Log')
+    }
+    const getDeletionRequest = (number) => {
+        database()
+        .ref('/users/' + phoneNo)
+        .once("value")
+        .then(snapshot => {
+            if(snapshot.val().canDeleteAccount) {
+                setDeleteInd(true)
+            } else {
+                setDeleteInd(false)
+            }
+        })
     }
     useEffect(() => {
         AsyncStorage
             .getItem("homeAddress")
             .then((homeAddress, msg) => {
                 setHomeAddress(JSON.parse(homeAddress))
+            })
+        AsyncStorage
+            .getItem('phoneNo')
+            .then((number, msg) => {
+                if (number) {
+                    setPhoneNo(number)
+                    getDeletionRequest(number)
+                }
             })
     }, [])
     return (

@@ -74,7 +74,7 @@ import React, {useEffect, useRef, useState} from 'react';
         if(data) {
           database().ref('/users/' + number).update({active: true})
         } else {
-          database().ref('/users/' + number).set({active: true})
+          database().ref('/users/' + number).set({active: true, canDeleteAccount: false})
         }
       })
       

@@ -388,7 +388,7 @@ const ItemReviewScreen = ({navigation, route}) => {
                                             ratingColor={Colors.green3}
                                             ratingBackgroundColor={Colors.darkGray}
                                             ratingCount={5}
-                                            imageSize={30}
+                                            imageSize={25}
                                             minValue={0}
                                             startingValue={ratingCount}
                                             jumpValue={1}
@@ -422,26 +422,32 @@ const ItemReviewScreen = ({navigation, route}) => {
                                     <View style={{width: '80%'}}>
                                         <Title color={Colors.darkGray} size={14} bold={true} label={"Lorem ipsum dolor sit amet , Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet..."}/>
                                     </View>
-                                    <View  style={{marginLeft: 10, width: '15%', alignItems: 'center', zIndex: 999, backgroundColor: Colors.white}}>
+                                    <View  style={{width: '10%', alignItems: 'center', zIndex: 999, backgroundColor: Colors.white}}>
                                         <View  style={{flexDirection: 'row', alignItems: 'center'}}>
-                                            <Icon
-                                                type={Icons.Foundation}
-                                                style={{
-                                                marginRight: 10,
-                                                marginTop: 5,
-                                                fontSize: 18
-                                            }}
-                                                name={'like'}
-                                                color={Colors.secondary}/>
-                                            <Icon
-                                                type={Icons.Foundation}
-                                                style={{
-                                                marginRight: 10,
-                                                marginTop: 5,
-                                                fontSize: 18
-                                            }}
-                                                name={'dislike'}
-                                                color={Colors.secondary}/>
+                                            <View>
+                                                <Icon
+                                                    type={Icons.Foundation}
+                                                    style={{
+                                                    marginRight: 10,
+                                                    marginTop: 5,
+                                                    fontSize: 18
+                                                }}
+                                                    name={'like'}
+                                                    color={Colors.green3}/>
+                                                    <Title color={Colors.secondary} size={10} bold={true} label={"12"}/>
+                                            </View>
+                                            <View>
+                                                <Icon
+                                                    type={Icons.Foundation}
+                                                    style={{
+                                                    marginRight: 10,
+                                                    marginTop: 5,
+                                                    fontSize: 18
+                                                }}
+                                                    name={'dislike'}
+                                                    color={Colors.red}/>
+                                                    <Title color={Colors.secondary} size={10} bold={true} label={"0"}/>
+                                            </View>
                                         </View>
                                     </View>
                                 </View>

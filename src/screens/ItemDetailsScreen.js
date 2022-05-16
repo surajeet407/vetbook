@@ -6,7 +6,8 @@ import {
     Dimensions,
     ScrollView,
     Animated,
-    ImageBackground
+    ImageBackground,
+    TouchableOpacity
 } from 'react-native';
 import {useIsFocused, useLinkBuilder} from "@react-navigation/native";
 import Icon, {Icons} from '../util/Icons';
@@ -22,19 +23,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import database from '@react-native-firebase/database';
 import Label, {Orientation} from "react-native-label";
 import SegmentedControlTab from 'react-native-segmented-control-tab'
-import Review from "react-native-customer-review-bars";
-import {Rating} from 'react-native-ratings';
 import NumericInput from 'react-native-numeric-input'
 import uuid from 'react-native-uuid';
 import moment from 'moment';
+import Star from "../reusable_elements/Star";
 import i18n from '../util/i18n';
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ItemDetailScreen = ({navigation, route}) => {
-    const [ratings, 
-        setRatings] = useState(route.params.item.review? route.params.item.review:[]);
     const isFocused = useIsFocused();
+
+
+
+    const [goodCount,
+        setGoodCount] = useState(0)
+    const [averageCount,
+        setAverageCount] = useState(0)
+    const [belowAverageCount,
+        setBelowAverageCount] = useState(0)
+    const [poorCount,
+        setPoorCount] = useState(0)
+    const [exeCount,
+        setExeCount] = useState(0)
+    const [ratings, 
+        setRatings] = useState([]);
+    const [averageRating,
+        setAverageRating] = useState(0)
+    const [totalRatingCount,
+        setTotalRatingCount] = useState(0)
     const [ratingCountInd,
         setRatingCountInd] = useState(0)
     const [phoneNo,
@@ -273,6 +290,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                     for(let i = 0; i < snapshot.val().length; i++) {
                         if(snapshot.val()[i].itemId === route.params.item.id) {
                             if(snapshot.val()[i].userId === phoneNo) {
+                                // console.log(snapshot.val()[i].ratings)
                                setRatingCountInd(snapshot.val()[i].ratings) 
                             }
                             ratingCount++
@@ -289,6 +307,14 @@ const ItemDetailScreen = ({navigation, route}) => {
                             }
                         }
                     }
+                    let averageRating = ((exeCount * 5) + (goodCount * 4) + (averageCount * 3) + (belowAverageCount * 2) + (poorCount * 1))
+                    setExeCount(exeCount)
+                    setGoodCount(goodCount)
+                    setAverageCount(averageCount)
+                    setBelowAverageCount(belowAverageCount)
+                    setPoorCount(poorCount)
+                    setAverageRating(averageRating / ratingCount)
+                    setTotalRatingCount(ratingCount)
                     if(ratingCount > 0) {
                         ratingsArray = [
                             {
@@ -617,60 +643,55 @@ const ItemDetailScreen = ({navigation, route}) => {
                     </View>
                     :
                     <View style={{marginTop: 5}}>
-                        
-                        <View>
-                            <View style={{marginBottom: 10, alignItems: 'center'}}>
-                                <View style={{alignItems: 'center', borderBottomColor: Colors.darkGray, borderBottomWidth: 2, width: 160, paddingVertical: 5}}>
-                                    <Title size={18} bold={true} label={"Customer Ratings"}/>
+
+                        <View style={{alignItems: 'center'}}>
+                            <View style={styles.reviewContainer}>
+                                <Text style={styles.title}>Customer reviews</Text>
+                                <View style={styles.totalWrap}>
+                                    <View
+                                        style={{
+                                        flexDirection: "row",
+                                        }}
+                                    >
+                                        <Star />
+                                        <Star />
+                                        <Star />
+                                        <Star />
+                                        <Star />
+                                    </View>
+                                    <Text>{averageRating} out of 5</Text>
                                 </View>
-                            </View>
-                            {ratings.length > 0? 
-                            <Review rightTextStyle={{
-                                fontSize: 12,
-                                fontFamily: 'Oswald-Medium'
-                            }} reviewTypeStyle={{
-                                color: Colors.darkGray,
-                                fontSize: 15,
-                                fontFamily: 'Oswald-Medium'
-                            }} barFillStyle={{
-                                marginRight: -5,
-                                height: 10
-                            }} showCount={true} reviews={ratings} />
-                            :
-                            <View style={{marginBottom: 10, alignItems: 'center'}}>
-                                <Title fontFamily={'Redressed-Regular'} color={Colors.secondary} size={15} bold={true} label={"There is no ratings on this item..., be the first to rate"}/>
-                            </View>
-                            }
-                        </View>
-                        {route.params.status === 'loggedIn'?
-                        <View style={{marginTop: 10, marginBottom: 10}}>
-                            <View
-                                style={{
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                            }}>
-                                <View style={{marginBottom: 10}}>
-                                    <Title size={20} bold={true} label={"Rate " + route.params.item.name + ": "}/>
-                                </View>
-                                <Rating
-                                    type='custom'
-                                    ratingColor={Colors.green3}
-                                    ratingBackgroundColor={Colors.darkGray}
-                                    ratingCount={5}
-                                    imageSize={40}
-                                    minValue={0}
-                                    startingValue={ratingCountInd}
-                                    jumpValue={1}
-                                    showRating={false}
-                                    style={{ paddingHorizontal: 40 }}
-                                    onFinishRating={onRatingCompleted}/>
+                                <Text style={styles.amountText}>{totalRatingCount} customer ratings</Text>
                             </View>
                         </View>
-                        :
-                        <View style={{alignItems: 'center', margin: 10}}>
-                            <Title size={18} bold={true} label={"Please Login to rate..."}/>
-                        </View>
-                        }
+                        <TouchableOpacity onPress={() => navigation.navigate("ItemReview", 
+                            { 
+                            details: {
+                                status: status, 
+                                ratings: ratings, 
+                                ratingCountInd: ratingCountInd, 
+                                averageRating: averageRating, 
+                                totalRatingCount: totalRatingCount, 
+                                name: route.params.item.name, 
+                                itemId: route.params.item.id,
+                                exeCount: exeCount,
+                                goodCount: goodCount,
+                                averageCount: averageCount,
+                                belowAverageCount: belowAverageCount,
+                                poorCount: poorCount
+                            }}
+                            )} style={{margin: 10, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', backgroundColor: Colors.white, elevation: 5, paddingVertical: 10}}>
+                            <Title size={16} bold={true} label={'See all reviews'}/>
+                            <Icon
+                                    type={Icons.AntDesign}
+                                    style={{
+                                    marginLeft: 10,
+                                    marginTop: 5,
+                                    fontSize: 16
+                                }}
+                                    name={'arrowright'}
+                                    color={Colors.secondary}/>
+                        </TouchableOpacity>
                         
                     </View>
                     }
@@ -711,6 +732,41 @@ const ItemDetailScreen = ({navigation, route}) => {
     );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    reviewContainer: {
+        backgroundColor: "#FFFFFF",
+        borderRadius: 10,
+        paddingHorizontal: 30,
+        paddingVertical: 40,
+        minWidth: "99%",
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 1.0,
+        shadowRadius: 10,
+        shadowColor: "rgba(193, 211, 251, 0.5)",
+        elevation: 5,
+      },
+      title: {
+        fontWeight: "bold",
+        fontSize: 20,
+        color: "#323357",
+        textAlign: "center",
+      },
+        totalWrap: {
+          marginTop: 20,
+          marginBottom: 5,
+          backgroundColor: "#F5F8FF",
+          borderRadius: 40,
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexDirection: "row",
+          paddingHorizontal: 15,
+          paddingVertical: 10,
+        },
+        amountText: {
+          fontSize: 16,
+          color: "#595B71",
+          textAlign: "center",
+        }
+});
 
 export default ItemDetailScreen;

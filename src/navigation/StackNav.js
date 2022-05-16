@@ -39,6 +39,7 @@ import PaymentStatusScreen from '../screens/PaymentStatusScreen';
 import TrackOrderScreen from '../screens/TrackOrderScreen';
 import ChooseTimeSlotScreen from '../screens/ChooseTimeSlotScreen';
 import PescriptionsScreen from '../screens/PescriptionsScreen';
+import ItemReviewScreen from '../screens/ItemReviewScreen';
 import database, {firebase} from '@react-native-firebase/database';
 import i18n from '../util/i18n';
 
@@ -274,6 +275,13 @@ const StackNav = (params) => {
                 }}
                     name="Pescriptions"
                     component={PescriptionsScreen}/>
+                <Stack.Screen
+                    options={{
+                    headerShown: false
+                }}
+                    name="ItemReview"
+                    component={ItemReviewScreen}/>
+                    
             </Stack.Navigator>
         </NavigationContainer>
     );

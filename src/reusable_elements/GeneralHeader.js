@@ -67,11 +67,11 @@ const GeneralHeader = (props) => {
                     <Animatable.View animation={'fadeInRight'}>
                         <RNBounceable
                             style={{
-                            width: 50,
-                            height: 50,
+                            height: props.rightSideIconBorderHeight? props.rightSideIconBorderHeight:50,
+                            width: props.rightSideIconBorderWidth? props.rightSideIconBorderWidth:50,
                             backgroundColor: props.rightIconBackgroundColor,
                             borderWidth: 1,
-                            borderRadius: 10,
+                            borderRadius: props.rightSideIconBorderRadius? props.rightSideIconBorderRadius:10,
                             alignItems: 'center',
                             justifyContent: 'center',
                             elevation: 5

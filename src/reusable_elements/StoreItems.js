@@ -52,7 +52,7 @@ const StoreItems = (props) => {
                         <Title label={props.name} size={15} color={Colors.primary}/>
                         <Icon name={'arrowright'} type={Icons.AntDesign} color={Colors.primary} size={20} style={{marginLeft: 5, marginTop: 5}}/>
                     </View>
-                    <Title label={"₹ " + props.actualPrice + " /- ( " + ((parseInt(props.actualPrice) - parseInt(props.discountPrice)) / 100).toFixed(1) + " % off)"} size={12} color={Colors.darkGray}/>
+                    {/* <Title label={"₹ " + props.actualPrice + " /- ( " + ((parseInt(props.actualPrice) - parseInt(props.discountPrice)) / 100).toFixed(1) + " % off)"} size={12} color={Colors.darkGray}/> */}
                 </View>
             </Label>
         </Animatable.View>

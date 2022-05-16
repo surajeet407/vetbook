@@ -333,7 +333,8 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 16
+                                        fontSize: 16,
+                                        marginTop: 10,
                                     }}>{i18n.contactUs}</Text>
                                 </View>
                                 <Icon
@@ -369,7 +370,8 @@ const SettingsScreen = ({navigation, route}) => {
                                     <Text
                                         style={{
                                         fontFamily: 'PTSerif-Bold',
-                                        fontSize: 16
+                                        fontSize: 16,
+                                        marginTop: 10,
                                     }}>{i18n.chatWithUs}</Text>
                                 </View>
                                 <Icon

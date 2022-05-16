@@ -29,9 +29,11 @@ import RNMasonryScroll from "react-native-masonry-scrollview";
 import RNBounceable from '@freakycoder/react-native-bounceable';
 import i18n from '../util/i18n';
 import LottieView from 'lottie-react-native';
+import NetInfo from "@react-native-community/netinfo";
 
  
  const HomeScreen = ({navigation, route}) => {
+  const [isConnectedToNet, setIsConnectedToNet] = useState(true)
   const isFocused = useIsFocused();
   const [homeAddress, setHomeAddress] = useState({})
   const [vetServiceCount, setVetServiceCount] = useState(0)
@@ -202,7 +204,24 @@ import LottieView from 'lottie-react-native';
       }
     }
   }
+  const onPressRetry = () => {
+    NetInfo.fetch().then(state => {
+      if(!state.isConnected) {
+        setIsConnectedToNet(false)
+      } else {
+        setIsConnectedToNet(true)
+        getData();
+      }
+    });
+  }
   useEffect(() => {
+    NetInfo.fetch().then(state => {
+      if(!state.isConnected) {
+        setIsConnectedToNet(false)
+      } else {
+        setIsConnectedToNet(true)
+      }
+    });
     if (isFocused) {
       AsyncStorage
         .getItem("homeAddress")
@@ -217,6 +236,52 @@ import LottieView from 'lottie-react-native';
       <LandingHeader homeAddress={homeAddress} status={status} navigation={navigation}/>
       {showTrackComponent && (
         <TrackComponent onPress={() => navigation.navigate("TrackOrder" , {details: {...trackDetails, fromScreen: 'Home'}})}/>
+      )}
+      {!isConnectedToNet && (
+        <View
+          style={{
+          position: 'absolute',
+          bottom: 0,
+          zIndex: 9999,
+          marginTop: 5,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingHorizontal: 15,
+          alignItems: 'center'
+      }}>
+          <View
+              style={{
+              width: '100%',
+              marginTop: 5,
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              backgroundColor: Colors.green2,
+              padding: 8,
+              marginBottom: 10,
+              borderRadius: 20,
+              borderColor: Colors.darkGray,
+              elevation: 15,
+              borderWidth: 1
+          }}>
+              <Title
+                  label={'Detected slow network connectivity'}
+                  size={15}
+                  color={Colors.appBackground}/>
+              <TouchableRipple
+                  style={{
+                  width: 60,
+                  backgroundColor: '#d35500',
+                  elevation: 5,
+                  borderRadius: 15,
+                  alignItems: 'center'
+              }}
+                  onPress={onPressRetry}
+                  rippleColor="rgba(0, 0, 0, .32)">
+                  <Title label={"Retry"} color='#fff' size={15}/>
+              </TouchableRipple>
+          </View>
+      </View>
       )}
       <View style={{ paddingHorizontal: 10, marginTop: 65, marginBottom: showTrackComponent? 60:0, flex: 1}}>
         <View style={{}}>

@@ -7,7 +7,6 @@ import {
 
   ToastAndroid
 } from 'react-native';
-import NetInfo from "@react-native-community/netinfo";
 import Geolocation from '@react-native-community/geolocation';
 import { MenuProvider } from 'react-native-popup-menu';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -90,20 +89,7 @@ const App = () => {
     ); 
 
 
-    NetInfo.fetch().then(state => {
-      if(!state.isConnected) {
-        Toast.show({
-          type: 'customToast',
-          text1: "You are not connected with internet",
-          position: 'top',
-          visibilityTime: 1500,
-          topOffset: 15,
-          props: {
-              backgroundColor: Colors.error_toast_color
-          }
-      });
-      }
-    });
+    
     requestUserPermission()
     checkToken();
     const unsubscribe = messaging().onMessage(async remoteMessage => {

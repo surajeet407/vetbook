@@ -709,7 +709,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     padding: 10,
-                    height: 100,
+                    height: 80,
                     backgroundColor: Colors.secondary,
                     borderTopLeftRadius: 50,
                     elevation: 15,

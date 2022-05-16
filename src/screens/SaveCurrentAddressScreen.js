@@ -263,7 +263,7 @@ import React, {useEffect, useState, useRef} from 'react';
             borderTopLeftRadius: 40,
             borderTopRightRadius: 40,
             padding: 20,
-            marginBottom: 100
+            marginBottom: 80
             }]}>
             <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
                 <View> 
@@ -280,7 +280,7 @@ import React, {useEffect, useState, useRef} from 'react';
                 </View>
             </ScrollView>
         </View>
-        <ImageBackground blurRadius={0} source={require('../assets/images/background6.png')} style={{overflow: 'hidden', position: 'absolute', bottom: 0, width: '100%', alignItems: 'center', justifyContent: 'center', padding: 10, height: 100,  backgroundColor: Colors.secondary, borderTopLeftRadius: 50, elevation: 15, borderTopRightRadius: 50}}>
+        <ImageBackground blurRadius={0} source={require('../assets/images/background6.png')} style={{overflow: 'hidden', position: 'absolute', bottom: 0, width: '100%', alignItems: 'center', justifyContent: 'center', padding: 10, height: 80,  backgroundColor: Colors.secondary, borderTopLeftRadius: 50, elevation: 15, borderTopRightRadius: 50}}>
           <Animatable.View delay={100} animation={'slideInUp'} style={{width: '90%'}}>
             <Button backgroundColor={Colors.primary} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Save Address" onPress={onPressSaveAddress}/>
           </Animatable.View>

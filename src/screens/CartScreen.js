@@ -235,7 +235,7 @@ const CartScreen = ({navigation, route}) => {
             <View
                 style={{
                 marginBottom: total === 0
-                    ? 100
+                    ? 80
                     : 200,
                 backgroundColor: Colors.appBackground,
                 padding: 20,
@@ -394,7 +394,7 @@ const CartScreen = ({navigation, route}) => {
                     justifyContent: 'center',
                     padding: 10,
                     height: total === 0
-                        ? 100
+                        ? 80
                         : 200,
                     backgroundColor: Colors.secondary,
                     borderTopLeftRadius: 50,

@@ -299,7 +299,7 @@ const PetDetailScreen = ({navigation, route}) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     padding: 10,
-                    height: 100,
+                    height: 80,
                     backgroundColor: route.params.item.color,
                     borderTopLeftRadius: 50,
                     elevation: 10,

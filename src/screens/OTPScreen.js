@@ -24,6 +24,7 @@ import React, {useEffect, useRef, useState} from 'react';
  import axios from 'axios';
  import auth from '@react-native-firebase/auth';
  import database from '@react-native-firebase/database';
+ import messaging from '@react-native-firebase/messaging';
  import { CommonActions } from '@react-navigation/native';
  import i18n from '../util/i18n';
  
@@ -74,7 +75,12 @@ import React, {useEffect, useRef, useState} from 'react';
         if(data) {
           database().ref('/users/' + number).update({active: true})
         } else {
-          database().ref('/users/' + number).set({active: true, canDeleteAccount: false})
+          messaging()
+          .getToken()
+          .then(token => {
+            database().ref('/users/' + number).set({active: true, canDeleteAccount: false, token: token})
+          });
+          
         }
       })
       

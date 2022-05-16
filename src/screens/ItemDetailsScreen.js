@@ -678,7 +678,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                                         belowAverageCount: belowAverageCount,
                                         poorCount: poorCount
                                     }}
-                                    )} style={{marginTop: 10, marginBottom: 10, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', backgroundColor: Colors.white, elevation: 2, paddingVertical: 10}}>
+                                    )} style={{marginTop: 10, marginBottom: 10, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', backgroundColor: Colors.white, paddingVertical: 10}}>
                                     <Title size={16} bold={true} label={'See all reviews'}/>
                                     <Icon
                                             type={Icons.AntDesign}
@@ -760,7 +760,7 @@ const styles = StyleSheet.create({
         },
         amountText: {
           fontSize: 18,
-          color: Colors.darkGray,
+          color: Colors.secondary,
           textAlign: "center",
           fontFamily: 'Redressed-Regular'
         }

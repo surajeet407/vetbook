@@ -323,7 +323,7 @@ import NetInfo from "@react-native-community/netinfo";
                       fontSize={16}
                       borderColor={Colors.white}
                       titleColor={Colors.white}/>
-                  <View style={{marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', width: "100%"}}>
+                    <View style={{marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', width: "100%"}}>
                       <RNMasonryScroll
                           columns={2}
                           oddColumnStyle={{marginTop: 30 }}

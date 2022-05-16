@@ -19,23 +19,6 @@ import axios from 'axios';
 
 const App = () => {
   const [status, setStatus] = useState('')
-  async function requestUserPermission() {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  
-    if (enabled) {
-      // console.log('Authorization status:', authStatus);
-    }
-  }
-  const checkToken = async () => {
-    const fcmToken = await messaging().getToken();
-    if (fcmToken) {
-      //  console.log(fcmToken);
-    } 
-   }
-
   useEffect(() => {
     Geolocation.getCurrentPosition(
       position => {   
@@ -88,10 +71,6 @@ const App = () => {
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     ); 
 
-
-    
-    requestUserPermission()
-    checkToken();
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       // console.log(remoteMessage);
       ToastAndroid.showWithGravityAndOffset(

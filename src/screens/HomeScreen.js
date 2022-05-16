@@ -9,6 +9,7 @@ import React, {useState, useRef, useEffect} from 'react';
    ImageBackground,
    ScrollView,
    Animated,
+   RefreshControl
  } from 'react-native';
 import { useTheme, useIsFocused } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
@@ -33,6 +34,7 @@ import NetInfo from "@react-native-community/netinfo";
 
  
  const HomeScreen = ({navigation, route}) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [isConnectedToNet, setIsConnectedToNet] = useState(true)
   const isFocused = useIsFocused();
   const [homeAddress, setHomeAddress] = useState({})
@@ -59,6 +61,7 @@ import NetInfo from "@react-native-community/netinfo";
                   database()
                       .ref("/users/" + phoneNo + "/services")
                       .on('value', snapshot => {
+                          setRefreshing(false)
                           setVetServiceCount(0)
                           setGroomingServiceCount(0)
                           setTrainingServiceCount(0)
@@ -96,6 +99,7 @@ import NetInfo from "@react-native-community/netinfo";
           .getItem("anonymusService")
           .then((data) => {
               if (data && JSON.parse(data).length > 0) {
+                setRefreshing(false)
                 let mainData = JSON.parse(data)
                 let onGoingItems = mainData.filter(item => item.mode === 'ongoing')
                 if (onGoingItems.length > 0) {
@@ -104,7 +108,6 @@ import NetInfo from "@react-native-community/netinfo";
                 } else {
                   setShowTrackComponent(false);
                 }
-                debugger
                 for(let i = 0; i < mainData.length; i++) {
                   if((mainData[i].serviceType  === 'Consult' || mainData[i].serviceType  === 'Veterinary' || mainData[i].serviceType  === 'BloodTest') && mainData[i].mode === 'ongoing') {
                     setVetServiceCount(1)
@@ -214,6 +217,13 @@ import NetInfo from "@react-native-community/netinfo";
       }
     });
   }
+
+  const onRefresh = () => {
+    setRefreshing(true)
+    getData();
+  }
+
+
   useEffect(() => {
     NetInfo.fetch().then(state => {
       if(!state.isConnected) {
@@ -285,7 +295,9 @@ import NetInfo from "@react-native-community/netinfo";
       )}
       <View style={{ paddingHorizontal: 10, marginTop: 65, marginBottom: showTrackComponent? 60:0, flex: 1}}>
         <View style={{}}>
-          <ScrollView scrollEventThrottle={16}
+          <ScrollView 
+          refreshControl={<RefreshControl progressViewOffset={20} colors={[Colors.primary, Colors.secondary]} refreshing={refreshing} onRefresh={onRefresh} />}
+          scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}>
             {homeAddress.serviceAvailable?
               <View>

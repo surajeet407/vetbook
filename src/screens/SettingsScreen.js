@@ -104,6 +104,7 @@ const SettingsScreen = ({navigation, route}) => {
                             animation={'fadeInLeft'}
                             style={{
                         }}>
+                            {status === 'loggedIn' && (
                             <TouchableOpacity
                                 style={{
                                 paddingVertical: 8,
@@ -141,43 +142,7 @@ const SettingsScreen = ({navigation, route}) => {
                                     size={20}
                                     color={Colors.secondary}/>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                style={{
-                                    paddingVertical: 8,
-                                    borderColor: Colors.gray,
-                                    borderBottomWidth: 1,
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between'
-                            }}
-                                onPress={() => navigation.navigate("ServicesBottomTabBar", {screen: "Orders"})}>
-                                <View
-                                    style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center'
-                                }}>
-                                    <Icon
-                                        style={{
-                                        marginRight: 10,
-                                        marginTop: 10
-                                    }}
-                                        type={Icons.Octicons}
-                                        name={'list-ordered'}
-                                        size={20}
-                                        color={Colors.primary}/>
-                                    <Text
-                                        style={{
-                                        fontFamily: 'PTSerif-Bold',
-                                        fontSize: 16,
-                                        marginTop: 10
-                                    }}>{i18n.orders}</Text>
-                                </View>
-                                <Icon
-                                    type={Icons.MaterialIcons}
-                                    name={'keyboard-arrow-right'}
-                                    size={20}
-                                    color={Colors.secondary}/>
-                            </TouchableOpacity>
+                            )}
                             <TouchableOpacity
                                 style={{
                                 paddingVertical: 8,
@@ -217,6 +182,43 @@ const SettingsScreen = ({navigation, route}) => {
                                     size={20}
                                     color={Colors.secondary}/>
 
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    paddingVertical: 8,
+                                    borderColor: Colors.gray,
+                                    borderBottomWidth: 1,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between'
+                            }}
+                                onPress={() => navigation.navigate("ServicesBottomTabBar", {screen: "Orders"})}>
+                                <View
+                                    style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
+                                }}>
+                                    <Icon
+                                        style={{
+                                        marginRight: 10,
+                                        marginTop: 10
+                                    }}
+                                        type={Icons.Octicons}
+                                        name={'list-ordered'}
+                                        size={20}
+                                        color={Colors.primary}/>
+                                    <Text
+                                        style={{
+                                        fontFamily: 'PTSerif-Bold',
+                                        fontSize: 16,
+                                        marginTop: 10
+                                    }}>{i18n.orders}</Text>
+                                </View>
+                                <Icon
+                                    type={Icons.MaterialIcons}
+                                    name={'keyboard-arrow-right'}
+                                    size={20}
+                                    color={Colors.secondary}/>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={{

@@ -10,7 +10,7 @@ import {
     Text,
     Image,
     Dimensions,
-    ToastAndroid
+    RefreshControl
 } from 'react-native';
 import {useIsFocused} from "@react-navigation/native";
 import {Badge} from 'react-native-paper';
@@ -46,6 +46,7 @@ import i18n from '../util/i18n';
 const PetStoreScreen = ({navigation, route}) => {
     const refRBSheet = useRef(null)
     const isFocused = useIsFocused();
+    const [refreshing, setRefreshing] = useState(false);
     const [loadind, setLoading] = useState(true);
     const [singleFile, setSingleFile] = useState(null);
     const [homeAddress,
@@ -252,6 +253,30 @@ const PetStoreScreen = ({navigation, route}) => {
     
     }
 
+    const onRefresh = () => {
+        setRefreshing(true)
+        let path
+        if (petStoreCategories[selectedCategoryIndex].name === 'Medicine') {
+            path = "/petMedicineItems"
+        } else if (petStoreCategories[selectedCategoryIndex].name === 'Food') {
+            path = "/petFoodItems"
+        } else if (petStoreCategories[selectedCategoryIndex].name === 'Toys') {
+            path = "/petToysItems"
+        } else if (petStoreCategories[selectedCategoryIndex].name === 'Accesorries') {
+            path = "/petAccItems"
+        } else {
+            path = "/petFurItems"
+        }
+        database()
+            .ref(path)
+            .on('value', snapshot => {
+                if (snapshot.val()) {
+                    setRefreshing(false)
+                    setPetStoreItems(snapshot.val())
+                }
+            })
+    }
+
     useEffect(() => {
         if (isFocused) {
             AsyncStorage
@@ -425,6 +450,7 @@ const PetStoreScreen = ({navigation, route}) => {
                         }}>
                             {petStoreItems.length > 0
                                 ? <RNMasonryScroll
+                                        refreshControl={<RefreshControl progressViewOffset={20} colors={[Colors.primary, Colors.secondary]} refreshing={refreshing} onRefresh={onRefresh} />}
                                         removeClippedSubviews={true}
                                         columns={2}
                                         oddColumnStyle={{

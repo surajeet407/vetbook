@@ -8,7 +8,8 @@ import {
     Image,
     FlatList,
     Dimensions,
-    ImageBackground
+    ImageBackground,
+    RefreshControl
 } from 'react-native';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
 import Title from '../reusable_elements/Title';
@@ -23,6 +24,7 @@ import {Searchbar} from 'react-native-paper';
 import i18n from '../util/i18n';
 
 const AdoptPetScreen = ({navigation}) => {
+    const [refreshing, setRefreshing] = useState(false);
     const [loadind,
         setLoading] = useState(true);
     const [selectedCategoryIndex,
@@ -113,6 +115,27 @@ const AdoptPetScreen = ({navigation}) => {
                 }
             })
 
+    }
+    const onRefresh = () => {
+        setRefreshing(true)
+        let path
+        if (petCategories[selectedCategoryIndex].name === 'Dogs') {
+            path = "/petDogs"
+        } else if (petCategories[selectedCategoryIndex].name === 'Cats') {
+            path = "/petCats"
+        } else if (petCategories[selectedCategoryIndex].name === 'Birds') {
+            path = "/petBirds"
+        } else {
+            path = "/petRabbits"
+        }
+        database()
+            .ref(path)
+            .on('value', snapshot => {
+                if (snapshot.val()) {
+                    setRefreshing(false)
+                    setPets(snapshot.val())
+                }
+            })
     }
     useEffect(() => {
         getData();
@@ -370,6 +393,7 @@ const AdoptPetScreen = ({navigation}) => {
                             )}/> 
                             {pets.length > 0
                             ? <RNMasonryScroll
+                                    refreshControl={<RefreshControl progressViewOffset={20} colors={[Colors.primary, Colors.secondary]} refreshing={refreshing} onRefresh={onRefresh} />}
                                     style={{
                                     marginTop: 20
                                 }}

@@ -33,12 +33,7 @@ import Button from '../reusable_elements/Button';
 import RNFetchBlob from 'rn-fetch-blob';
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import moment from 'moment';
-import DocumentPicker, {
-    DirectoryPickerResponse,
-    DocumentPickerResponse,
-    isInProgress,
-    types,
-} from 'react-native-document-picker'
+import DocumentPicker from 'react-native-document-picker'
 import axios from 'axios';
 import uuid from 'react-native-uuid';
 import i18n from '../util/i18n';
@@ -518,7 +513,7 @@ const PetStoreScreen = ({navigation, route}) => {
                             justifyContent: 'center',
                     }}>
                         <View style={{marginBottom: 10, borderBottomColor: Colors.darkGray, borderBottomWidth: 1, padding: 5, paddingHorizontal: 20}}>
-                            <Text style={{fontSize: 24, fontFamily: 'Redressed-Regular', color: Colors.darkGray}}>Upload doctor's pescription</Text>
+                            <Text style={{fontSize: 20, fontFamily: 'Redressed-Regular', color: Colors.darkGray}}>Upload doctor's pescription</Text>
                         </View>
                         {singleFile && (
                             <View style={{marginTop: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
@@ -552,6 +547,7 @@ const PetStoreScreen = ({navigation, route}) => {
                             onPress={onPressSubmit}/>
                         :
                         <Button
+                        
                             iconPostionRight={true}
                             backgroundColor={Colors.secondary}
                             useIcon={true}

@@ -469,8 +469,7 @@ const PetStoreScreen = ({navigation, route}) => {
                                                 animationStyle="fadeInUp"
                                                 navToDetail={() => navigation.navigate("ItemDetails", {
                                                 item: item,
-                                                status: status,
-                                                type: petStoreCategories[selectedCategoryIndex].name
+                                                status: status
                                             })}
                                                 name={item.name}
                                                 image={item.image}

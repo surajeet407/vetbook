@@ -445,7 +445,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                 leftIconSize={45}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
-                onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "PetStore", status: status, type: route.params.type})}/>
+                onPressLeft={() => navigation.goBack()}/>
             <View
                 style={{
                 width: '100%',

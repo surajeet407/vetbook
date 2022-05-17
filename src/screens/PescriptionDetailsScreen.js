@@ -170,32 +170,26 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
             if(firstImageDetails) {
                 count++
                 ar.push(firstImageDetails)
-                ar.push(converImageToBinary(firstImageDetails))
             }
             if(secondImageDetails) {
                 count++
                 ar.push(secondImageDetails)
-                ar.push(converImageToBinary(secondImageDetails))
             }
             if(thirdImageDetails) {
                 count++
                 ar.push(thirdImageDetails)
-                ar.push(converImageToBinary(thirdImageDetails))
             }
             if(fourthImageDetails) {
                 count++
                 ar.push(fourthImageDetails)
-                ar.push(converImageToBinary(fourthImageDetails))
             }
             if(fifthImageDetails) {
                 count++
                 ar.push(fifthImageDetails)
-                ar.push(converImageToBinary(fifthImageDetails))
             }
             if(sixImageDetails) {
                 count++
                 ar.push(sixImageDetails)
-                ar.push(converImageToBinary(sixImageDetails))
             }
             if(count < 1) {
                 Toast.show({
@@ -210,7 +204,6 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
                 });
                 
             } else {
-                console.log(ar)
                 if(checked === "") {
                     Toast.show({
                         type: 'customToast',
@@ -228,7 +221,6 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
                         .fs
                         .readFile(ar[i].fileCopyUri, 'base64')
                         .then(base64String => {
-                            console.log(base64String)
                             ar[i].base64String = base64String
                         })
                     }
@@ -250,20 +242,24 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
                                 if (snapshot.val()) {
                                     array = snapshot.val()
                                 }
-                                // array.push(obj)
-                                // database()
-                                //     .ref("/users/" + phoneNo + "/pescriptions")
-                                //     .set(array)
-                                Toast.show({
-                                    type: 'customToast',
-                                    text1: "We will contact you within few minitues...",
-                                    position: 'bottom',
-                                    visibilityTime: 1500,
-                                    bottomOffset: 80,
-                                    props: {
-                                        backgroundColor: Colors.green3
-                                    }
-                                });
+                                array.push(obj)
+                                database()
+                                    .ref("/users/" + phoneNo + "/pescriptions")
+                                    .set(array).then(() => {
+                                        navigation.navigate("HomeBottomTabBar", {screen: "Home", status: 'loggedIn'})
+                                        Toast.show({
+                                            type: 'customToast',
+                                            text1: "We will contact you within few minitues...",
+                                            position: 'bottom',
+                                            delay: 1500,
+                                            visibilityTime: 1500,
+                                            bottomOffset: 80,
+                                            props: {
+                                                backgroundColor: Colors.green3
+                                            }
+                                        });
+                                })
+                                
                             })
                     })
                 }
@@ -537,7 +533,7 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
                             {addressess.length !== 0?
                             <View style={{marginTop: 10, flex: 1,  width: '100%'}}>
                                 {addressess.map((item, index) => 
-                                    <View style={[styles.item, {backgroundColor: checked === item.id ? Colors.green2:Colors.appBackground}]}>
+                                    <View key={index} style={[styles.item, {backgroundColor: checked === item.id ? Colors.green2:Colors.appBackground}]}>
                                         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                                             <View>
                                             <View style={{flexDirection: 'row', alignItems: 'center'}}>

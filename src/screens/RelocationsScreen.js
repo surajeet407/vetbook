@@ -237,7 +237,7 @@ const RelocationsScreen = ({navigation, route}) => {
                 leftIconSize={45}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
-                onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings"})}/>
+                onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings", status: status})}/>
                 <View
                     style={{
                     paddingHorizontal: 20,

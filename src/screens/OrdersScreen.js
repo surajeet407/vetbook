@@ -319,7 +319,7 @@ const OrdersScreen = ({navigation, route}) => {
                     />
             </View>
             {loading?
-            <View style={{marginTop: 10, padding: 20}}>
+            <View style={{paddingHorizontal: 20}}>
                 <ServiceScreenLoader/>
             </View>
             :

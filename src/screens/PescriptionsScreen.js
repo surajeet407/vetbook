@@ -18,20 +18,30 @@ import database from '@react-native-firebase/database';
 import Toast from 'react-native-toast-message';
 import RNFetchBlob from 'rn-fetch-blob'
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import SegmentedControlTab from 'react-native-segmented-control-tab'
 import i18n from '../util/i18n';
 
 const PescriptionsScreen = ({navigation, route}) => {
+    const filters = [{
+        key: "active",
+        text: "active"
+    },{
+        key: "Completed",
+        text: "completed"
+    }]
     const [loading,
         setLoading] = useState(true)
     const [details,
         setDetails] = useState([])
+    const [catIndex,
+        setCatIndex] = useState(0);
 
     const onPressDelete = (index) => {
         let data = details;
         data.splice(index, 1);
         setDetails(data);
     }
-    const getData = () => {
+    const getData = (cond) => {
         setLoading(true)
         if (route.params.status === 'loggedIn') {
             AsyncStorage
@@ -43,13 +53,19 @@ const PescriptionsScreen = ({navigation, route}) => {
                             .on('value', snapshot => {
                                 setLoading(false)
                                 if (snapshot.val()) {
-                                    let data = snapshot.val()
+                                    let data = snapshot.val(), items
                                     for (let i = 0; i < data.length; i++) {
                                         for (let j = 0; j < data[i].fileDetails.length; j++) {
                                             data[i].fileDetails[j].document = "data:image/png;base64," + data[i].fileDetails[j].base64String
                                         }
                                     }
-                                    setDetails(data)
+                                    if(cond === 'active') {
+                                        items = data.filter(item => item.active === true)
+                                    } else {
+                                        items = data.filter(item => item.active === false)
+                                    }
+                                    
+                                    setDetails(items)
                                 } else {
                                     setDetails([])
                                 }
@@ -62,13 +78,19 @@ const PescriptionsScreen = ({navigation, route}) => {
                 .then((data) => {
                     setLoading(false)
                     if (data && JSON.parse(data) > 0) {
-                        let mainData = JSON.parse(data)
+                        let mainData = JSON.parse(data), items
                         for (let i = 0; i < mainData.length; i++) {
                             for (let j = 0; j < mainData[i].fileDetails.length; j++) {
                                 mainData[i].fileDetails[j].document = "data:image/png;base64," + data[i].fileDetails[j].base64String
                             }
                         }
-                        setDetails(mainData)
+                        if(cond === 'active') {
+                            items = mainData.filter(item => item.active === true)
+                        } else {
+                            items = mainData.filter(item => item.active === false)
+                        }
+                        
+                        setDetails(items)
                     } else {
                         setDetails([])
                     }
@@ -95,6 +117,10 @@ const PescriptionsScreen = ({navigation, route}) => {
                 });
             });
     }
+    const handleCustomIndexSelect = (index) => {
+        setCatIndex(index)
+        getData(filters[index].key)
+    }
 
     useEffect(() => {
         PermissionsAndroid
@@ -113,7 +139,7 @@ const PescriptionsScreen = ({navigation, route}) => {
                     });
                 }
             })
-        getData();
+        getData('active');
     }, []);
 
     return (
@@ -135,7 +161,7 @@ const PescriptionsScreen = ({navigation, route}) => {
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={60}
+                headerHeight={100}
                 headerText={'Uploaded Pescriptions'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}
@@ -150,72 +176,52 @@ const PescriptionsScreen = ({navigation, route}) => {
 
             <View
                 style={{
-                marginTop: 20,
-                padding: 10,
-                flex: 1
+                paddingHorizontal: 20,
+                alignItems: 'center',
+                width: '100%'
             }}>
-                <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
+                <SegmentedControlTab
+                    values={["Active", "Completed"]}
+                    borderRadius={0}
+                    tabsContainerStyle={{ height: 50, backgroundColor: Colors.white }}
+                    tabStyle={{ backgroundColor: Colors.darkGray, borderColor: Colors.white, borderWidth: 1 }}
+                    activeTabStyle={{ backgroundColor: Colors.green }}
+                    tabTextStyle={{ color: '#444444', fontFamily: 'Oswald-Medium' }}
+                    activeTabTextStyle={{ color: Colors.white }}
+                    selectedIndex={catIndex}
+                    onTabPress={handleCustomIndexSelect}/>
+            </View>
+            <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
                     {loading?
-                    <View style={{marginTop: 10, padding: 5}}>
+                    <View style={{paddingHorizontal: 20}}>
                         <SkeletonPlaceholder >
-                            <View style={{borderColor: Colors.darkGray, borderWidth: 1, padding: 10}}>
+                            {[1, 2, 3, 4, 5].map(() => 
+                            <View style={{borderColor: Colors.darkGray, borderWidth: 1, padding: 10, marginTop: 10}}>
                                 <View style={{ width: 120, height: 20, borderRadius: 4 }} />
                                 <View  style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}/>
                                 <View style={{ flexDirection: "row", alignItems: "center", width: '100%' }}>
                                     <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4}}/>
                                     <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
                                     <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
                                 </View>
                             </View>
-                            <View style={{marginTop: 40, borderColor: Colors.darkGray, borderWidth: 1, padding: 10}}>
-                                <View style={{ width: 120, height: 20, borderRadius: 4 }} />
-                                <View  style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}/>
-                                <View style={{ flexDirection: "row", alignItems: "center", width: '100%' }}>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4}}/>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
-                                </View>
-                            </View>
-                            <View style={{marginTop: 40, borderColor: Colors.darkGray, borderWidth: 1, padding: 10}}>
-                                <View style={{ width: 120, height: 20, borderRadius: 4 }} />
-                                <View  style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}/>
-                                <View style={{ flexDirection: "row", alignItems: "center", width: '100%' }}>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4}}/>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
-                                </View>
-                            </View>
-                            <View style={{marginTop: 40, borderColor: Colors.darkGray, borderWidth: 1, padding: 10}}>
-                                <View style={{ width: 120, height: 20, borderRadius: 4 }} />
-                                <View  style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}/>
-                                <View style={{ flexDirection: "row", alignItems: "center", width: '100%' }}>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4}}/>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
-                                    <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
-                                </View>
-                            </View>
+                            )}
                         </SkeletonPlaceholder>
                     </View>
                     :
                     <View>
                         {details.length > 0
-                            ? <View>
+                            ? <View style={{
+                                paddingHorizontal: 20, 
+                                marginTop: 10,
+                            }}>
                                     {details.map((item, index) => <View
                                         key={index}
                                         style={{
                                         backgroundColor: Colors.appBackground,
-                                        marginHorizontal: 10,
-                                        marginVertical: 4,
                                         elevation: 4,
                                         marginBottom: 10,
-                                        padding: 10,
-                                        width: Dimensions
-                                            .get("screen")
-                                            .width - 40
+                                        padding: 10
                                     }}>
                                         <Animatable.View animation={'fadeInLeft'} style={{}}>
                                             <View
@@ -306,8 +312,8 @@ const PescriptionsScreen = ({navigation, route}) => {
                         }
                     </View>
                     }
-                </ScrollView>
-            </View>
+            </ScrollView>
+            
         </View>
     );
 };

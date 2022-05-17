@@ -402,7 +402,7 @@ import NetInfo from "@react-native-community/netinfo";
                       y: 1.0
                   }}
                   colors={[Colors.lightRed, Colors.darkGray]}
-                  style={{marginTop: 10, elevation: 5, padding: 10, height: 140, backgroundColor: Colors.gray, width: '100%', borderRadius: 20}}>
+                  style={{marginTop: 10, elevation: 5, padding: 10, height: 150, backgroundColor: Colors.gray, width: '100%', borderRadius: 20}}>
                     <View style={{width: '90%'}}>
                       <Text style={{marginTop: 5, fontFamily: 'Oswald-Bold', fontSize: 16, color: Colors.secondary}}>{"Order quickly with pescriptions"}</Text>
                       <Text style={{marginTop: 5, fontFamily: 'PTSerif-BoldItalic', fontSize: 14, color: Colors.gray}}>{"Upload pescriptions and tell us what you need!"}</Text>

@@ -7,9 +7,11 @@ import {
     FlatList,
     TouchableOpacity,
     Animated,
-    Dimensions
+    Dimensions,
+    RefreshControl
 } from 'react-native';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
+import ServiceScreenLoader from '../reusable_elements/ServiceScreenLoader';
 import Colors from '../util/Colors';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Title from '../reusable_elements/Title';
@@ -26,6 +28,7 @@ import RNBounceable from '@freakycoder/react-native-bounceable';
 import {Picker} from '@react-native-picker/picker';
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import RBSheet from "react-native-raw-bottom-sheet";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 
 const width = Dimensions
     .get('screen')
@@ -44,6 +47,9 @@ const OrdersScreen = ({navigation, route}) => {
     }]
     
     const refRBSheet = useRef(null)
+    const [refreshing, setRefreshing] = useState(false);
+    const [loading,
+        setLoading] = useState(true)
     const [pickerItems, 
         setPickerItems] = useState([])
     const [itemId, 
@@ -66,6 +72,8 @@ const OrdersScreen = ({navigation, route}) => {
         AsyncStorage
             .getItem("anonymusOrders")
             .then((data) => {
+                setLoading(false)
+                setRefreshing(false)
                 if (data && JSON.parse(data).length > 0) {
                     let allItem = JSON.parse(data);
                     let items = allItem.filter(item => item.mode === filter)
@@ -86,6 +94,8 @@ const OrdersScreen = ({navigation, route}) => {
             .ref("/users/" + phoneNo + "/orders")
             .once('value')
             .then(snapshot => {
+                setLoading(false)
+                setRefreshing(false)
                 if (snapshot.val()) {
                     let items = snapshot.val().filter(item => item.mode === filter)
                     let pickerValArray = [],
@@ -233,6 +243,14 @@ const OrdersScreen = ({navigation, route}) => {
             getDataFromStorage(filters[index].key)
         }
     }
+    const onRefresh = () => {
+        setRefreshing(true)
+        if (status === 'loggedIn') {
+            getDataFromDatabase(phoneNo, filters[catIndex].key);
+        } else {
+            getDataFromStorage(filters[catIndex].key)
+        }
+    }
 
     useEffect(() => {
         if (status === 'loggedIn') {
@@ -299,8 +317,14 @@ const OrdersScreen = ({navigation, route}) => {
                         selectedIndex={catIndex}
                         onTabPress={handleCustomIndexSelect}
                     />
-                </View>
+            </View>
+            {loading?
+            <View style={{marginTop: 10, padding: 20}}>
+                <ServiceScreenLoader/>
+            </View>
+            :
             <FlatList
+                refreshControl={<RefreshControl progressViewOffset={20} colors={[Colors.primary, Colors.secondary]} refreshing={refreshing} onRefresh={onRefresh} />}
                 ListEmptyComponent={
                     <View style={{alignItems: 'center', marginTop: 20}}>
                         <Title label="No orders are found..." size={20} color={Colors.darkGray}/>
@@ -607,6 +631,7 @@ const OrdersScreen = ({navigation, route}) => {
                     </Animatable.View>
                 )
             }}/>
+            }
             <RBSheet
                 height={180}
                 ref={refRBSheet}

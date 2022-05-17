@@ -17,6 +17,7 @@ import Colors from '../util/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button } from 'react-native-paper';
 import Title from '../reusable_elements/Title';
+import HomeScreenLoader from '../reusable_elements/HomeScreenLoader';
 import LandingHeader from '../reusable_elements/LandingHeader';
 import TrackComponent from '../reusable_elements/TrackComponent';
 import { TouchableRipple } from 'react-native-paper';
@@ -303,28 +304,12 @@ import NetInfo from "@react-native-community/netinfo";
             {homeAddress.serviceAvailable?
               <View>
                 {loadind ? 
-                <Animatable.View animation={'fadeIn'} >
-                  <SkeletonPlaceholder style={{padding: 20}}>
-                      <View style={{  height: 120, borderRadius: 30 }} />
-                      <View style={{marginTop: 20, width: '100%', height: 50, borderRadius: 10 }}/>
-                      <View style={{ marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View style={{ width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
-                        <View style={{marginLeft: 5, width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
-                      </View>
-                      <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View style={{ width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
-                        <View style={{marginLeft: 5, width: Dimensions.get('screen').width / 2 - 15, height: 160, borderRadius: 20 }} />
-                      </View>
-                      <View style={{marginTop: 20, width: '100%', height: 100, borderRadius: 10 }}/>
-                      <View style={{marginTop: 10, width: '100%', height: 100, borderRadius: 10 }}/>
-                      <View style={{ marginTop: 20, height: 150, borderRadius: 30 }} />
-                  </SkeletonPlaceholder>
-                </Animatable.View>
+                <HomeScreenLoader/>
                 :
                 <View style={{flex: 1, padding: 5}}>
                   <Swiper showsPagination={true} autoplayTimeout={5} autoplay={true} dotColor={Colors.darkOverlayColor} activeDotColor={Colors.white} activeDotStyle={{width: 40}} style={{height: 150}}>
                       {homePageCarouselServices.map((item, index) =>
-                      <View style={{
+                      <View key={index} style={{
                           borderRadius: 20,
                           height: 130,
                           marginHorizontal: 5,
@@ -343,7 +328,7 @@ import NetInfo from "@react-native-community/netinfo";
                           borderRadius: 20
                         }}
                         colors={[item.backgroundColor, Colors.darkGray]}>
-                          <View key={index} style={{
+                          <View style={{
                               flexDirection: 'row',
                               justifyContent: 'center',
                               alignItems: 'center'
@@ -392,7 +377,7 @@ import NetInfo from "@react-native-community/netinfo";
                   </View> 
                   <View style={{marginBottom: 5}}>
                     {quickService.map((item, index) => 
-                    <View key={index} style={{marginTop: 20, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: Colors.appBackground, borderRadius: 10, elevation: 2}}>
+                    <View key={index} style={{marginTop: 10, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: Colors.appBackground, borderRadius: 10, elevation: 2}}>
                       <TouchableRipple key={index} style={{width: '100%'}} onPress={() => onPressNavToService(item)}>
                         <ImageBackground blurRadius={5} source={require('../assets/images/background3.png')} style={{ width: '100%', height: 80, padding: 10}}>
                           <View style={{flexDirection: 'row'}}>
@@ -417,7 +402,7 @@ import NetInfo from "@react-native-community/netinfo";
                       y: 1.0
                   }}
                   colors={[Colors.lightRed, Colors.darkGray]}
-                  style={{marginTop: 20, elevation: 5, padding: 10, height: 140, backgroundColor: Colors.gray, width: '100%', borderRadius: 20}}>
+                  style={{marginTop: 10, elevation: 5, padding: 10, height: 140, backgroundColor: Colors.gray, width: '100%', borderRadius: 20}}>
                     <View style={{width: '90%'}}>
                       <Text style={{marginTop: 5, fontFamily: 'Oswald-Bold', fontSize: 16, color: Colors.secondary}}>{"Order quickly with pescriptions"}</Text>
                       <Text style={{marginTop: 5, fontFamily: 'PTSerif-BoldItalic', fontSize: 14, color: Colors.gray}}>{"Upload pescriptions and tell us what you need!"}</Text>

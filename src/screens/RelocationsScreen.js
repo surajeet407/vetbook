@@ -8,9 +8,11 @@ import {
     TouchableOpacity,
     Animated,
     Dimensions,
-    Linking
+    Linking,
+    RefreshControl
 } from 'react-native';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
+import ServiceScreenLoader from '../reusable_elements/ServiceScreenLoader';
 import Colors from '../util/Colors';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Title from '../reusable_elements/Title';
@@ -25,6 +27,7 @@ import i18n from '../util/i18n';
 import {Picker} from '@react-native-picker/picker';
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import RBSheet from "react-native-raw-bottom-sheet";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 
 const width = Dimensions
     .get('screen')
@@ -43,6 +46,9 @@ const RelocationsScreen = ({navigation, route}) => {
     }]
 
     const refRBSheet = useRef(null)
+    const [refreshing, setRefreshing] = useState(false);
+    const [loading,
+        setLoading] = useState(true)
     const [itemId, 
         setItemId] = useState("");
     const [pickerValue, 
@@ -62,6 +68,8 @@ const RelocationsScreen = ({navigation, route}) => {
         AsyncStorage
             .getItem("anonymusRelocation")
             .then((data) => {
+                setLoading(false)
+                setRefreshing(false)
                 if (data && JSON.parse(data).length > 0) {
                     let allItem = JSON.parse(data);
                     let items = allItem.filter(item => item.mode === filter)
@@ -82,6 +90,8 @@ const RelocationsScreen = ({navigation, route}) => {
             .ref("/users/" + phoneNo + "/relocations")
             .once('value')
             .then(snapshot => {
+                setLoading(false)
+                setRefreshing(false)
                 if (snapshot.val()) {
                     let items = snapshot.val().filter(item => item.mode === filter)
                     let pickerValArray = [],
@@ -191,6 +201,15 @@ const RelocationsScreen = ({navigation, route}) => {
         }
     }
 
+    const onRefresh = () => {
+        setRefreshing(true)
+        if (status === 'loggedIn') {
+            getDataFromDatabase(phoneNo, filters[catIndex].key);
+        } else {
+            getDataFromStorage(filters[catIndex].key)
+        }
+    }
+
     useEffect(() => {
         if (status === 'loggedIn') {
             AsyncStorage
@@ -255,9 +274,14 @@ const RelocationsScreen = ({navigation, route}) => {
                     selectedIndex={catIndex}
                     onTabPress={handleCustomIndexSelect}
                     />
-                </View>
-
+            </View>
+            {loading?
+            <View style={{marginTop: 10, padding: 20}}>
+                <ServiceScreenLoader/>
+            </View>
+            :
             <FlatList
+                refreshControl={<RefreshControl progressViewOffset={20} colors={[Colors.primary, Colors.secondary]} refreshing={refreshing} onRefresh={onRefresh} />}
                 ListEmptyComponent={
                     <View style={{alignItems: 'center', marginTop: 20}}>
                         <Title label="No relocation requests are found..." size={20} color={Colors.darkGray}/>
@@ -652,6 +676,7 @@ const RelocationsScreen = ({navigation, route}) => {
                     </Animatable.View>
                 )
             }}/>
+            }
             <RBSheet
                 height={180}
                 ref={refRBSheet}

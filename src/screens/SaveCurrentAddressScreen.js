@@ -112,8 +112,9 @@ import React, {useEffect, useState, useRef} from 'react';
                 }
               });
             } else {
+              
               AsyncStorage
-              .getItem('AsynchronousAddresses')
+              .getItem('anonymusAddresses')
               .then((data) => {
                   let obj = {
                     ...region, 
@@ -140,7 +141,7 @@ import React, {useEffect, useState, useRef} from 'react';
                     ar.push(obj)
                   }
                   AsyncStorage
-                  .setItem('AsynchronousAddresses', JSON.stringify(ar))
+                  .setItem('anonymusAddresses', JSON.stringify(ar))
 
                   
                   Toast.show({

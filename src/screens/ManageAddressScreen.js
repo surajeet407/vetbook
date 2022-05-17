@@ -62,10 +62,10 @@ import i18n from '../util/i18n';
     } else {
       if (newAddressess.length > 0) {
         AsyncStorage
-        .setItem('AsynchronousAddresses', JSON.stringify(newAddressess))
+        .setItem('anonymusAddresses', JSON.stringify(newAddressess))
       } else {
         AsyncStorage
-        .setItem('AsynchronousAddresses', '[]')
+        .setItem('anonymusAddresses', '[]')
       }
     }
   };
@@ -91,7 +91,7 @@ import i18n from '../util/i18n';
       })
     } else {
       AsyncStorage
-        .getItem('AsynchronousAddresses')
+        .getItem('anonymusAddresses')
         .then((data) => {
           if (data && JSON.parse(data).length > 0) {
             setAddressess(JSON.parse(data))
@@ -140,7 +140,7 @@ import i18n from '../util/i18n';
         })
       } else {
         AsyncStorage
-          .getItem('AsynchronousAddresses')
+          .getItem('anonymusAddresses')
           .then((data) => {
             if (data && JSON.parse(data).length > 0) {
               let path, ar = JSON.parse(data);
@@ -150,7 +150,7 @@ import i18n from '../util/i18n';
                 }
               }
               AsyncStorage
-                .setItem('AsynchronousAddresses', JSON.stringify(ar))
+                .setItem('anonymusAddresses', JSON.stringify(ar))
               navigation.navigate("Confirm", {details: {
                 ...route.params.details,
                 address: ar[path]

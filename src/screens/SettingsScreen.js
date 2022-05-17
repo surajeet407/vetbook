@@ -104,7 +104,6 @@ const SettingsScreen = ({navigation, route}) => {
                             animation={'fadeInLeft'}
                             style={{
                         }}>
-                            {status === 'loggedIn' && (
                             <TouchableOpacity
                                 style={{
                                 paddingVertical: 8,
@@ -142,7 +141,6 @@ const SettingsScreen = ({navigation, route}) => {
                                     size={20}
                                     color={Colors.secondary}/>
                             </TouchableOpacity>
-                            )}
                             <TouchableOpacity
                                 style={{
                                 paddingVertical: 8,

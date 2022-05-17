@@ -60,7 +60,7 @@ const DefaltAddressComponent = (props) => {
                         })
                     } else {
                         AsyncStorage
-                            .getItem('AsynchronousAddresses')
+                            .getItem('anonymusAddresses')
                             .then((data) => {
                             if (data && JSON.parse(data).length > 0) {
                                 

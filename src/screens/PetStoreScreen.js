@@ -179,7 +179,7 @@ const PetStoreScreen = ({navigation, route}) => {
 
     }
     const onPressFileUploadButton = () => {
-        navigation.navigate("PescriptionDetails")
+        navigation.navigate("PescriptionDetails", {status: status})
     }
     const onPressUpload = () => {
         DocumentPicker.pickSingle({
@@ -304,7 +304,7 @@ const PetStoreScreen = ({navigation, route}) => {
             flex: 1,
             backgroundColor: Colors.appBackground
         }}>
-            {(selectedCategoryIndex === 0 && status === 'loggedIn') && ( 
+            {selectedCategoryIndex === 0 && ( 
             <Animatable.View animation={'fadeInUp'} style={{
                 alignItems: 'center',
                 justifyContent: 'center',

@@ -18,7 +18,6 @@ import SpalshScreen from '../screens/SpalshScreen';
 import LogScreen from '../screens/LogScreen';
 import OTPScreen from '../screens/OTPScreen';
 import AddressScreen from '../screens/AddressScreen';
-import SaveCurrentAddressScreen from '../screens/SaveCurrentAddressScreen';
 import ManageAddressScreen from '../screens/ManageAddressScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import BloodTestScreen from '../screens/BloodTestScreen';
@@ -207,14 +206,6 @@ const StackNav = (params) => {
                 }}
                     name="Address"
                     component={AddressScreen}/>
-                <Stack.Screen
-                    options={{
-                    headerShown: false,
-                    gestureEnabled: true,
-                    ...TransitionPresets.RevealFromBottomAndroid
-                }}
-                    name="SaveCurrentAddress"
-                    component={SaveCurrentAddressScreen}/>
                 <Stack.Screen
                     options={{
                     headerShown: false

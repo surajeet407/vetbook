@@ -263,7 +263,6 @@ const AddressScreen = ({navigation, route}) => {
 
     const onPressGoToSaveAddress = () => {
         setShowMap(false)
-        // navigation.navigate('SaveCurrentAddress', {region: region, addressText: address})
     }
 
     return (

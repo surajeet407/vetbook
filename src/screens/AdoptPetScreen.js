@@ -203,50 +203,27 @@ const AdoptPetScreen = ({navigation}) => {
                                     style={{
                                     padding: 20
                                 }}>
-                                    <View
-                                        style={{
-                                        marginTop: 10,
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between'
-                                    }}>
-                                        <View
-                                            style={{
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 20
-                                        }}/>
-                                        <View
-                                            style={{
-                                            marginLeft: 15,
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 20
-                                        }}/>
-                                        <View
-                                            style={{
-                                            marginLeft: 15,
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 20
-                                        }}/>
-                                        <View
-                                            style={{
-                                            marginLeft: 15,
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 20
-                                        }}/>
-                                        <View
-                                            style={{
-                                            marginLeft: 15,
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 20
-                                        }}/>
+                                    <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{alignItems: 'center'}}>
+                                            <View style={{ width: 80, height: 80, borderRadius: 20 }} />
+                                            <View  style={{ marginTop: 5, width: 60, height: 10, borderRadius: 4}}/>
+                                        </View>
+                                        <View style={{alignItems: 'center'}}>
+                                            <View style={{ width: 80, height: 80, borderRadius: 20 }} />
+                                            <View  style={{ marginTop: 5, width: 60, height: 10, borderRadius: 4}}/>
+                                        </View>
+                                        <View style={{alignItems: 'center'}}>
+                                            <View style={{ width: 80, height: 80, borderRadius: 20 }} />
+                                            <View  style={{ marginTop: 5, width: 60, height: 10, borderRadius: 4}}/>
+                                        </View>
+                                        <View style={{alignItems: 'center'}}>
+                                            <View style={{ width: 80, height: 80, borderRadius: 20 }} />
+                                            <View  style={{ marginTop: 5, width: 60, height: 10, borderRadius: 4}}/>
+                                        </View>
                                     </View>
                                     <View
                                         style={{
-                                        marginTop: 20,
+                                        marginTop: 30,
                                         flexDirection: 'row',
                                         justifyContent: 'space-between'
                                     }}>

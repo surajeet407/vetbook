@@ -158,7 +158,7 @@ const PescriptionsScreen = ({navigation, route}) => {
                     {loading?
                     <View style={{marginTop: 10, padding: 5}}>
                         <SkeletonPlaceholder >
-                            <View>
+                            <View style={{borderColor: Colors.darkGray, borderWidth: 1, padding: 10}}>
                                 <View style={{ width: 120, height: 20, borderRadius: 4 }} />
                                 <View  style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}/>
                                 <View style={{ flexDirection: "row", alignItems: "center", width: '100%' }}>
@@ -168,7 +168,7 @@ const PescriptionsScreen = ({navigation, route}) => {
                                     <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
                                 </View>
                             </View>
-                            <View style={{marginTop: 40}}>
+                            <View style={{marginTop: 40, borderColor: Colors.darkGray, borderWidth: 1, padding: 10}}>
                                 <View style={{ width: 120, height: 20, borderRadius: 4 }} />
                                 <View  style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}/>
                                 <View style={{ flexDirection: "row", alignItems: "center", width: '100%' }}>
@@ -178,7 +178,7 @@ const PescriptionsScreen = ({navigation, route}) => {
                                     <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
                                 </View>
                             </View>
-                            <View style={{marginTop: 40}}>
+                            <View style={{marginTop: 40, borderColor: Colors.darkGray, borderWidth: 1, padding: 10}}>
                                 <View style={{ width: 120, height: 20, borderRadius: 4 }} />
                                 <View  style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}/>
                                 <View style={{ flexDirection: "row", alignItems: "center", width: '100%' }}>
@@ -188,7 +188,7 @@ const PescriptionsScreen = ({navigation, route}) => {
                                     <View  style={{ marginTop: 10, width: 80, height: 80, borderRadius: 4, marginLeft: 20 }}/>
                                 </View>
                             </View>
-                            <View style={{marginTop: 40}}>
+                            <View style={{marginTop: 40, borderColor: Colors.darkGray, borderWidth: 1, padding: 10}}>
                                 <View style={{ width: 120, height: 20, borderRadius: 4 }} />
                                 <View  style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}/>
                                 <View style={{ flexDirection: "row", alignItems: "center", width: '100%' }}>

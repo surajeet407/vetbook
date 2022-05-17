@@ -318,7 +318,7 @@ const PetStoreScreen = ({navigation, route}) => {
                 borderRadius: 50,
                 elevation: 10
                 }}>
-                <Icon onPress={onPressFileUploadButton} type={Icons.MaterialIcons} name="upload-file" color={Colors.white} size={25} />
+                <Icon onPress={onPressFileUploadButton} type={Icons.Feather} name="upload" color={Colors.white} size={25} />
             </Animatable.View>
             )}
             <LandingHeader
@@ -385,13 +385,24 @@ const PetStoreScreen = ({navigation, route}) => {
                     <Animatable.View animation={'fadeIn'} >
                         <SkeletonPlaceholder style={{padding: 20}}>
                             <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <View style={{ width: 80, height: 80, borderRadius: 20 }} />
-                                <View style={{ marginLeft: 15, width: 80, height: 80, borderRadius: 20 }} />
-                                <View style={{ marginLeft: 15, width: 80, height: 80, borderRadius: 20 }} />
-                                <View style={{ marginLeft: 15, width: 80, height: 80, borderRadius: 20 }} />
-                                <View style={{ marginLeft: 15, width: 80, height: 80, borderRadius: 20 }} />
+                                <View style={{alignItems: 'center'}}>
+                                    <View style={{ width: 80, height: 80, borderRadius: 20 }} />
+                                    <View  style={{ marginTop: 5, width: 60, height: 10, borderRadius: 4}}/>
+                                </View>
+                                <View style={{alignItems: 'center'}}>
+                                    <View style={{ width: 80, height: 80, borderRadius: 20 }} />
+                                    <View  style={{ marginTop: 5, width: 60, height: 10, borderRadius: 4}}/>
+                                </View>
+                                <View style={{alignItems: 'center'}}>
+                                    <View style={{ width: 80, height: 80, borderRadius: 20 }} />
+                                    <View  style={{ marginTop: 5, width: 60, height: 10, borderRadius: 4}}/>
+                                </View>
+                                <View style={{alignItems: 'center'}}>
+                                    <View style={{ width: 80, height: 80, borderRadius: 20 }} />
+                                    <View  style={{ marginTop: 5, width: 60, height: 10, borderRadius: 4}}/>
+                                </View>
                             </View>
-                            <View style={{ marginTop: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View style={{ marginTop: 30, flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <View style={{ width: Dimensions.get('screen').width / 2 - 30, height: 160, borderRadius: 20 }} />
                                 <View style={{marginTop: 20, marginLeft: 5, width: Dimensions.get('screen').width / 2 - 30, height: 160, borderRadius: 20 }} />
                             </View>

@@ -6,7 +6,9 @@ import React, {useRef, useState, useEffect} from 'react';
    TouchableOpacity,
    FlatList,
    Animated,
-   ImageBackground
+   ImageBackground,
+   RefreshControl,
+   Dimensions
  } from 'react-native';
  import Colors from '../util/Colors';
  import { useIsFocused } from '@react-navigation/native';
@@ -19,6 +21,7 @@ import database from '@react-native-firebase/database';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon, { Icons } from '../util/Icons';
 import Toast from 'react-native-toast-message';
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import i18n from '../util/i18n';
  
  const ManageAddressScreen = ({navigation, route}) => {
@@ -26,6 +29,8 @@ import i18n from '../util/i18n';
   const isFocused = useIsFocused();
   const [status,
     setStatus] = useState(route.params.status);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loadind, setLoading] = useState(true);
   const [addressess, setAddressess] = useState([]);
   const [checked, setChecked] = useState('');
   const [showSelection, setShowSelection] = useState(route.params.showSelection);
@@ -79,6 +84,8 @@ import i18n from '../util/i18n';
       AsyncStorage
         .getItem('phoneNo')
         .then((phoneNo, msg) => {
+          setRefreshing(false)
+          setLoading(false)
           if (phoneNo) {
             database()
             .ref('/users/' + phoneNo + "/addresses")
@@ -93,6 +100,8 @@ import i18n from '../util/i18n';
       AsyncStorage
         .getItem('anonymusAddresses')
         .then((data) => {
+          setRefreshing(false)
+          setLoading(false)
           if (data && JSON.parse(data).length > 0) {
             setAddressess(JSON.parse(data))
           }
@@ -162,6 +171,11 @@ import i18n from '../util/i18n';
     
   }
 
+  const onRefresh = () => {
+    setRefreshing(true)
+    getData()
+  }
+
   useEffect(() => {
     if (isFocused) {
       getData();
@@ -205,9 +219,27 @@ import i18n from '../util/i18n';
             leftIconBackgroundColor={Colors.appBackground}
             onPressLeft={() => navigation.goBack()} 
         />
-      <View style={{marginBottom: showSelection? 80:0, paddingHorizontal: 5, marginTop: 10, flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start', backgroundColor: Colors.appBackground,  width: '100%'}}>
+      <View style={{marginBottom: showSelection? 80:0, paddingHorizontal: 20, backgroundColor: Colors.appBackground}}>
+        {true?
+        <Animatable.View animation={'fadeIn'}>
+          <SkeletonPlaceholder>
+              {[1,2,3,4,5,6,7,8,9,0].map(() => 
+              <View style={{marginTop: 20, borderColor: Colors.darkGray, borderWidth: 1, padding: 15 }}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <View style={{ width: 100, height: 15, borderRadius: 4 }} />
+                      <View style={{marginLeft: 20, width: 50, height: 15, borderRadius: 4 }} />
+                  </View>
+                  <View style={{marginTop: 10, width: Dimensions.get('screen').width - 80, height: 10, borderRadius: 4 }} />
+                  <View style={{marginTop: 10, width: Dimensions.get('screen').width - 120, height: 10, borderRadius: 4 }} />
+              </View>
+              )}
+          </SkeletonPlaceholder>
+      </Animatable.View>
+        :
+        <View style={{marginTop: 10}}>
           {addressess.length !== 0?
           <SwipeListView
+            refreshControl={<RefreshControl progressViewOffset={20} colors={[Colors.primary, Colors.secondary]} refreshing={refreshing} onRefresh={onRefresh} />}
             disableLeftSwipe={showSelection? true:false}
             disableRightSwipe= {true}
             width="100%"
@@ -251,10 +283,12 @@ import i18n from '../util/i18n';
                 </TouchableOpacity>
               </View>
             )}
-        /> 
-        :
-        <View style={{padding: 20}}>
-          <Animatable.Text animation={'slideInUp'} style={{fontFamily: 'Redressed-Regular', fontSize: 25, color: checked === '#ff9d0a'}}>There is no saved address, click on add icon to add...</Animatable.Text>
+          /> 
+          :
+          <View style={{padding: 20}}>
+            <Animatable.Text animation={'slideInUp'} style={{fontFamily: 'Redressed-Regular', fontSize: 25, color: checked === '#ff9d0a'}}>There is no saved address, click on add icon to add...</Animatable.Text>
+          </View>
+          }
         </View>
         }
       </View>
@@ -278,9 +312,8 @@ import i18n from '../util/i18n';
     backgroundColor: 'red'
   },
   item: {
-    flex: 1,
     padding: 12,
-    marginHorizontal: 10,
+    marginHorizontal: 2,
     marginVertical: 4,
     borderRadius: 10,
     elevation: 4

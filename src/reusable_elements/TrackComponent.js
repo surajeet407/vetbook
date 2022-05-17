@@ -40,7 +40,7 @@ const TrackComponent = (props) => {
                 <TouchableRipple
                     style={{
                     width: 60,
-                    backgroundColor: '#d35500',
+                    backgroundColor: Colors.lightRed,
                     elevation: 5,
                     borderRadius: 15,
                     alignItems: 'center'

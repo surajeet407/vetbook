@@ -24,6 +24,7 @@ export default {
     gray : '#CCCCCC',
     darkGray : '#999999',
     deepGreen : '#4a8f4b',
+    lightRed: "#ea7a72",
 
     darkOverlayColor : 'rgba(0, 0, 0, 0.4)',
     darkOverlayColor2 : 'rgba(0, 0, 0, 0.8)',

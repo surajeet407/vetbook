@@ -220,7 +220,7 @@ import i18n from '../util/i18n';
             onPressLeft={() => navigation.goBack()} 
         />
       <View style={{marginBottom: showSelection? 80:0, paddingHorizontal: 20, backgroundColor: Colors.appBackground}}>
-        {true?
+        {loadind?
         <Animatable.View animation={'fadeIn'}>
           <SkeletonPlaceholder>
               {[1,2,3,4,5,6,7,8,9,0].map(() => 

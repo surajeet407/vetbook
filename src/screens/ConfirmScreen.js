@@ -291,14 +291,14 @@ const _updateUiBasedOnServiceType = (txnId) => {
                 renderItem={ ({item, index}) => (
                 <Animatable.View delay={50 * index} animation={'slideInRight'} style={{margin: 5, paddingHorizontal: 15, paddingVertical: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: Colors.appBackground, borderRadius: 15, elevation: 5}}>
                   <View style={{flexDirection: 'row'}}>
-                    <Image source={{uri: item.image}} style={{borderRadius: 15, borderColor: Colors.appBackground, borderWidth: 5,  width: 80, height: 80}}/>
-                    <View style={{marginLeft: 10, width: '70%', alignItems: 'flex-start', justifyContent: 'space-evenly'}}>
+                    <Image source={{uri: item.image}} style={{borderRadius: 15, borderColor: Colors.appBackground, borderWidth: 5,  width: 60, height: 60}}/>
+                    <View style={{marginLeft: 10, width: '70%',   justifyContent: 'center'}}>
                       <View style={{width: '90%', flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={{fontFamily: 'Oswald-Medium', fontSize: 20, color: Colors.primary}}>{item.name}</Text>
-                        <Icon type={Icons.Ionicons} style={{marginTop: 10, marginLeft: 2}} name={'close'} size={20} color={Colors.primary}/>
-                        <Text style={{marginLeft: 2, fontFamily: 'Oswald-Medium', fontSize: 20, color: Colors.primary}}>{item.quantity}</Text>
+                        <Text style={{fontFamily: 'Oswald-Medium', fontSize: 18, color: Colors.primary}}>{item.name}</Text>
+                        <Icon type={Icons.Ionicons} style={{marginTop: 10, marginLeft: 2}} name={'close'} size={18} color={Colors.primary}/>
+                        <Text style={{marginLeft: 2, fontFamily: 'Oswald-Medium', fontSize: 18, color: Colors.primary}}>{item.quantity}</Text>
                       </View>
-                      <Text style={{fontFamily: 'PTSerif-Bold', fontSize: 18, color: 'grey'}}>Price: {item.price} /-</Text>
+                      <Text style={{fontFamily: 'PTSerif-Bold', fontSize: 14, color: Colors.darkGray}}>Price: {item.discountPrice} /-</Text>
                     </View>
                   </View>
                 </Animatable.View>

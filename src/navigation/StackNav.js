@@ -41,6 +41,7 @@ import PaymentStatusScreen from '../screens/PaymentStatusScreen';
 import TrackOrderScreen from '../screens/TrackOrderScreen';
 import ChooseTimeSlotScreen from '../screens/ChooseTimeSlotScreen';
 import PescriptionsScreen from '../screens/PescriptionsScreen';
+import PescriptionDetailsScreen from '../screens/PescriptionDetailsScreen';
 import ItemReviewScreen from '../screens/ItemReviewScreen';
 import ChatScreen from '../screens/ChatScreen';
 import AccountDeletionScreen from '../screens/AccountDeletionScreen';
@@ -279,6 +280,12 @@ const StackNav = (params) => {
                 }}
                     name="Pescriptions"
                     component={PescriptionsScreen}/>
+                <Stack.Screen
+                    options={{
+                    headerShown: false
+                }}
+                    name="PescriptionDetails"
+                    component={PescriptionDetailsScreen}/>
                 <Stack.Screen
                     options={{
                     headerShown: false

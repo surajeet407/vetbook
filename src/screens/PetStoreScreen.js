@@ -179,7 +179,7 @@ const PetStoreScreen = ({navigation, route}) => {
 
     }
     const onPressFileUploadButton = () => {
-        refRBSheet.current.open()
+        navigation.navigate("PescriptionDetails")
     }
     const onPressUpload = () => {
         DocumentPicker.pickSingle({

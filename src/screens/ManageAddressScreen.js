@@ -27,7 +27,7 @@ import i18n from '../util/i18n';
   const [status,
     setStatus] = useState(route.params.status);
   const [addressess, setAddressess] = useState([]);
-  const [checked, setChecked] = React.useState('');
+  const [checked, setChecked] = useState('');
   const [showSelection, setShowSelection] = useState(route.params.showSelection);
 
   const closeRow = (rowMap, rowKey) => {

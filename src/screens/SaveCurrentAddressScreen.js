@@ -28,6 +28,7 @@ import React, {useEffect, useState, useRef} from 'react';
  import uuid from 'react-native-uuid';
  import i18n from '../util/i18n';
  
+ 
  const AddressScreen = ({navigation, route}) => {
    const region = route.params.region
    const [checked, setChecked] = useState("true");

@@ -367,7 +367,7 @@ import NetInfo from "@react-native-community/netinfo";
                       fontSize={16}
                       borderColor={Colors.white}
                       titleColor={Colors.white}/>
-                    <View style={{marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', width: "100%"}}>
+                    <View style={{marginTop: 10, flexDirection: 'row', flexWrap: 'wrap', width: "100%"}}>
                       <RNMasonryScroll
                           columns={2}
                           oddColumnStyle={{marginTop: 30 }}
@@ -376,12 +376,12 @@ import NetInfo from "@react-native-community/netinfo";
                           keyExtractor={(item) => item.id}>
                           {mainServices.map((item, index) =>
                           <Animatable.View  delay={100 * index} animation={'fadeInUp'} key={index} style={{alignItems: 'center', justifyContent: 'space-evenly', margin: 5, elevation: 5}}>
-                            <RNBounceable onPress={() => onPressNavToService(item)} style={{width: Dimensions.get('screen').width/2 - 25, justifyContent: 'space-evenly', borderRadius: 15, backgroundColor: item.backgroundColor, height: 180,  padding: 10}}>
+                            <RNBounceable onPress={() => onPressNavToService(item)} style={{width: Dimensions.get('screen').width/2 - 25, justifyContent: 'space-evenly', borderRadius: 15, backgroundColor: item.backgroundColor, height: 150,  padding: 10}}>
                               <ImageBackground blurRadius={2} source={require('../assets/images/background4.png')} style={{ width: '100%', height: '100%'}}>
-                                  <Title label={item.title} size={18} color={'#fff'}/> 
-                                  <Text style={{color: Colors.gray, fontSize: 15, fontFamily: 'Oswald-Medium'}}>Lorem ipsum dolor sit amet...</Text>
+                                  <Title label={item.title} size={16} color={'#fff'}/> 
+                                  <Text style={{color: Colors.secondary, fontSize: 12, fontFamily: 'PTSerif-BoldItalic'}}>Lorem ipsum dolor sit amet...</Text>
                                   <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: '100%', height: '100%'}}>
-                                    <Icon name={'arrow-right'} color={'#fff'} size={15}/> 
+                                    <Icon name={'arrow-right'} color={'#fff'} size={14}/> 
                                     <Image style={{height: '40%', width: '60%'}} source={{uri: item.image}}/>
                                   </View>
                               </ImageBackground>
@@ -417,9 +417,9 @@ import NetInfo from "@react-native-community/netinfo";
                       y: 1.0
                   }}
                   colors={[Colors.lightRed, Colors.darkGray]}
-                  style={{marginTop: 20, elevation: 5, padding: 10, height: 150, backgroundColor: Colors.gray, width: '100%', borderRadius: 20}}>
+                  style={{marginTop: 20, elevation: 5, padding: 10, height: 140, backgroundColor: Colors.gray, width: '100%', borderRadius: 20}}>
                     <View style={{width: '90%'}}>
-                      <Text style={{marginTop: 5, fontFamily: 'Oswald-Bold', fontSize: 18, color: Colors.secondary}}>{"Order quickly with pescriptions"}</Text>
+                      <Text style={{marginTop: 5, fontFamily: 'Oswald-Bold', fontSize: 16, color: Colors.secondary}}>{"Order quickly with pescriptions"}</Text>
                       <Text style={{marginTop: 5, fontFamily: 'PTSerif-BoldItalic', fontSize: 14, color: Colors.gray}}>{"Upload pescriptions and tell us what you need!"}</Text>
                       <Text style={{marginTop: 5, fontFamily: 'PTSerif-Bold', fontSize: 12, color: Colors.gray}}>{"We will provide you at your dooestep..."}</Text>
                       <View style={{marginTop: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>

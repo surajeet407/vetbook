@@ -39,13 +39,13 @@ const PescriptionsScreen = ({navigation}) => {
                             if (snapshot.val()) {
                                 let data = snapshot.val()
                                 for(let i = 0; i < data.length; i++) {
-                                    if(data[i].fileDetails.type.split("/")[0] === 'image') {
-                                        data[i].document = "data:image/png;base64," + data[i].image 
-                                    } else {
-                                        data[i].document = "data:application/pdf;base64," + data[i].image
-                                    } 
+                                    for(let j = 0; j < data[i].fileDetails.length; j++) {
+                                        data[i].fileDetails[j].document = "data:image/png;base64," + data[i].fileDetails[j].base64String
+                                    }
                                 }
                                 setDetails(data)
+                            } else {
+                                setDetails([])
                             }
                         })
                 }
@@ -138,6 +138,7 @@ const PescriptionsScreen = ({navigation}) => {
                             marginVertical: 4,
                             elevation: 4,
                             marginBottom: 10,
+                            padding: 10,
                             width: Dimensions
                                 .get("screen")
                                 .width - 40
@@ -148,53 +149,44 @@ const PescriptionsScreen = ({navigation}) => {
                             }}>
                                 <View
                                     style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    padding: 10
-                                }}>
-                                    <View
-                                        style={{
-                                        alignItems: 'center',
-                                        backgroundColor: Colors.appBackground,
-                                        elevation: 2,
-                                        borderRadius: 50,
-                                        borderColor: Colors.gray,
-                                        borderWidth: 1
+                                    alignItems: 'flex-start'
                                     }}>
+                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    <Title size={18} label={"Pescriptions"} bold={true} color={Colors.darkGray}/>
+                                        {item.active && (
+                                            <View style={{marginLeft: 5, backgroundColor: Colors.red, paddingHorizontal: 10, borderRadius: 5, elevation: 5}}>
+                                                <Title size={10} label={'Active'} bold={true} color={Colors.white}/>
+                                            </View>
+                                        )}
+                                    </View>
+                                    <Title size={12} label={"Placed on: " + item.date} bold={true} color={Colors.primary}/>
+                                </View>
+                                
+                                <View style={{flexWrap: 'wrap', flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+                                    {item.fileDetails.map((file, fileIndex) => 
+                                    <View style={{marginTop: 10, marginRight: 20}}>
                                         <ImageBackground style={{
                                             backgroundColor: Colors.secondary,
                                             borderRadius: 0,
-                                            width: 80,
+                                            width: 60,
                                             height: 60,
                                             alignItems: 'center',
                                             justifyContent: 'center'
                                         }} source={{
-                                            uri: item.document
+                                            uri: file.document
                                         }}>
                                             <Icon
-                                                onPress={() => onPressDownload(item)}
+                                                onPress={() => onPressDownload(file)}
                                                 type={Icons.FontAwesome5}
                                                 name={'download'}
-                                                size={30}
-                                                color={Colors.error_toast_color}/>
+                                                size={20}
+                                                color={Colors.green3}/>
                                         </ImageBackground>
+                                        <Title fontFamily={"Redressed-Regular"} size={12} label={"Pescriptions " + (fileIndex + 1)} bold={true} color={Colors.secondary}/>
                                     </View>
-                                    <View
-                                        style={{
-                                        marginLeft: 10,
-                                        alignItems: 'flex-start'
-                                    }}>
-                                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                            <Title size={15} label={item.fileDetails.name} bold={true} color={Colors.darkGray}/>
-                                            {item.active && (
-                                                <View style={{marginLeft: 5, backgroundColor: Colors.red, paddingHorizontal: 10, borderRadius: 5, elevation: 5}}>
-                                                    <Title size={10} label={'Active'} bold={true} color={Colors.white}/>
-                                                </View>
-                                            )}
-                                        </View>
-                                        <Title size={12} label={"Uploaded on: " + item.date} bold={true} color={Colors.secondary}/>
-                                    </View>
+                                    )}
                                 </View>
+                                
                             </Animatable.View>
                         </View>)}
                     </View>

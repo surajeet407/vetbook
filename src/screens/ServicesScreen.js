@@ -248,7 +248,7 @@ const ServicesScreen = ({navigation, route}) => {
                     values={["Ongoing", "Cancelled", "Completed"]}
                     borderRadius={0}
                     tabsContainerStyle={{ height: 50, backgroundColor: Colors.white }}
-                    tabStyle={{ backgroundColor: Colors.darkGray, borderColor: Colors.green, borderWidth: 2 }}
+                    tabStyle={{ backgroundColor: Colors.darkGray, borderColor: Colors.white, borderWidth: 1 }}
                     activeTabStyle={{ backgroundColor: Colors.green }}
                     tabTextStyle={{ color: '#444444', fontFamily: 'Oswald-Medium' }}
                     activeTabTextStyle={{ color: Colors.white }}

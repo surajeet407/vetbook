@@ -258,7 +258,9 @@ const PescriptionsScreen = ({navigation, route}) => {
                                             }}>
                                                 {item
                                                     .fileDetails
-                                                    .map((file, fileIndex) => <View
+                                                    .map((file, fileIndex) => 
+                                                    <View
+                                                        key={fileIndex}
                                                         style={{
                                                         marginTop: 10,
                                                         marginRight: 20

@@ -82,7 +82,6 @@ const SettingsScreen = ({navigation, route}) => {
         database()
         .ref('/users/' + phoneNo)
         .on("value", snapshot => {
-            console.log("here")
             if(snapshot.val().canDeleteAccount) {
                 setDeleteInd(true)
             } else {

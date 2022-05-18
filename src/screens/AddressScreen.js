@@ -276,6 +276,9 @@ const AddressScreen = ({navigation, route}) => {
                     rightIconType={Icons.MaterialIcons}
                     rightIconName={'close'} 
                     rightIconSize={30} 
+                    rightIconWidth={40}
+                    rightIconHeight={40}
+                    rightIconBorderRadius={20}
                     rightIconColor={Colors.white}
                     rightIconBackgroundColor={Colors.error_toast_color}
                     onPressRight={() => setShowMap(true)} 
@@ -284,7 +287,7 @@ const AddressScreen = ({navigation, route}) => {
                     subHeaderTextSize={20}
                     subHeaderTextColor={Colors.secondary}
                     position={showMap? 'absolute':'relative'}
-                    headerHeight={80}
+                    headerHeight={60}
                     headerText={showMap? "Address":"Save Address"}
                     headerTextSize={25}
                     headerTextColor={Colors.primary}

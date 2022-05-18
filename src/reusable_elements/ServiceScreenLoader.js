@@ -8,7 +8,8 @@ const ServiceScreenLoader = ({navigation, route}) => {
     return (
 
         <SkeletonPlaceholder >
-            {[1, 2, 3, 4].map(() => <View
+            {[1, 2, 3, 4].map((item, index) => <View
+                key={index}
                 style={{
                 borderColor: Colors.darkGray,
                 borderWidth: 1,

@@ -195,8 +195,8 @@ const PescriptionsScreen = ({navigation, route}) => {
                     {loading?
                     <View style={{paddingHorizontal: 20}}>
                         <SkeletonPlaceholder >
-                            {[1, 2, 3, 4, 5].map(() => 
-                            <View style={{borderColor: Colors.darkGray, borderWidth: 1, padding: 10, marginTop: 10}}>
+                            {[1, 2, 3, 4, 5].map((item, index) => 
+                            <View key={index} style={{borderColor: Colors.darkGray, borderWidth: 1, padding: 10, marginTop: 10}}>
                                 <View style={{ width: 120, height: 20, borderRadius: 4 }} />
                                 <View  style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}/>
                                 <View style={{ flexDirection: "row", alignItems: "center", width: '100%' }}>

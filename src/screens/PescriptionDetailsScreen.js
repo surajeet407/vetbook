@@ -43,7 +43,7 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
         }, {
             name: "Enter delivery address"
         }, {
-            name: "Receive confirmation call"
+            name: "Receive call"
         }
     ])
     const [status,
@@ -427,6 +427,12 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
                         </View>)}/>
                     </View>
                     <View >
+                        <SectionBanner
+                            title={"Upload pescriptions"}
+                            borderWidth={160}
+                            fontSize={16}
+                            borderColor={Colors.white}
+                            titleColor={Colors.white}/>
                         <View
                             style={{
                             alignItems: 'center'
@@ -435,21 +441,15 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
                                 numberOfLines={3}
                                 style={{
                                 fontSize: 15,
-                                marginBottom: 10,
+                                marginTop: 10,
                                 color: Colors.darkGray,
                                 fontFamily: 'Oswald-Medium'
                             }}>{'You can upload a total of 4 pescriptions per order'}</Text>
                         </View>
-                        <SectionBanner
-                            title={"Upload pescriptions"}
-                            borderWidth={80}
-                            fontSize={16}
-                            borderColor={Colors.white}
-                            titleColor={Colors.white}/>
                         <View
                             style={{
                             flexDirection: 'row',
-                            marginTop: 20,
+                            marginTop: 10,
                             flexWrap: 'wrap'
                         }}>
                             <TouchableOpacity
@@ -737,12 +737,29 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
 }
                             </TouchableOpacity>
                         </View>
-                        <SectionBanner
-                            title={"Select delivery address"}
-                            borderWidth={80}
-                            fontSize={16}
-                            borderColor={Colors.white}
-                            titleColor={Colors.white}/> 
+                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
+                            <View style={{width: '88%'}}>
+                                <SectionBanner
+                                    title={"Select delivery address"}
+                                    borderWidth={180}
+                                    fontSize={16}
+                                    borderColor={Colors.white}
+                                    titleColor={Colors.white}/>
+                            </View> 
+                            <TouchableOpacity onPress={onPressAddAddress} style={{
+                                    width: "10%",
+                                    height: 40,
+                                    borderRadius: 10,
+                                    padding: 5,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    elevation: 5,
+                                    backgroundColor: Colors.darkGray
+                                }}>
+                                    <Icon type={Icons.AntDesign} name="plus" color={Colors.white} size={25}/>
+                            </TouchableOpacity>
+                        </View>
+                        
                             
                             {addressess.length !== 0
                             ? <View
@@ -859,22 +876,7 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
                                 </View>
                             </View>
                         }
-                        <View
-                            style={{
-                                paddingHorizontal: 2,
-                                marginTop: 20,
-                                marginBottom: 20
-                            }}>
-                            <Button
-                                iconColor={Colors.darkGray}
-                                textColor={Colors.primary}
-                                backgroundColor={Colors.appBackground}
-                                iconPostionLeft={true}
-                                useIcon={true}
-                                icon="plus"
-                                title="Change / Add address"
-                                onPress={onPressAddAddress}/>
-                        </View>
+                        
                     </View>
                 </ScrollView>
             </View>
@@ -922,11 +924,11 @@ const styles = StyleSheet.create({
     },
     item: {
         flex: 1,
-        padding: 12,
+        padding: 8,
         marginHorizontal: 1,
-        marginVertical: 4,
+        marginVertical: 8,
         borderRadius: 10,
-        elevation: 4
+        elevation: 2
     }
 });
 

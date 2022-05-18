@@ -298,7 +298,11 @@ import NetInfo from "@react-native-community/netinfo";
       <View style={{ paddingHorizontal: 10, marginTop: 65, marginBottom: showTrackComponent? 60:0, flex: 1}}>
         <View style={{}}>
           <ScrollView 
-          refreshControl={<RefreshControl progressViewOffset={20} colors={[Colors.primary, Colors.secondary]} refreshing={refreshing} onRefresh={onRefresh} />}
+          
+          refreshControl={<RefreshControl tintColor="#ff0000"
+          title="Loading..."
+          titleColor={Colors.primary}
+          progressBackgroundColor={Colors.white} progressViewOffset={20} colors={[Colors.primary, Colors.secondary]} refreshing={refreshing} onRefresh={onRefresh} />}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}>
             {homeAddress.serviceAvailable?
@@ -338,7 +342,7 @@ import NetInfo from "@react-native-community/netinfo";
                                 <Button labelStyle={{fontFamily: 'Oswald-Medium', fontSize: 12, color: Colors.white}} color={Colors.lightRed} onPress={() => navigation.navigate(item.navTo)} mode="contained">{item.buttonText}</Button>
                               </View>
                               <View style={{width: '40%', alignItems: 'flex-end'}}>
-                                <Image style={{width: Dimensions.get("screen").width / 2, height: 130, aspectRatio: 1}} source={{uri: item.image}}/>
+                                <Image style={{height: 130, aspectRatio: 1}} source={{uri: item.image}}/>
                               </View>
                           </View>
                         </LinearGradient>
@@ -361,13 +365,15 @@ import NetInfo from "@react-native-community/netinfo";
                           keyExtractor={(item) => item.id}>
                           {mainServices.map((item, index) =>
                           <Animatable.View  delay={100 * index} animation={'fadeInUp'} key={index} style={{alignItems: 'center', justifyContent: 'space-evenly', margin: 5, elevation: 5}}>
-                            <RNBounceable onPress={() => onPressNavToService(item)} style={{width: Dimensions.get('screen').width/2 - 25, justifyContent: 'space-evenly', borderRadius: 15, backgroundColor: item.backgroundColor, height: 150,  padding: 10}}>
-                              <ImageBackground blurRadius={2} source={require('../assets/images/background4.png')} style={{ width: '100%', height: '100%'}}>
+                            <RNBounceable onPress={() => onPressNavToService(item)} style={{width: Dimensions.get('screen').width/2 - 25 }}>
+                              <ImageBackground blurRadius={2} source={require('../assets/images/background4.png')} style={{ justifyContent: 'space-between', borderRadius: 15, backgroundColor: item.backgroundColor, height: 150,  padding: 10}}>
                                   <Title label={item.title} size={16} color={'#fff'}/> 
-                                  <Text style={{color: Colors.secondary, fontSize: 12, fontFamily: 'PTSerif-BoldItalic'}}>Lorem ipsum dolor sit amet...</Text>
+                                  <View style={{marginTop: 5}}>
+                                    <Text style={{color: Colors.secondary, fontSize: 12, fontFamily: 'PTSerif-BoldItalic'}}>{item.desc}</Text>
+                                  </View>
                                   <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: '100%', height: '100%'}}>
-                                    <Icon name={'arrow-right'} color={'#fff'} size={14}/> 
-                                    <Image style={{height: '40%', width: '60%'}} source={{uri: item.image}}/>
+                                    <Icon style={{marginTop: 5}} name={'arrow-right'} color={'#fff'} size={14}/> 
+                                    <Image style={{height: 70, width: 70, aspectRatio: 1}} source={{uri: item.image}}/>
                                   </View>
                               </ImageBackground>
                             </RNBounceable>
@@ -402,14 +408,19 @@ import NetInfo from "@react-native-community/netinfo";
                       y: 1.0
                   }}
                   colors={[Colors.lightRed, Colors.gray]}
-                  style={{marginTop: 15, elevation: 5, padding: 10, height: 150, backgroundColor: Colors.gray, width: '100%', borderRadius: 20}}>
-                    <View style={{width: '90%'}}>
-                      <Text style={{marginTop: 5, fontFamily: 'Oswald-Bold', fontSize: 16, color: Colors.white}}>{"Order quickly with pescriptions"}</Text>
-                      <Text style={{marginTop: 5, fontFamily: 'PTSerif-BoldItalic', fontSize: 14, color: Colors.lightOverlayColor}}>{"Upload pescriptions and tell us what you need!"}</Text>
-                      <Text style={{marginTop: 5, fontFamily: 'PTSerif-Bold', fontSize: 12, color: Colors.lightOverlayColor}}>{"We will provide you at your dooestep..."}</Text>
-                      <View style={{marginTop: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <Text style={{marginLeft: 10, fontFamily: 'Oswald-Bold', fontSize: 12, color: Colors.secondary}}>{"Get 20% off"}</Text>
-                        <Button labelStyle={{fontFamily: 'Oswald-Medium', fontSize: 12, color: Colors.white}} color={Colors.lightRed} onPress={() => navigation.navigate("PescriptionDetails", {status: status})} mode="contained">{'Upload'}</Button>
+                  style={{marginTop: 15, elevation: 2,  height: 140, backgroundColor: Colors.gray, width: '100%', borderRadius: 20}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <View style={{width: '60%', padding: 10}}>
+                      <Text style={{marginTop: 5, fontFamily: 'Oswald-Bold', fontSize: 16, color: Colors.white}}>{"Order with pescriptions"}</Text>
+                        <Text style={{marginTop: 5, fontFamily: 'PTSerif-BoldItalic', fontSize: 14, color: Colors.lightOverlayColor}}>{"Upload pescriptions and tell us what you need!"}</Text>
+                        {/* <Text style={{marginTop: 5, fontFamily: 'PTSerif-Bold', fontSize: 12, color: Colors.lightOverlayColor}}>{"We will provide you at your dooestep..."}</Text> */}
+                        <View style={{marginTop: 10, alignItems: 'center', justifyContent: 'center'}}>
+                          {/* <Text style={{marginLeft: 10, fontFamily: 'Oswald-Bold', fontSize: 12, color: Colors.secondary}}>{"Get 20% off"}</Text> */}
+                          <Button labelStyle={{fontFamily: 'Oswald-Medium', fontSize: 12, color: Colors.white}} color={Colors.lightRed} onPress={() => navigation.navigate("PescriptionDetails", {status: status})} mode="contained">{'Upload'}</Button>
+                        </View>
+                      </View>
+                      <View style={{width: '40%', alignItems: 'flex-end', overflow: 'hidden', borderRadius: 20 }}>
+                        <Image style={{ height: 140,  aspectRatio: 1}} source={require('../assets/images/petMedicines.png')}/>
                       </View>
                     </View>
                   </LinearGradient>

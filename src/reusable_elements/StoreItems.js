@@ -49,7 +49,7 @@ const StoreItems = (props) => {
                         uri: props.image
                     }}/>
                 </TouchableOpacity>
-                <View style={{alignItems: 'center', justifyContent: 'center', padding: 5, position: 'absolute', bottom: 0, left: 0, width: '100%', borderTopLeftRadius: 30, borderTopRightRadius: 30, backgroundColor: Colors.darkOverlayColor2}}>
+                <View style={{alignItems: 'center', justifyContent: 'center', padding: 5, position: 'absolute', bottom: 0, left: 0, width: '100%', borderTopLeftRadius: 30, borderTopRightRadius: 30, backgroundColor: Colors.darkOverlayColor}}>
                     <View style={{flexDirection: 'row'}}>
                         <Title label={props.name} size={14} color={Colors.white}/>
                         <Icon name={'arrowright'} type={Icons.AntDesign} color={Colors.white} size={20} style={{marginLeft: 5, marginTop: 5}}/>

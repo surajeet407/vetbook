@@ -288,7 +288,7 @@ const OrdersScreen = ({navigation, route}) => {
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={100}
+                headerHeight={80}
                 headerText={'All Orders'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}

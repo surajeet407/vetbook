@@ -245,15 +245,15 @@ const RelocationsScreen = ({navigation, route}) => {
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={100}
+                headerHeight={80}
                 headerText={'Relocations'}
-                headerTextSize={35}
+                headerTextSize={25}
                 headerTextColor={Colors.primary}
                 showHeaderText={true}
                 showLeftIcon={true}
                 leftIconType={Icons.MaterialIcons}
                 leftIconName={'navigate-before'}
-                leftIconSize={45}
+                leftIconSize={35}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.navigate("HomeBottomTabBar", {screen: "Settings", status: status})}/>

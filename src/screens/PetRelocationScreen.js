@@ -132,7 +132,7 @@ const PetRelocationScreen = ({navigation, route}) => {
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={80}
+                headerHeight={60}
                 headerText={route.params.item.title}
                 headerTextSize={25}
                 headerTextColor={route.params.item.backgroundColor}

@@ -360,7 +360,7 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
                 subHeaderTextSize={16}
                 subHeaderTextColor={Colors.secondary}
                 position={'relative'}
-                headerHeight={90}
+                headerHeight={80}
                 headerText={'Order Medicines'}
                 headerTextSize={25}
                 headerTextColor={Colors.primary}

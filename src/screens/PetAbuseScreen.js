@@ -188,7 +188,7 @@ const PetAbuseScreen = ({navigation}) => {
                                     borderBottomColor: Colors.primary,
                                     padding: 10
                                 }}>
-                                    <Title label={item.title} color={Colors.secondary} size={25}/>
+                                    <Title label={item.title} color={Colors.secondary} size={20}/>
                                 </View>
                                 <Animatable.View
                                     animation={'zoomIn'}

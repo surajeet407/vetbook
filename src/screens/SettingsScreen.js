@@ -42,6 +42,21 @@ const SettingsScreen = ({navigation, route}) => {
     const handleAccountDeletion = () => {
         if(deleteInd) {
             database()
+                .ref('/accountDeletionRequest')
+                .once("value")
+                .then(snapshot => {
+                    if(snapshot.val()) {
+                        let delAr = []
+                        for(let i = 0; i < snapshot.val().length; i++) {
+                            if(snapshot.val()[i].phoneNo !== phoneNo) {
+                                delAr.push(snapshot.val()[i])
+                            }
+                        }
+                        database()
+                            .ref('/accountDeletionRequest').set(delAr)
+                    }
+            })
+            database()
             .ref('/users/' + phoneNo).remove().then(() => {
                 AsyncStorage.removeItem('phoneNo')
                 AsyncStorage.setItem("userStatus", 'loggedOut');

@@ -101,7 +101,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
     obj.mode = "ongoing"
     obj.total = total
     type = 'Service';
-    anonymusPath = 'anonymusService'
+    anonymusPath = 'anonymusServices'
     loggedInPath = 'services'
     navToScreen = "Services"
     

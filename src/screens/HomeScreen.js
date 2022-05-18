@@ -95,10 +95,8 @@ import NetInfo from "@react-native-community/netinfo";
           })
 
   } else {
-      // AsyncStorage
-      //   .setItem("anonymusService", "[]")
       AsyncStorage
-          .getItem("anonymusService")
+          .getItem("anonymusServices")
           .then((data) => {
               if (data && JSON.parse(data).length > 0) {
                 setRefreshing(false)

@@ -60,16 +60,16 @@ const RelocationDetailsScreen = ({navigation, route}) => {
             .then((status) => {
                 if (status === 'loggedOut') {
                     AsyncStorage
-                        .getItem("anonymusRelocation")
+                        .getItem("anonymusRelocations")
                         .then((data) => {
                             obj.userStatus = "loggedOut"
                             if (data && JSON.parse(data).length > 0) {
                                 ar = JSON.parse(data)
                                 ar.push(obj)
-                                AsyncStorage.setItem("anonymusRelocation", JSON.stringify(ar))
+                                AsyncStorage.setItem("anonymusRelocations", JSON.stringify(ar))
                             } else {
                                 ar.push(obj);
-                                AsyncStorage.setItem("anonymusRelocation", JSON.stringify(ar))
+                                AsyncStorage.setItem("anonymusRelocations", JSON.stringify(ar))
                             }
                         });
                 } else {

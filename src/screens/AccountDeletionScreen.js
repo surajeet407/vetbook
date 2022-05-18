@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 
 import Colors from '../util/Colors';
-import FormElement from '../reusable_elements/FormElement';
 import Button from '../reusable_elements/Button';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
 import * as Animatable from 'react-native-animatable';

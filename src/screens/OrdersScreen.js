@@ -10,6 +10,7 @@ import {
     Dimensions,
     RefreshControl
 } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import GeneralHeader from '../reusable_elements/GeneralHeader';
 import ServiceScreenLoader from '../reusable_elements/ServiceScreenLoader';
 import Colors from '../util/Colors';
@@ -25,10 +26,7 @@ import {Rating} from 'react-native-ratings';
 import {Button, Chip} from 'react-native-paper'
 import i18n from '../util/i18n';
 import RNBounceable from '@freakycoder/react-native-bounceable';
-import {Picker} from '@react-native-picker/picker';
 import SegmentedControlTab from 'react-native-segmented-control-tab'
-import RBSheet from "react-native-raw-bottom-sheet";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 
 const width = Dimensions
     .get('screen')
@@ -46,14 +44,11 @@ const OrdersScreen = ({navigation, route}) => {
         text: "Delivered"
     }]
     
-    const refRBSheet = useRef(null)
     const [refreshing, setRefreshing] = useState(false);
     const [loading,
         setLoading] = useState(true)
     const [pickerItems, 
         setPickerItems] = useState([])
-    const [itemId, 
-        setItemId] = useState("");
     const [pickerValue, 
         setPickerValue] = useState("");
     const [phoneNo,
@@ -111,127 +106,88 @@ const OrdersScreen = ({navigation, route}) => {
             })
     }
 
-    const onPressSubmit = () => {
-        if(pickerValue === "") {
-            Toast.show({
-                type: 'customToast',
-                text1: "Select reason for cancellation...",
-                position: 'bottom',
-                visibilityTime: 1500,
-                bottomOffset: 200,
-                props: {
-                    backgroundColor: Colors.error_toast_color
-                }
-            });
-        } else {
-            refRBSheet.current.close()
-            if (status === 'loggedIn') {
-                database()
-                    .ref("/users/" + phoneNo + "/orders")
-                    .once('value')
-                    .then(snapshot => {
-                        let path;
-                        snapshot
-                            .val()
-                            .forEach((dbItem, index) => {
-                                if (dbItem.id === itemId) {
-                                    path = index
-                                }
-    
-                            })
-                        database()
-                            .ref("/users/" + phoneNo + "/orders/" + path)
-                            .update({mode: 'cancelled', reasonForCancellation: pickerValue}).then(() => {
-                                getDataFromDatabase(phoneNo, filters[catIndex].key)
-                                Toast.show({
-                                    type: 'customToast',
-                                    text1: "This order has been cancelled...",
-                                    position: 'bottom',
-                                    visibilityTime: 1500,
-                                    bottomOffset: 80,
-                                    props: {
-                                        backgroundColor: Colors.error_toast_color
-                                    }
-                                });
-                            })
-                    })    
-            } else {
-                AsyncStorage
-                    .getItem("anonymusOrders")
-                    .then((data) => {
-                        if (data && JSON.parse(data).length > 0) {
-                            
-                            let path,
-                                mainData = JSON.parse(data);
-                            mainData.forEach((dbItem, index) => {
-                                if (dbItem.id === itemId) {
-                                    path = index
-                                }
-                            })
-                            
-                            mainData[path].mode = 'cancelled'
-                            mainData[path].reasonForCancellation = pickerValue
-                            AsyncStorage.setItem("anonymusOrders", JSON.stringify(mainData)).then(() => {
-                                getDataFromStorage(filters[catIndex].key)
-                                Toast.show({
-                                    type: 'customToast',
-                                    text1: "This order has been cancelled...",
-                                    position: 'bottom',
-                                    visibilityTime: 1500,
-                                    bottomOffset: 80,
-                                    props: {
-                                        backgroundColor: Colors.error_toast_color
-                                    }
-                                });
-                            })
-                        }
-                    });
-            }
-        }
-        
-    }
-
-    const onPressCancel = (id, serviceType) => {
+    const onPressCancel = (item, serviceType) => {
         if(serviceType !== "Adopt") {
-            setPickerItems([{
-                label: "Select reason for cancellation",
-                value: ""
-            },{
-                label: "I have changed my mind",
-                value: "I have changed my mind"
-            },{
-                label: "Found from local store",
-                value: "Found from local store"
-            },{
-                label: "Quality was not good",
-                value: "Quality was not good"
-            },{
-                label: "Price is not reasonable",
-                value: "Price is not reasonable"
-            },{
-                label: "Somewhat not satisfied with the privious order",
-                value: "Somewhat not satisfied with the privious order"
-            }])
+            navigation.navigate("Cancel", {type: "order", data: [
+                {
+                    id: 1,
+                    label: "I have changed my mind",
+                    value: "I have changed my mind",
+                    labelStyle: {
+                        fontFamily: 'Redressed-Regular',
+                        fontSize: 18
+                    }
+                }, {
+                    id: 2,
+                    label: "Found from local store",
+                    value: "Found from local store",
+                    labelStyle: {
+                        fontFamily: 'Redressed-Regular',
+                        fontSize: 18
+                    }
+                }, {
+                    id: 3,
+                    label: "Quality was not good",
+                    value: "Quality was not good",
+                    labelStyle: {
+                        fontFamily: 'Redressed-Regular',
+                        fontSize: 18
+                    }
+                }, {
+                    id: 4,
+                    label: "Price is not reasonable",
+                    value: "Price is not reasonable",
+                    labelStyle: {
+                        fontFamily: 'Redressed-Regular',
+                        fontSize: 18
+                    }
+                }, {
+                    id: 5,
+                    label: "Somewhat not satisfied with the privious order",
+                    value: "Somewhat not satisfied with the privious order",
+                    labelStyle: {
+                        fontFamily: 'Redressed-Regular',
+                        fontSize: 18
+                    }
+                }
+            ], item: item})
         } else {
-            setPickerItems([{
-                label: "Select reason for cancellation",
-                value: ""
-            },{
-                label: "I have changed my mind",
-                value: "I have changed my mind"
-            },{
-                label: "Found anywhere else",
-                value: "Found anywhere else"
-            },{
-                label: "Price is not reasonable",
-                value: "Price is not reasonable"
-            },{
-                label: "Don't want to mention",
-                value: "Don't want to mention"
-            }])
+            navigation.navigate("Cancel", {type: "order", data: [
+                {
+                    id: 1,
+                    label: "I have changed my mind",
+                    value: "I have changed my mind",
+                    labelStyle: {
+                        fontFamily: 'Redressed-Regular',
+                        fontSize: 18
+                    }
+                }, {
+                    id: 2,
+                    label: "Found anywhere else",
+                    value: "Found anywhere else",
+                    labelStyle: {
+                        fontFamily: 'Redressed-Regular',
+                        fontSize: 18
+                    }
+                }, {
+                    id: 3,
+                    label: "Price is not reasonable",
+                    value: "Price is not reasonable",
+                    labelStyle: {
+                        fontFamily: 'Redressed-Regular',
+                        fontSize: 18
+                    }
+                }, {
+                    id: 4,
+                    label: "Don't want to mention",
+                    value: "Don't want to mention",
+                    labelStyle: {
+                        fontFamily: 'Redressed-Regular',
+                        fontSize: 18
+                    }
+                }
+            ], item: item})
         }
-        refRBSheet.current.open()
-        setItemId(id)
     }
 
     const handleCustomIndexSelect = (index) => {
@@ -253,18 +209,19 @@ const OrdersScreen = ({navigation, route}) => {
     }
 
     useEffect(() => {
-        if (status === 'loggedIn') {
-            AsyncStorage
-            .getItem('phoneNo')
-            .then((phoneNo, msg) => {
-                setPhoneNo(phoneNo)
-                getDataFromDatabase(phoneNo, "inprocess");
-            })
-        } else {
-            getDataFromStorage("inprocess")
+        if (isFocused) {
+            if (status === 'loggedIn') {
+                AsyncStorage
+                .getItem('phoneNo')
+                .then((phoneNo, msg) => {
+                    setPhoneNo(phoneNo)
+                    getDataFromDatabase(phoneNo, "inprocess");
+                })
+            } else {
+                getDataFromStorage("inprocess")
+            }
         }
-        
-    }, []);
+    }, [isFocused])
     return (
         <View
             style={{
@@ -583,7 +540,7 @@ const OrdersScreen = ({navigation, route}) => {
                                         }}
                                             color={Colors.error_toast_color}
                                             mode="contained"
-                                            onPress={() => onPressCancel(item.id, item.serviceType)}>Cancel</Button>
+                                            onPress={() => onPressCancel(item, item.serviceType)}>Cancel</Button>
                                     </View>
                                 </View>
                             )}
@@ -632,67 +589,6 @@ const OrdersScreen = ({navigation, route}) => {
                 )
             }}/>
             }
-            <RBSheet
-                height={180}
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={true}
-                customStyles={{
-                container: {
-                    backgroundColor: Colors.white,
-                    borderTopLeftRadius: 50,
-                    borderTopRightRadius: 50,
-                    elevation: 10,
-                    overflow: 'hidden',
-                    paddingHorizontal: 20
-                },
-                wrapper: {
-                    backgroundColor: "transparent",
-                },
-                draggableIcon: {
-                    backgroundColor: Colors.secondary
-                }
-                }}
-                >
-                <View style={{marginTop: 20}}>
-                    <View
-                        style={{
-                        borderWidth: 1,
-                        borderColor: Colors.darkGray
-                    }}>
-                        <Picker
-                            placeholder='Select reason for cancellation'
-                            dropdownIconColor={Colors.darkGray}
-                            mode="dropdown"
-                            selectedValue={pickerValue}
-                            onValueChange={(itemValue) => { 
-                            setPickerValue(itemValue)
-                        }}>
-                            {pickerItems.map((item, index) => 
-                                <Picker.Item
-                                    style={{
-                                    color: Colors.darkGray,
-                                    fontFamily: 'Oswald-Medium'
-                                }}
-                                label={item.label}
-                                value={item.value}/>
-                            )}
-                        </Picker>
-                    </View>  
-                    <View style={{alignItems: 'center', margin: 20}}>
-                        <View style={{width: '50%'}}>
-                            <Button
-                                labelStyle={{
-                                color: Colors.white,
-                                fontFamily: 'PTSerif-Bold'
-                                }}
-                                color={Colors.error_toast_color}
-                                mode="contained"
-                                onPress={onPressSubmit}>Submit</Button>   
-                        </View>
-                    </View>
-                </View>
-            </RBSheet>
         </View>
     );
 };

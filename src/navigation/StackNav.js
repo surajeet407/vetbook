@@ -44,6 +44,7 @@ import PescriptionDetailsScreen from '../screens/PescriptionDetailsScreen';
 import ItemReviewScreen from '../screens/ItemReviewScreen';
 import ChatScreen from '../screens/ChatScreen';
 import AccountDeletionScreen from '../screens/AccountDeletionScreen';
+import CancelScreen from '../screens/CancelScreen';
 
 
 
@@ -295,6 +296,12 @@ const StackNav = (params) => {
                 }}
                     name="AccountDeletion"
                     component={AccountDeletionScreen}/>
+                <Stack.Screen
+                    options={{
+                    headerShown: false
+                }}
+                    name="Cancel"
+                    component={CancelScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

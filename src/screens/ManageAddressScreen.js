@@ -219,7 +219,7 @@ import i18n from '../util/i18n';
             leftIconBackgroundColor={Colors.appBackground}
             onPressLeft={() => navigation.goBack()} 
         />
-      <View style={{marginBottom: showSelection? 80:0, paddingHorizontal: 20, backgroundColor: Colors.appBackground}}>
+      <View style={{marginBottom: showSelection? 80:0, paddingHorizontal: 20, backgroundColor: Colors.appBackground, flex: 1}}>
         {loadind?
         <Animatable.View animation={'fadeIn'}>
           <SkeletonPlaceholder>
@@ -267,7 +267,7 @@ import i18n from '../util/i18n';
                   </View>
                 </View>
                 {showSelection?
-                <View style={{right: 10}}>
+                <View style={{right: 15}}>
                   <RadioButton onPress={() => onPressAddressRadioButton(item.id)} color={Colors.primary} status={ checked === item.id ? 'checked' : 'unchecked' }/>
                 </View>
                 :

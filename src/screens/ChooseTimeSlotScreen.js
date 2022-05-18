@@ -242,14 +242,14 @@ const ChooseTimeSlotScreen = ({navigation, route}) => {
                                     backgroundColor: Colors.primary,
                                     borderRadius: 10,
                                     width: 200,
-                                    paddingVertical: 20
+                                    paddingVertical: 10
                                 }}>
-                                    <Title size={18} label='Selected Date' bold={true} color='grey'/>
+                                    <Title size={18} label='Selected Date' bold={true} color={Colors.white}/>
                                     <Title
                                         size={25}
                                         label={Object.keys(markedDates)[0]}
                                         bold={true}
-                                        color={Colors.appBackground}/>
+                                        color={Colors.secondary}/>
                                 </View>
                             </Animatable.View>
                         </View>

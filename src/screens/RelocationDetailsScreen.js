@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
     StyleSheet,
     TextInput,
@@ -19,6 +19,7 @@ import Toast from 'react-native-toast-message';
 import Title from '../reusable_elements/Title';
 import SectionBanner from '../reusable_elements/SectionBanner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DefaltAddressComponent from '../reusable_elements/DefaltAddressComponent';
 import database from '@react-native-firebase/database';
 import uuid from 'react-native-uuid';
 import * as Animatable from 'react-native-animatable';
@@ -27,6 +28,9 @@ import i18n from '../util/i18n';
 
 const RelocationDetailsScreen = ({navigation, route}) => {
     // console.log(route.params.details)
+    const [defaltAddress, setDefaltAddress] = useState(null)
+    const [status,
+        setStatus] = useState("")
     const [address1,
         setAddress1] = useState("");
     const [address2,
@@ -37,24 +41,27 @@ const RelocationDetailsScreen = ({navigation, route}) => {
         setState] = useState("");
     const [zip,
         setZip] = useState("");
+    const [phoneNumber,
+        setPhoneNumber] = useState("")
 
     const saveRelocationDetails = () => {
         let ar = [],
             obj = {
                 ...route.params.details,
-                currentLocation: "",
+                currentLocation: defaltAddress,
                 dropLocation: {
                     address1: address1,
                     address2: address2,
                     city: city,
                     state: state,
-                    zip: zip
+                    zip: zip,
+                    phoneNumber: phoneNumber
                 }
             }
         obj.id = uuid.v4()
         obj.userStatus = "loggedOut"
         obj.type = 'Relocation'
-        obj.mode = "inprocess"
+        obj.mode = "ongoing"
         AsyncStorage
             .getItem('userStatus')
             .then((status) => {
@@ -114,8 +121,10 @@ const RelocationDetailsScreen = ({navigation, route}) => {
             text = "Please enter state";
         } else if (zip === "") {
             text = "Please enter postal code";
+        } else if (phoneNumber === "") {
+            text = "Please enter phone no";
         }
-        if (address1 !== "" && address2 !== "" && city !== "" && state !== "" && zip !== "") {
+        if (address1 !== "" && address2 !== "" && city !== "" && state !== "" && zip !== "" && phoneNumber !== "") {
             Toast.show({
                 type: 'customToast',
                 text1: 'Submitted Successfully...',
@@ -142,6 +151,16 @@ const RelocationDetailsScreen = ({navigation, route}) => {
             });
         }
     }
+    const updateDefaltAddress = (address) => {
+        setDefaltAddress(address)
+    }
+    useEffect(() => {
+        AsyncStorage.getItem("userStatus").then((status) => {
+            if(status) {
+                setStatus(status)
+            }
+        })
+    })
     return (
         <KeyboardAvoidingView
             behavior='height'
@@ -185,54 +204,16 @@ const RelocationDetailsScreen = ({navigation, route}) => {
             }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View>
-                        <Animatable.View
-                            delay={100}
-                            animation={'slideInDown'}
-                            style={{
-                            marginBottom: 20,
-                            flex: 1
-                        }}>
-                            <View
-                                style={{
-                                flexDirection: 'row',
-                                alignItems: 'center'
-                            }}>
-                                <Title color={Colors.mediumDark} size={18} bold={true} label="Surajeet Hazari"/>
-                                <View
-                                    style={{
-                                    backgroundColor: Colors.primary,
-                                    marginLeft: 10,
-                                    borderRadius: 10,
-                                    padding: 5
-                                }}>
-                                    <Title color={Colors.appBackground} size={10} bold={true} label="Home"/>
-                                </View>
-                            </View>
-                            <Title
-                                color='grey'
-                                size={16}
-                                bold={false}
-                                label="106, Chaklalpur, Radhamohanpur, West Mindnapore, 721160"/>
-                            <View
-                                style={{
-                                width: '100%',
-                                marginTop: 10
-                            }}>
-                                <Button
-                                    backgroundColor={Colors.primary}
-                                    iconPostionLeft={true}
-                                    useIcon={true}
-                                    icon="plus"
-                                    title="Change / Add address"
-                                    onPress={() => navigation.navigate("ManageAddress", {showSelection: true})}/>
-                            </View>
-                        </Animatable.View>
-                        <SectionBanner
-                            fontSize={20}
-                            title='Drop Location'
-                            borderColor={Colors.primary}
-                            borderWidth={100}
-                            titleColor={Colors.mediumDark}/>
+                        <DefaltAddressComponent selectedAddress={route.params.details.address} updateDefaltAddress={updateDefaltAddress} navigation={navigation} params={route.params.details} />
+
+                        <View style={{marginTop: 20}}>
+                            <SectionBanner
+                                title='Drop Location'
+                                borderWidth={80} 
+                                fontSize={16}
+                                borderColor={Colors.white}
+                                titleColor={Colors.white}/>
+                        </View>
                         <View
                             style={{
                             marginTop: 10
@@ -300,6 +281,15 @@ const RelocationDetailsScreen = ({navigation, route}) => {
                                 labelColor={Colors.primary}
                                 keyboardType='numeric'
                                 maxLength={6}/>
+                            <FormElement
+                                onChangeText={(val) => setPhoneNumber(val)}
+                                inputValue={phoneNumber}
+                                showLabel={false}
+                                title='Phone Number'
+                                type='input'
+                                labelColor={Colors.primary}
+                                keyboardType='numeric'
+                                maxLength={10}/>
                         </View>
                     </View>
                 </ScrollView>

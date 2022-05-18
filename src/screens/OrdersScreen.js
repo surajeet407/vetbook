@@ -44,6 +44,7 @@ const OrdersScreen = ({navigation, route}) => {
         text: "Delivered"
     }]
     
+    const isFocused = useIsFocused();
     const [refreshing, setRefreshing] = useState(false);
     const [loading,
         setLoading] = useState(true)

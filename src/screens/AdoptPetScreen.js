@@ -400,7 +400,6 @@ const AdoptPetScreen = ({navigation}) => {
                                         }}
                                             onPress={() => navigation.navigate("PetDetail", {item: item})}>
                                             <Image
-                                                blurRadius={3}
                                                 style={{
                                                 width: ITEM_SIZE - 15,
                                                 height: 180
@@ -411,15 +410,23 @@ const AdoptPetScreen = ({navigation}) => {
                                         </TouchableOpacity>
                                         <View
                                             style={{
+                                            backgroundColor: Colors.darkOverlayColor,
                                             position: 'absolute',
-                                            bottom: 10,
-                                            left: 10
+                                            bottom: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            paddingHorizontal: 15,
+                                            paddingVertical: 5,
+                                            borderTopLeftRadius: 20,
+                                            borderTopRightRadius: 20
                                         }}>
-                                            <Title color={'#fff'} size={18} bold={true} label={item.name}/>
+                                            <View style={{}}>
+                                                <Title fontFamily={'Redressed-Regular'} color={'#fff'} size={20} bold={true} label={item.name}/>
+                                            </View>
                                             <View
                                                 style={{
                                                 flexDirection: 'row',
-                                                justifyContent: 'space-evenly'
+                                                justifyContent: 'space-between'
                                             }}>
                                                 <View
                                                     style={{
@@ -433,8 +440,8 @@ const AdoptPetScreen = ({navigation}) => {
                                                     }}
                                                         name={'time-outline'}
                                                         color={Colors.appBackground}
-                                                        size={20}/>
-                                                    <Title color={'#fff'} size={15} bold={true} label={item.details[1].value}/>
+                                                        size={12}/>
+                                                    <Title fontFamily={'PTSerif-BoldItalic'} color={'#fff'} size={12} bold={true} label={item.details[1].value}/>
                                                 </View>
                                                 <View
                                                     style={{
@@ -451,10 +458,11 @@ const AdoptPetScreen = ({navigation}) => {
                                                         ? 'male'
                                                         : 'female'}
                                                         color={Colors.appBackground}
-                                                        size={20}/>
+                                                        size={16}/>
                                                     <Title
+                                                        fontFamily={'PTSerif-BoldItalic'}
                                                         color={'#fff'}
-                                                        size={15}
+                                                        size={12}
                                                         bold={true}
                                                         label={item.details[2].value === 'Male'
                                                         ? 'boy'

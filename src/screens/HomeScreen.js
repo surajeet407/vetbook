@@ -401,12 +401,12 @@ import NetInfo from "@react-native-community/netinfo";
                       x: 0.5,
                       y: 1.0
                   }}
-                  colors={[Colors.lightRed, Colors.darkGray]}
-                  style={{marginTop: 10, elevation: 5, padding: 10, height: 150, backgroundColor: Colors.gray, width: '100%', borderRadius: 20}}>
+                  colors={[Colors.lightRed, Colors.gray]}
+                  style={{marginTop: 15, elevation: 5, padding: 10, height: 150, backgroundColor: Colors.gray, width: '100%', borderRadius: 20}}>
                     <View style={{width: '90%'}}>
                       <Text style={{marginTop: 5, fontFamily: 'Oswald-Bold', fontSize: 16, color: Colors.white}}>{"Order quickly with pescriptions"}</Text>
-                      <Text style={{marginTop: 5, fontFamily: 'PTSerif-BoldItalic', fontSize: 14, color: Colors.gray}}>{"Upload pescriptions and tell us what you need!"}</Text>
-                      <Text style={{marginTop: 5, fontFamily: 'PTSerif-Bold', fontSize: 12, color: Colors.gray}}>{"We will provide you at your dooestep..."}</Text>
+                      <Text style={{marginTop: 5, fontFamily: 'PTSerif-BoldItalic', fontSize: 14, color: Colors.lightOverlayColor}}>{"Upload pescriptions and tell us what you need!"}</Text>
+                      <Text style={{marginTop: 5, fontFamily: 'PTSerif-Bold', fontSize: 12, color: Colors.lightOverlayColor}}>{"We will provide you at your dooestep..."}</Text>
                       <View style={{marginTop: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                         <Text style={{marginLeft: 10, fontFamily: 'Oswald-Bold', fontSize: 12, color: Colors.secondary}}>{"Get 20% off"}</Text>
                         <Button labelStyle={{fontFamily: 'Oswald-Medium', fontSize: 12, color: Colors.white}} color={Colors.lightRed} onPress={() => navigation.navigate("PescriptionDetails", {status: status})} mode="contained">{'Upload'}</Button>

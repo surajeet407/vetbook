@@ -71,6 +71,7 @@ const ChatScreen = ({navigation}) => {
                 width: '100%'
             }}>
                 <GiftedChat
+                    isTyping={true}
                     messages={messages}
                     onSend={messages => onSend(messages)}
                     user={{

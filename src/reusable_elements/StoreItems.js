@@ -15,10 +15,11 @@ const StoreItems = (props) => {
             key={props.index}
             style={{
             backgroundColor: Colors.white,
-            elevation: 8,
+            elevation: 4,
             alignItems: 'center',
             justifyContent: 'space-evenly',
-            margin: 10
+            marginVertical: 10,
+            marginHorizontal: 5
         }}>
             <Label
                 orientation={Orientation.TOP_RIGHT}
@@ -42,16 +43,16 @@ const StoreItems = (props) => {
                     <Image
                         style={{
                         width: props.width,
-                        height: 120
+                        height: 140
                     }}
                         source={{
                         uri: props.image
                     }}/>
                 </TouchableOpacity>
-                <View style={{alignItems: 'center', justifyContent: 'center', padding: 5}}>
+                <View style={{alignItems: 'center', justifyContent: 'center', padding: 5, position: 'absolute', bottom: 0, left: 0, width: '100%', borderTopLeftRadius: 30, borderTopRightRadius: 30, backgroundColor: Colors.darkOverlayColor2}}>
                     <View style={{flexDirection: 'row'}}>
-                        <Title label={props.name} size={15} color={Colors.primary}/>
-                        <Icon name={'arrowright'} type={Icons.AntDesign} color={Colors.primary} size={20} style={{marginLeft: 5, marginTop: 5}}/>
+                        <Title label={props.name} size={14} color={Colors.white}/>
+                        <Icon name={'arrowright'} type={Icons.AntDesign} color={Colors.white} size={20} style={{marginLeft: 5, marginTop: 5}}/>
                     </View>
                     {/* <Title label={"₹ " + props.actualPrice + " /- ( " + ((parseInt(props.actualPrice) - parseInt(props.discountPrice)) / 100).toFixed(1) + " % off)"} size={12} color={Colors.darkGray}/> */}
                 </View>

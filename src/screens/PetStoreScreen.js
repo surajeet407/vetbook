@@ -331,9 +331,8 @@ const PetStoreScreen = ({navigation, route}) => {
                 marginTop: 50,
                 marginBottom: 0,
                 borderTopRightRadius: 50,
-                paddingHorizontal: 20,
-                flex: 1,
-                width: '100%'
+                paddingHorizontal: 15,
+                flex: 1
             }}>
                 <View
                     style={{
@@ -451,7 +450,7 @@ const PetStoreScreen = ({navigation, route}) => {
                             index={index}
                             animationStyle="fadeInLeft"/>)}/>
                         <View style={{
-                            marginTop: 30
+                            marginTop: 15
                         }}>
                             {petStoreItems.length > 0
                                 ? <RNMasonryScroll
@@ -459,7 +458,8 @@ const PetStoreScreen = ({navigation, route}) => {
                                         removeClippedSubviews={true}
                                         columns={2}
                                         oddColumnStyle={{
-                                        marginTop: 30
+                                            marginLeft: 10,
+                                            marginTop: 30
                                     }}
                                         horizontal={false}
                                         showsVerticalScrollIndicator={false}
@@ -478,7 +478,7 @@ const PetStoreScreen = ({navigation, route}) => {
                                                 index={item.id}
                                                 width={Dimensions
                                                 .get('screen')
-                                                .width / 2 - 40}/>
+                                                .width / 2 - 30}/>
                                         </View>)}
                                     </RNMasonryScroll>
                                 : <View

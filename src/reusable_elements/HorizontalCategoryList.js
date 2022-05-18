@@ -24,7 +24,7 @@ const HorizontalCategoryList = (props) => {
                 backgroundColor: props.selectedCategoryIndex == props.index
                     ? Colors.secondary
                     : Colors.appBackground,
-                elevation: 5,
+                elevation: 4,
                 paddingHorizontal: 15,
                 paddingVertical: 10,
                 borderRadius: 20

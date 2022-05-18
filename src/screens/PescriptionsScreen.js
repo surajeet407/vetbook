@@ -152,7 +152,7 @@ const PescriptionsScreen = ({navigation, route}) => {
                 showRigtIcon={false}
                 rightIconType={Icons.MaterialIcons}
                 rightIconName={'close'}
-                rightIconSize={45}
+                rightIconSize={35}
                 rightIconColor={Colors.appBackground}
                 rightIconBackgroundColor={Colors.primary}
                 onPressRight={() => navigation.goBack()}
@@ -169,7 +169,7 @@ const PescriptionsScreen = ({navigation, route}) => {
                 showLeftIcon={true}
                 leftIconType={Icons.MaterialIcons}
                 leftIconName={'navigate-before'}
-                leftIconSize={45}
+                leftIconSize={35}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.goBack()}/>

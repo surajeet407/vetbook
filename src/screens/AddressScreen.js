@@ -287,7 +287,7 @@ const AddressScreen = ({navigation, route}) => {
                     subHeaderTextSize={20}
                     subHeaderTextColor={Colors.secondary}
                     position={showMap? 'absolute':'relative'}
-                    headerHeight={60}
+                    headerHeight={80}
                     headerText={showMap? "Address":"Save Address"}
                     headerTextSize={25}
                     headerTextColor={Colors.primary}

@@ -107,7 +107,7 @@ const BloodTestScreen = ({navigation, route}) => {
                 showRigtIcon={false}
                 rightIconType={Icons.MaterialIcons}
                 rightIconName={'navigate-before'}
-                rightIconSize={45}
+                rightIconSize={35}
                 rightIconColor={Colors.black}
                 rightIconBackgroundColor={Colors.appBackground}
                 onPressRight={() => navigation.goBack()}
@@ -124,7 +124,7 @@ const BloodTestScreen = ({navigation, route}) => {
                 showLeftIcon={true}
                 leftIconType={Icons.MaterialIcons}
                 leftIconName={'navigate-before'}
-                leftIconSize={45}
+                leftIconSize={35}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.goBack()}/>

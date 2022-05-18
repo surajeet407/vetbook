@@ -232,7 +232,7 @@ const RelocationsScreen = ({navigation, route}) => {
                 showRigtIcon={false}
                 rightIconType={Icons.MaterialIcons}
                 rightIconName={'navigate-before'}
-                rightIconSize={45}
+                rightIconSize={35}
                 rightIconColor={Colors.black}
                 rightIconBackgroundColor={Colors.appBackground}
                 onPressRight={() => navigation.goBack()}
@@ -247,7 +247,7 @@ const RelocationsScreen = ({navigation, route}) => {
                 position={'relative'}
                 headerHeight={100}
                 headerText={'Relocations'}
-                headerTextSize={25}
+                headerTextSize={35}
                 headerTextColor={Colors.primary}
                 showHeaderText={true}
                 showLeftIcon={true}

@@ -49,7 +49,7 @@ const NotificationScreen = ({navigation}) => {
                 showRigtIcon={false}
                 rightIconType={Icons.MaterialIcons}
                 rightIconName={'close'}
-                rightIconSize={45}
+                rightIconSize={35}
                 rightIconColor={Colors.appBackground}
                 rightIconBackgroundColor={Colors.primary}
                 onPressRight={() => navigation.goBack()}
@@ -66,7 +66,7 @@ const NotificationScreen = ({navigation}) => {
                 showLeftIcon={true}
                 leftIconType={Icons.MaterialIcons}
                 leftIconName={'navigate-before'}
-                leftIconSize={45}
+                leftIconSize={35}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.goBack()}/>

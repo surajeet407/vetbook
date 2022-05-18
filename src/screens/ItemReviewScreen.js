@@ -207,7 +207,7 @@ const ItemReviewScreen = ({navigation, route}) => {
                 rightIconBorderRadius={40}
                 rightIconHeight={40}
                 rightIconWidth={40}
-                rightIconSize={30}
+                rightIconSize={35}
                 rightIconColor={Colors.appBackground}
                 rightIconBackgroundColor={'#d35500'}
                 onPressRight={() => navigation.goBack()}
@@ -230,7 +230,7 @@ const ItemReviewScreen = ({navigation, route}) => {
                 showLeftIcon={false}
                 leftIconType={Icons.MaterialIcons}
                 leftIconName={'navigate-before'}
-                leftIconSize={45}
+                leftIconSize={35}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.goBack()}/>

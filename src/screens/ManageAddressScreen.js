@@ -188,7 +188,7 @@ import i18n from '../util/i18n';
             showRigtIcon={true}
             rightIconType={Icons.MaterialIcons}
             rightIconName={'add'} 
-            rightIconSize={40} 
+            rightIconSize={35} 
             rightIconColor={Colors.appBackground}
             rightIconBackgroundColor={Colors.primary}
             onPressRight={() => navigation.navigate("Address")} 
@@ -214,7 +214,7 @@ import i18n from '../util/i18n';
             showLeftIcon={true}
             leftIconType={Icons.MaterialIcons} 
             leftIconName={'navigate-before'} 
-            leftIconSize={45} 
+            leftIconSize={35} 
             leftIonColor={Colors.black}
             leftIconBackgroundColor={Colors.appBackground}
             onPressLeft={() => navigation.goBack()} 
@@ -223,8 +223,8 @@ import i18n from '../util/i18n';
         {loadind?
         <Animatable.View animation={'fadeIn'}>
           <SkeletonPlaceholder>
-              {[1,2,3,4,5,6,7,8,9,0].map(() => 
-              <View style={{marginTop: 20, borderColor: Colors.darkGray, borderWidth: 1, padding: 15 }}>
+              {[1,2,3,4,5,6,7,8,9,0].map((item, index) => 
+              <View key={index} style={{marginTop: 20, borderColor: Colors.darkGray, borderWidth: 1, padding: 15 }}>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <View style={{ width: 100, height: 15, borderRadius: 4 }} />
                       <View style={{marginLeft: 20, width: 50, height: 15, borderRadius: 4 }} />

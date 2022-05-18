@@ -419,7 +419,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                 showRigtIcon={true}
                 rightIconType={Icons.MaterialCommunityIcons}
                 rightIconName={'cart'}
-                rightIconSize={30}
+                rightIconSize={35}
                 rightIconColor={Colors.secondary}
                 rightIconBackgroundColor={Colors.white}
                 onPressRight={() => navigation.navigate("Cart", {status: route.params.status})}
@@ -442,7 +442,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                 showLeftIcon={true}
                 leftIconType={Icons.MaterialIcons}
                 leftIconName={'navigate-before'}
-                leftIconSize={45}
+                leftIconSize={35}
                 leftIonColor={Colors.black}
                 leftIconBackgroundColor={Colors.appBackground}
                 onPressLeft={() => navigation.goBack()}/>

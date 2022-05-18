@@ -35,14 +35,15 @@ const GeneralHeader = (props) => {
                         <Animatable.View animation={'fadeInLeft'}>
                             <RNBounceable
                                 style={{
-                                width: 50,
-                                height: 50,
+                                width: 40,
+                                height: 40,
                                 backgroundColor: props.leftIconBackgroundColor,
                                 borderWidth: 1,
                                 borderRadius: 10,
                                 alignItems: 'center',
+                                justifyContent: 'center',
                                 elevation: 5,
-                                marginRight: 15
+                                marginRight: 10
                             }}
                                 onPress={props.onPressLeft}>
                                 <Icon
@@ -67,8 +68,8 @@ const GeneralHeader = (props) => {
                     <Animatable.View animation={'fadeInRight'}>
                         <RNBounceable
                             style={{
-                            height: props.rightIconHeight? props.rightIconHeight:50,
-                            width: props.rightIconWidth? props.rightIconWidth:50,
+                            height: props.rightIconHeight? props.rightIconHeight:40,
+                            width: props.rightIconWidth? props.rightIconWidth:40,
                             backgroundColor: props.rightIconBackgroundColor,
                             borderRadius: props.rightIconBorderRadius? props.rightIconBorderRadius:10,
                             alignItems: 'center',

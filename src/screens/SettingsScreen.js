@@ -40,13 +40,34 @@ const SettingsScreen = ({navigation, route}) => {
         navigation.navigate('Log')
     }
     const handleAccountDeletion = () => {
-        navigation.navigate("AccountDeletion", {phoneNo: phoneNo})
+        if(deleteInd) {
+            database()
+            .ref('/users/' + phoneNo).remove().then(() => {
+                AsyncStorage.removeItem('phoneNo')
+                AsyncStorage.setItem("userStatus", 'loggedOut');
+                navigation.navigate('Log')
+                Toast.show({
+                    type: 'customToast',
+                    text1: "Your account has been deleted successfully...",
+                    position: 'top',
+                    visibilityTime: 1500,
+                    topOffset: 80,
+                    delay: 1500,
+                    props: {
+                        backgroundColor: Colors.green2
+                    }
+                  });
+            })
+        } else {
+            navigation.navigate("AccountDeletion", {phoneNo: phoneNo})
+        }
+        
     }
     const getDeletionRequest = (number) => {
         database()
         .ref('/users/' + phoneNo)
-        .once("value")
-        .then(snapshot => {
+        .on("value", snapshot => {
+            console.log("here")
             if(snapshot.val().canDeleteAccount) {
                 setDeleteInd(true)
             } else {

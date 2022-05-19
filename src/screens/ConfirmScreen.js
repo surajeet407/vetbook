@@ -77,7 +77,6 @@ import moment from 'moment';
 
 const _updateUiBasedOnServiceType = (txnId) => {
   let type = "", anonymusPath = '', navToScreen = 'Orders', loggedInPath = '', clearCart = false, ar = [], obj = {...route.params.details}
-  console.log(obj)
   obj.id = uuid.v4()
   obj.orderedOn = moment().format('yyyy-MM-DD').toString()
   obj.userStatus = "loggedOut"

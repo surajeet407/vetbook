@@ -1,24 +1,18 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React from 'react';
 import {
    StyleSheet,
-   Text,
    View,
-   TouchableOpacity,
-   Animated,
    ScrollView,
    FlatList,
    ImageBackground,
    Dimensions
  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../util/Colors';
 import Button from '../reusable_elements/Button';
 import Title from '../reusable_elements/Title';
 import LottieView from 'lottie-react-native';
-import SectionBanner from '../reusable_elements/SectionBanner';
 import * as Animatable from 'react-native-animatable';
-import RazorpayCheckout from 'react-native-razorpay';
 import i18n from '../util/i18n';
  
  const PaymentStatusScreen = ({navigation, route}) => {
@@ -55,10 +49,10 @@ import i18n from '../util/i18n';
               <View style={{marginTop: 20}}>
                 <View>
                   {(route.params.details.serviceType === 'None' || route.params.details.serviceType === 'Adopt') && (
-                    <Button backgroundColor={Colors.deepGreen} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Track Order" onPress={() => navigation.navigate("TrackOrder", {details: {...route.params.details}})}/>
+                    <Button backgroundColor={Colors.lightRed} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Track Order" onPress={() => navigation.navigate("TrackOrder", {details: {...route.params.details}})}/>
                   )}
                   {(route.params.details.serviceType === "Training" || route.params.details.serviceType === "Grooming" || route.params.details.serviceType === "Consult") && (
-                    <Button backgroundColor={Colors.deepGreen} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Track Service" onPress={() => navigation.navigate("TrackOrder", {details: {...route.params.details}})}/>
+                    <Button backgroundColor={Colors.lightRed} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Track Service" onPress={() => navigation.navigate("TrackOrder", {details: {...route.params.details}})}/>
                   )}
                 </View>
               </View>

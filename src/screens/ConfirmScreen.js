@@ -77,6 +77,7 @@ import moment from 'moment';
 
 const _updateUiBasedOnServiceType = (txnId) => {
   let type = "", anonymusPath = '', navToScreen = 'Orders', loggedInPath = '', clearCart = false, ar = [], obj = {...route.params.details}
+  console.log(obj)
   obj.id = uuid.v4()
   obj.orderedOn = moment().format('yyyy-MM-DD').toString()
   obj.userStatus = "loggedOut"
@@ -85,28 +86,28 @@ const _updateUiBasedOnServiceType = (txnId) => {
   obj.paymentStatus = "Success"
   obj.fromScreen = "Confirm"
   obj.address = defaltAddress
+  obj.paymentStatus = "Success"
   if (route.params.details.serviceType === "None" ) {
     obj.mode = "inprocess"
-    type = 'Items';
+    obj.type = 'Items';
     anonymusPath = 'anonymusOrders'
     loggedInPath = 'orders'
     clearCart = true
   }  else if(route.params.details.serviceType === "Adopt") {
     obj.mode = "inprocess"
-    type = 'Adopt';
+    obj.type = 'Adopt';
     anonymusPath = 'anonymusOrders'
     loggedInPath = 'orders'
   } else {
     obj.notes = ""
     obj.mode = "ongoing"
     obj.total = total
-    type = 'Service';
+    obj.type = 'Service';
     anonymusPath = 'anonymusServices'
     loggedInPath = 'services'
     navToScreen = "Services"
     
   } 
-  obj.type = type
   AsyncStorage.getItem('userStatus').then((status) => {
     if(status === 'loggedOut') {
       if(clearCart) { 
@@ -121,7 +122,8 @@ const _updateUiBasedOnServiceType = (txnId) => {
           ar.push(obj);
         }
         AsyncStorage.setItem(anonymusPath, JSON.stringify(ar))
-        navigation.navigate("ServicesBottomTabBar", {screen: navToScreen, status: obj.userStatus})
+        navigation.navigate("PaymentStatus", {details: obj})
+        // navigation.navigate("ServicesBottomTabBar", {screen: navToScreen, status: obj.userStatus})
       });
     } else {
       AsyncStorage
@@ -144,7 +146,8 @@ const _updateUiBasedOnServiceType = (txnId) => {
                     ar.push(obj);
                   }
                   database().ref('/users/' + phoneNo + "/" + loggedInPath).set(ar)
-                  navigation.navigate("ServicesBottomTabBar", {screen: navToScreen, status: obj.userStatus})
+                  navigation.navigate("PaymentStatus", {details: obj})
+                  // navigation.navigate("ServicesBottomTabBar", {screen: navToScreen, status: obj.userStatus})
               })
           }
       })
@@ -168,9 +171,9 @@ const _updateUiBasedOnServiceType = (txnId) => {
     }).catch((error) => {
       // console.log(error.description)
       if(error.description.error.reason !== "payment_cancelled") {
-        // let obj = {...route.params.details}
-        // obj.paymentStatus = "Error"
-        // navigation.navigate("PaymentStatus", {details: obj})
+        let obj = {...route.params.details}
+        obj.paymentStatus = "Error"
+        navigation.navigate("PaymentStatus", {details: obj})
       }
       
     });

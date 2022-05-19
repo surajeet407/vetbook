@@ -259,6 +259,7 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
             presentationStyle: 'fullScreen',
             copyTo: 'cachesDirectory'
         }).then((result) => {
+            // console.log(result)
             setFirstImageDetails(result)
         })
     }

@@ -93,7 +93,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                 text1: "Try to add items less than 6...",
                 position: 'bottom',
                 visibilityTime: 1000,
-                bottomOffset: 120,
+                bottomOffset: 100,
                 props: {
                     backgroundColor: '#ea5e48'
                 }
@@ -117,7 +117,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                                     text1: "Quantity Updated...",
                                     position: 'bottom',
                                     visibilityTime: 1500,
-                                    bottomOffset: 120,
+                                    bottomOffset: 100,
                                     props: {
                                         backgroundColor: Colors.deepGreen
                                     }
@@ -140,7 +140,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                                 text1: "Item added to your cart...",
                                 position: 'bottom',
                                 visibilityTime: 1500,
-                                bottomOffset: 120,
+                                bottomOffset: 100,
                                 props: {
                                     backgroundColor: Colors.deepGreen
                                 }
@@ -158,7 +158,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                             text1: "Item added to your cart...",
                             position: 'bottom',
                             visibilityTime: 1500,
-                            bottomOffset: 120,
+                            bottomOffset: 100,
                             props: {
                                 backgroundColor: Colors.deepGreen
                             }
@@ -197,7 +197,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                                             text1: "Item added to your cart...",
                                             position: 'bottom',
                                             visibilityTime: 1500,
-                                            bottomOffset: 120,
+                                            bottomOffset: 100,
                                             props: {
                                                 backgroundColor: Colors.deepGreen
                                             }
@@ -212,7 +212,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                                             text1: "Quantity Updated...",
                                             position: 'bottom',
                                             visibilityTime: 1500,
-                                            bottomOffset: 120,
+                                            bottomOffset: 100,
                                             props: {
                                                 backgroundColor: Colors.deepGreen
                                             }
@@ -232,7 +232,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                                         text1: "Item added to your cart...",
                                         position: 'bottom',
                                         visibilityTime: 1500,
-                                        bottomOffset: 120,
+                                        bottomOffset: 100,
                                         props: {
                                             backgroundColor: Colors.deepGreen
                                         }

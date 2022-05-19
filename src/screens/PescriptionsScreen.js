@@ -19,6 +19,7 @@ import Toast from 'react-native-toast-message';
 import RNFetchBlob from 'rn-fetch-blob'
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import SegmentedControlTab from 'react-native-segmented-control-tab'
+import Sound from 'react-native-sound';
 import i18n from '../util/i18n';
 
 const PescriptionsScreen = ({navigation, route}) => {
@@ -101,20 +102,30 @@ const PescriptionsScreen = ({navigation, route}) => {
     const onPressDownload = (item) => {
         var Base64Code = item.image;
         let location = RNFetchBlob.fs.dirs.DocumentDir + '/' + item.name;
+        console.log(location)
         RNFetchBlob
             .fs
             .writeFile(location, RNFetchBlob.base64.encode(Base64Code), 'base64')
             .then((res) => {
-                Toast.show({
-                    type: 'customToast',
-                    text1: "File saved to gallery...",
-                    position: 'bottom',
-                    visibilityTime: 1500,
-                    bottomOffset: 10,
-                    props: {
-                        backgroundColor: Colors.green3
-                    }
-                });
+                RNFetchBlob.android.addCompleteDownload({
+                    title: item.name,
+                    description: 'Download complete',
+                    mime: 'image/png',
+                    // path: "file:/data/user/0/com.vetbook/cache/823c999a-fe59-4daa-bd68-154ae4134289/Screenshot%20(51).png",
+                    // path: "content://com.android.providers.media.documents/document/image%3A27",
+                    path: RNFetchBlob.fs.dirs.DocumentDir + '/' + item.name,
+                    showNotification: true,
+                })
+                // Toast.show({
+                //     type: 'customToast',
+                //     text1: "File saved to gallery...",
+                //     position: 'bottom',
+                //     visibilityTime: 1500,
+                //     bottomOffset: 10,
+                //     props: {
+                //         backgroundColor: Colors.green3
+                //     }
+                // });
             });
     }
     const handleCustomIndexSelect = (index) => {

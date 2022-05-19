@@ -22,7 +22,6 @@ import RazorpayCheckout from 'react-native-razorpay';
 import i18n from '../util/i18n';
  
  const PaymentStatusScreen = ({navigation, route}) => {
-  // const [status, setStatus] = useState(route.params.status);
   const [status, setStatus] = useState(route.params.details.paymentStatus);
    return (
     <View style={{ flex: 1, backgroundColor: status === 'Success'? Colors.deepGreen:Colors.red}} >
@@ -33,7 +32,7 @@ import i18n from '../util/i18n';
             height: 50,
             zIndex: 999}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon onPress={() => status === 'Success'? navigation.navigate('HomeBottomTabBar', {screen: 'Home'}):navigation.goBack()} name={'close-circle-outline'} style={{fontSize: 45}} color={Colors.appBackground} />
+          <Icon onPress={() => status === 'Success'? navigation.navigate('HomeBottomTabBar', {screen: 'Home', status: route.params.details.userStatus}):navigation.goBack()} name={'close-circle-outline'} style={{fontSize: 45}} color={Colors.appBackground} />
         </View>
       </View>
         <View style={{ padding: 15, flex: 1, width: '100%'}}>
@@ -46,8 +45,12 @@ import i18n from '../util/i18n';
               <View style={{width: '100%'}}>
                 {status ==='Success' ?
                 <View style={{alignItems: 'center'}}>
-                  <Title label="Payment Successful" color={Colors.appBackground} bold={true} size={28}/>
-                  
+                  {(route.params.details.serviceType === 'None' || route.params.details.serviceType === 'Adopt') && (
+                    <Title label="Order placed" color={Colors.appBackground} bold={true} size={28}/>
+                  )}
+                  {(route.params.details.serviceType === "Training" || route.params.details.serviceType === "Grooming" || route.params.details.serviceType === "Consult") && (
+                    <Title label="Service booked" color={Colors.appBackground} bold={true} size={28}/>
+                  )}
                 </View>  
                 :
                 <View style={{alignItems: 'center'}}>
@@ -58,7 +61,14 @@ import i18n from '../util/i18n';
               {/* <Title label="Thank you for using our app, we will try to provide you the best service" color={Colors.mediumDark} bold={true} size={25}/> */}
               <View style={{marginTop: 20}}>
                 {status === 'Success'? 
-                <Button backgroundColor={Colors.deepGreen} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Track Service" onPress={() => navigation.navigate("TrackOrder", {details: {...route.params.details}})}/>
+                <View>
+                  {(route.params.details.serviceType === 'None' || route.params.details.serviceType === 'Adopt') && (
+                    <Button backgroundColor={Colors.deepGreen} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Track Order" onPress={() => navigation.navigate("TrackOrder", {details: {...route.params.details}})}/>
+                  )}
+                  {(route.params.details.serviceType === "Training" || route.params.details.serviceType === "Grooming" || route.params.details.serviceType === "Consult") && (
+                    <Button backgroundColor={Colors.deepGreen} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Track Service" onPress={() => navigation.navigate("TrackOrder", {details: {...route.params.details}})}/>
+                  )}
+                </View>
                 :  
                 <Button backgroundColor={Colors.red} iconPostionRight={true} useIcon={true} icon="long-arrow-right" title="Try Again" onPress={() => navigation.goBack()}/>
                 }

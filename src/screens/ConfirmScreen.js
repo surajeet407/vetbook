@@ -86,7 +86,6 @@ const _updateUiBasedOnServiceType = (txnId) => {
   obj.paymentStatus = "Success"
   obj.fromScreen = "Confirm"
   obj.address = defaltAddress
-  obj.paymentStatus = "Success"
   if (route.params.details.serviceType === "None" ) {
     obj.mode = "inprocess"
     obj.type = 'Items';
@@ -170,10 +169,20 @@ const _updateUiBasedOnServiceType = (txnId) => {
       _updateUiBasedOnServiceType(data.razorpay_payment_id)
     }).catch((error) => {
       // console.log(error.description)
-      if(error.description.error.reason !== "payment_cancelled") {
-        let obj = {...route.params.details}
-        obj.paymentStatus = "Error"
-        navigation.navigate("PaymentStatus", {details: obj})
+      if(error.description.error.reason === "payment_cancelled") {
+        Toast.show({
+          type: 'customToast',
+          text1: 'Payment has been cancelled...',
+          position: 'bottom',
+          visibilityTime: 1500,
+          bottomOffset: 120,
+          props: {
+              backgroundColor: Colors.error_toast_color
+          }
+        });
+        // let obj = {...route.params.details}
+        // obj.paymentStatus = "Error"
+        // navigation.navigate("PaymentStatus", {details: obj})
       }
       
     });

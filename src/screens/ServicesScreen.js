@@ -315,7 +315,7 @@ const ServicesScreen = ({navigation, route}) => {
                                             marginTop: 5
                                         }}>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate("TrackOrder", {details: {...item, fromScreen: 'Services'}})}
+                                                onPress={() => navigation.navigate("TrackService", {details: {...item, fromScreen: 'Services'}})}
                                                 style={{
                                                 flexDirection: 'row',
                                                 alignItems: 'center'

@@ -38,6 +38,7 @@ import ContactUsScreen from '../screens/ContactUsScreen';
 import TermsScreen from '../screens/TermsScreen';
 import PaymentStatusScreen from '../screens/PaymentStatusScreen';
 import TrackOrderScreen from '../screens/TrackOrderScreen';
+import TrackServiceScreen from '../screens/TrackServiceScreen';
 import ChooseTimeSlotScreen from '../screens/ChooseTimeSlotScreen';
 import PescriptionsScreen from '../screens/PescriptionsScreen';
 import PescriptionDetailsScreen from '../screens/PescriptionDetailsScreen';
@@ -266,6 +267,12 @@ const StackNav = (params) => {
                 }}
                     name="TrackOrder"
                     component={TrackOrderScreen}/>
+                <Stack.Screen
+                    options={{
+                    headerShown: false
+                }}
+                    name="TrackService"
+                    component={TrackServiceScreen}/>
                 <Stack.Screen
                     options={{
                     headerShown: false

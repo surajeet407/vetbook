@@ -245,7 +245,7 @@ import NetInfo from "@react-native-community/netinfo";
     <View  style={{ flex: 1, backgroundColor: Colors.appBackground}} >
       <LandingHeader homeAddress={homeAddress} status={status} navigation={navigation}/>
       {showTrackComponent && (
-        <TrackComponent onPress={() => navigation.navigate("TrackOrder" , {details: {...trackDetails, fromScreen: 'Home'}})}/>
+        <TrackComponent onPress={() => navigation.navigate("TrackService" , {details: {...trackDetails, fromScreen: 'Home'}})}/>
       )}
       {!isConnectedToNet && (
         <View

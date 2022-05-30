@@ -153,6 +153,7 @@ const RelocationsScreen = ({navigation, route}) => {
     }
 
     const handleCustomIndexSelect = (index) => {
+        setLoading(true)
         setCatIndex(index)
         setPickerValue("")
         if (status === 'loggedIn') {

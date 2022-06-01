@@ -275,19 +275,19 @@ const AddressScreen = ({navigation, route}) => {
                     showRigtIcon={showMap? false:true}
                     rightIconType={Icons.MaterialIcons}
                     rightIconName={'close'} 
-                    rightIconSize={30} 
-                    rightIconWidth={40}
-                    rightIconHeight={40}
+                    rightIconSize={20} 
+                    rightIconWidth={30}
+                    rightIconHeight={30}
                     rightIconBorderRadius={20}
                     rightIconColor={Colors.white}
                     rightIconBackgroundColor={Colors.error_toast_color}
                     onPressRight={() => setShowMap(true)} 
-                    subHeaderText="A Quick brown fox jumps over the lazy dog... A Quick brown fox jumps over the lazy dog..."
+                    subHeaderText=""
                     showSubHeaderText={false}
                     subHeaderTextSize={20}
                     subHeaderTextColor={Colors.secondary}
                     position={showMap? 'absolute':'relative'}
-                    headerHeight={80}
+                    headerHeight={60}
                     headerText={showMap? "Address":"Save Address"}
                     headerTextSize={25}
                     headerTextColor={Colors.primary}
@@ -295,7 +295,7 @@ const AddressScreen = ({navigation, route}) => {
                     showLeftIcon={showMap? true: false}
                     leftIconType={Icons.MaterialIcons}
                     leftIconName={'navigate-before'}
-                    leftIconSize={45}
+                    leftIconSize={35}
                     leftIonColor={Colors.black}
                     leftIconBackgroundColor={Colors.appBackground}
                     onPressLeft={() => navigation.goBack()}/>

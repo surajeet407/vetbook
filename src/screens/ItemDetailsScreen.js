@@ -429,7 +429,7 @@ const ItemDetailScreen = ({navigation, route}) => {
                 badgeBorderColor={Colors.appBackground}
                 badgeText={cartItemCount}
                 badgeSize={25}
-                subHeaderText="A Quick brown fox jumps over the lazy dog... A Quick brown fox jumps over the lazy dog..."
+                subHeaderText=""
                 showSubHeaderText={false}
                 subHeaderTextSize={20}
                 subHeaderTextColor={Colors.secondary}

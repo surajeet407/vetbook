@@ -61,15 +61,21 @@ import NetInfo from "@react-native-community/netinfo";
           .then((phoneNo, msg) => {
               if (phoneNo) {
                   database()
-                      .ref("/users/" + phoneNo + "/services")
+                      .ref("/allServices")
                       .on('value', snapshot => {
                           setRefreshing(false)
                           setVetServiceCount(0)
                           setGroomingServiceCount(0)
                           setTrainingServiceCount(0)
                           if (snapshot.val()) {
-                            let onGoingItems = snapshot.val().filter(item => item.mode === 'ongoing')
-                            // console.log(onGoingItems)
+                            let onGoingItems = []
+                            for(let j = 0; j < snapshot.val().length; j++) {
+                              if(snapshot.val()[j].phoneNo === phoneNo && snapshot.val()[j].mode === 'ongoing' &&
+                                snapshot.val()[j].userStatus === 'loggedIn') {
+                                onGoingItems.push(snapshot.val()[j])
+                              }
+                            }
+                            console.log(onGoingItems)
                             if (onGoingItems.length > 0) {
                               setShowTrackComponent(true);
                               setTrackDetails(onGoingItems[0]);
@@ -77,13 +83,13 @@ import NetInfo from "@react-native-community/netinfo";
                               setShowTrackComponent(false);
                             }
                             for(let i = 0; i < snapshot.val().length; i++) {
-                                if((snapshot.val()[i].serviceType  === 'Consult' || snapshot.val()[i].serviceType  === 'Veterinary' || snapshot.val()[i].serviceType  === 'BloodTest') && snapshot.val()[i].mode === 'ongoing') {
+                                if((snapshot.val()[i].serviceType  === 'Consult' || snapshot.val()[i].serviceType  === 'Veterinary' || snapshot.val()[i].serviceType  === 'BloodTest') && snapshot.val()[i].mode === 'ongoing' && snapshot.val()[i].phoneNo === phoneNo) {
                                   setVetServiceCount(1)
                                 }
-                                if(snapshot.val()[i].serviceType === 'Training' && snapshot.val()[i].mode === 'ongoing') {
+                                if(snapshot.val()[i].serviceType === 'Training' && snapshot.val()[i].mode === 'ongoing' && snapshot.val()[i].phoneNo === phoneNo) {
                                   setTrainingServiceCount(1)
                                 }
-                                if(snapshot.val()[i].serviceType === 'Grooming' && snapshot.val()[i].mode === 'ongoing') {
+                                if(snapshot.val()[i].serviceType === 'Grooming' && snapshot.val()[i].mode === 'ongoing' && snapshot.val()[i].phoneNo === phoneNo) {
                                   setGroomingServiceCount(1)
                                 }
                             }

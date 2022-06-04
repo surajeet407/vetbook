@@ -46,6 +46,8 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
             name: "Receive call"
         }
     ])
+    const [phoneNo,
+        setPhoneNo] = useState('');
     const [status,
         setStatus] = useState(route.params.status);
     const [firstImageDetails,
@@ -68,19 +70,15 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
         setShowSelection] = useState(true);
     const [singleFile,
         setSingleFile] = useState(null);
+
+
     const getData = () => {
         if(status === 'loggedIn') {
-            AsyncStorage
-            .getItem('phoneNo')
-            .then((phoneNo, msg) => {
-                if (phoneNo) {
-                    database()
-                        .ref('/users/' + phoneNo + "/addresses")
-                        .on("value", snapshot => {
-                            if (snapshot.val()) {
-                                setAddressess(snapshot.val())
-                            }
-                        })
+            database()
+                .ref('/users/' + phoneNo + "/addresses")
+                .on("value", snapshot => {
+                if (snapshot.val()) {
+                    setAddressess(snapshot.val())
                 }
             })
         } else {
@@ -161,57 +159,35 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
                         break;
                     }
                 }
+                let mainAr = [], obj = {}
                 if(status === 'loggedIn') {
-                    AsyncStorage
-                    .getItem("phoneNo")
-                    .then(phoneNo => {
-                        let array = [],
-                            obj = {
-                                phoneNo: phoneNo,
-                                fileDetails: ar,
-                                date: moment()
-                                    .format('yyyy-MM-DD')
-                                    .toString(),
-                                active: true,
-                                address: address
-                            }
-                        database()
-                            .ref("/users/" + phoneNo + "/pescriptions")
-                            .once('value')
-                            .then(snapshot => {
-                                if (snapshot.val()) {
-                                    array = snapshot.val()
-                                }
-                                array.push(obj)
-                                database()
-                                    .ref("/users/" + phoneNo + "/pescriptions")
-                                    .set(array)
-                                    .then(() => {
-                                        navigation.navigate("HomeBottomTabBar", {
-                                            screen: "Home",
-                                            status: 'loggedIn'
-                                        })
-                                        Toast.show({
-                                            type: 'customToast',
-                                            text1: "We will contact you within few minitues...",
-                                            position: 'bottom',
-                                            delay: 1500,
-                                            visibilityTime: 1500,
-                                            bottomOffset: 80,
-                                            props: {
-                                                backgroundColor: Colors.green3
-                                            }
-                                        });
-                                    })
-
-                            })
-                    })
+                    obj = {
+                        userStatus: 'loggedIn',
+                        phoneNo: phoneNo,
+                        fileDetails: ar,
+                        date: moment()
+                            .format('yyyy-MM-DD')
+                            .toString(),
+                        active: true,
+                        address: address
+                    }
                 } else {
+                    obj = {
+                        userStatus: 'loggedOut',
+                        phoneNo: address.phoneNo,
+                        fileDetails: ar,
+                        date: moment()
+                            .format('yyyy-MM-DD')
+                            .toString(),
+                        active: true,
+                        address: address
+                    }
                     AsyncStorage
                     .getItem('anonymusPescriptions')
                     .then((data) => {
                         let array = [],
                         obj = {
+                            userStatus: 'loggedOut',
                             phoneNo: address.phoneNo,
                             fileDetails: ar,
                             date: moment()
@@ -225,26 +201,38 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
                         }
                         array.push(obj)
                         AsyncStorage
-                        .setItem('anonymusPescriptions', JSON.stringify(array)).then(() => {
-                            navigation.navigate("HomeBottomTabBar", {
-                                screen: "Home",
-                                status: 'loggedOut'
-                            })
-                            Toast.show({
-                                type: 'customToast',
-                                text1: "We will contact you within few minitues...",
-                                position: 'bottom',
-                                delay: 1500,
-                                visibilityTime: 1500,
-                                bottomOffset: 80,
-                                props: {
-                                    backgroundColor: Colors.green3
-                                }
-                            });
-                        })
+                        .setItem('anonymusPescriptions', JSON.stringify(array))
                     })
                 }
-                
+                database()
+                    .ref("/allPescriptions")
+                    .once('value')
+                    .then(snapshot => {
+                        if (snapshot.val()) {
+                            mainAr = snapshot.val()
+                        }
+                        mainAr.push(obj)
+                        database()
+                            .ref("/allPescriptions")
+                            .set(mainAr)
+                            .then(() => {
+                                navigation.navigate("HomeBottomTabBar", {
+                                    screen: "Home",
+                                    status: status
+                                })
+                                Toast.show({
+                                    type: 'customToast',
+                                    text1: "We will contact you within few minitues...",
+                                    position: 'bottom',
+                                    delay: 1500,
+                                    visibilityTime: 1500,
+                                    bottomOffset: 80,
+                                    props: {
+                                        backgroundColor: Colors.green3
+                                    }
+                                });
+                            })
+                    })  
             }
         }
     }
@@ -334,7 +322,14 @@ const PescriptionDetailsScreen = ({navigation, route}) => {
 
     useEffect(() => {
         if (isFocused) {
-            getData()
+            AsyncStorage
+            .getItem("phoneNo")
+            .then(phoneNo => {
+                if(phoneNo) {
+                    setPhoneNo(phoneNo)
+                }
+                getData()
+            })
         }
     }, [isFocused]);
 

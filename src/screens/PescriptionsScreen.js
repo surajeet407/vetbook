@@ -50,11 +50,16 @@ const PescriptionsScreen = ({navigation, route}) => {
                 .then((number, msg) => {
                     if (number) {
                         database()
-                            .ref('/users/' + number + '/pescriptions')
+                            .ref('/allPescriptions')
                             .on('value', snapshot => {
                                 setLoading(false)
                                 if (snapshot.val()) {
-                                    let data = snapshot.val(), items
+                                    let data = [], items
+                                    for (let len = 0; len < snapshot.val().length; len++) {
+                                        if(snapshot.val()[len].phoneNo === phoneNo) {
+                                            data.push(snapshot.val()[len])
+                                        }
+                                    }
                                     for (let i = 0; i < data.length; i++) {
                                         for (let j = 0; j < data[i].fileDetails.length; j++) {
                                             data[i].fileDetails[j].document = "data:image/png;base64," + data[i].fileDetails[j].base64String

@@ -29,6 +29,8 @@ import i18n from '../util/i18n';
 const RelocationDetailsScreen = ({navigation, route}) => {
     // console.log(route.params.details)
     const [defaltAddress, setDefaltAddress] = useState(null)
+    const [userPhoneNo,
+        setUserPhoneNo] = useState("")
     const [status,
         setStatus] = useState("")
     const [address1,
@@ -59,54 +61,40 @@ const RelocationDetailsScreen = ({navigation, route}) => {
                 }
             }
         obj.id = uuid.v4()
-        obj.userStatus = "loggedOut"
         obj.type = 'Relocation'
         obj.mode = "ongoing"
-        AsyncStorage
-            .getItem('userStatus')
-            .then((status) => {
-                if (status === 'loggedOut') {
-                    AsyncStorage
-                        .getItem("anonymusRelocations")
-                        .then((data) => {
-                            obj.userStatus = "loggedOut"
-                            if (data && JSON.parse(data).length > 0) {
-                                ar = JSON.parse(data)
-                                ar.push(obj)
-                                AsyncStorage.setItem("anonymusRelocations", JSON.stringify(ar))
-                            } else {
-                                ar.push(obj);
-                                AsyncStorage.setItem("anonymusRelocations", JSON.stringify(ar))
-                            }
-                        });
+        if(status === 'loggedOut')  {
+            obj.userStatus = "loggedOut"
+            obj.phoneNo = defaltAddress.phoneNo
+            AsyncStorage
+            .getItem("anonymusRelocations")
+            .then((data) => {
+                if (data && JSON.parse(data).length > 0) {
+                    ar = JSON.parse(data)
+                    ar.push(obj)
+                    AsyncStorage.setItem("anonymusRelocations", JSON.stringify(ar))
                 } else {
-                    AsyncStorage
-                        .getItem('phoneNo')
-                        .then((phoneNo, msg) => {
-                            if (phoneNo) {
-                                database()
-                                    .ref('/users/' + phoneNo + "/relocations")
-                                    .once("value")
-                                    .then(snapshot => {
-                                        obj.userStatus = "loggedIn"
-                                        obj.phoneNo = phoneNo
-                                        if (snapshot.val() && snapshot.val().length > 0) {
-                                            ar = snapshot.val()
-                                            ar.push(obj)
-                                            database()
-                                                .ref('/users/' + phoneNo + "/relocations")
-                                                .set(ar)
-                                        } else {
-                                            ar.push(obj);
-                                            database()
-                                                .ref('/users/' + phoneNo + "/relocations")
-                                                .set(ar)
-                                        }
-                                    })
-                            }
-                        })
+                    ar.push(obj);
+                    AsyncStorage.setItem("anonymusRelocations", JSON.stringify(ar))
                 }
             });
+        } else {
+            obj.userStatus = "loggedIn"
+            obj.phoneNo = phoneNo
+        }
+        database()
+            .ref("/allRelocations")
+            .once("value")
+            .then(snapshot => {  
+                let ar = []              
+                if (snapshot.val() && snapshot.val().length > 0) {
+                    ar = snapshot.val()
+                }
+                ar.push(obj)
+                database()
+                    .ref("/allRelocations")
+                    .set(ar)
+        })
     }
 
     const onPressSubmit = () => {
@@ -158,6 +146,13 @@ const RelocationDetailsScreen = ({navigation, route}) => {
         AsyncStorage.getItem("userStatus").then((status) => {
             if(status) {
                 setStatus(status)
+            }
+        })
+        AsyncStorage
+        .getItem('phoneNo')
+        .then((phoneNo, msg) => {
+            if(phoneNo){
+                setUserPhoneNo(phoneNo)
             }
         })
     })

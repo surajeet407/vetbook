@@ -87,13 +87,19 @@ const OrdersScreen = ({navigation, route}) => {
     }
     const getDataFromDatabase = (phoneNo, filter) => {
         database()
-            .ref("/users/" + phoneNo + "/orders")
+            .ref("/allOrders")
             .once('value')
             .then(snapshot => {
                 setLoading(false)
                 setRefreshing(false)
                 if (snapshot.val()) {
-                    let items = snapshot.val().filter(item => item.mode === filter)
+                    let items = []
+                    for(let j = 0; j < snapshot.val().length; j++) {
+                        let array = []
+                        if(snapshot.val()[j].phoneNo === phoneNo && snapshot.val()[j].mode === filter) {
+                            items.push(snapshot.val()[j])
+                        } 
+                    }
                     let pickerValArray = [],
                         obj = {
                             value: "Select reason for cancellation"

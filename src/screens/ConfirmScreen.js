@@ -34,7 +34,8 @@ import moment from 'moment';
 
 
  const ConfirmScreen = ({navigation, route}) => {
-  //  console.log(route.params.details)
+  const [status, setStatus] = useState('')
+  const [phoneNo, setPhoneNo] = useState('')
   const [cartItems, setCartItems] = useState([])
   const [defaltAddress, setDefaltAddress] = useState(null)
   const [priceDetails, setPriceDetails] = useState([]);
@@ -89,68 +90,58 @@ const _updateUiBasedOnServiceType = (txnId) => {
     obj.mode = "inprocess"
     obj.type = 'Items';
     anonymusPath = 'anonymusOrders'
-    loggedInPath = 'orders'
+    adminPath = 'allOrders'
     clearCart = true
   }  else if(route.params.details.serviceType === "Adopt") {
     obj.mode = "inprocess"
     obj.type = 'Adopt';
     anonymusPath = 'anonymusOrders'
-    loggedInPath = 'orders'
+    adminPath = 'allOrders'
   } else {
     obj.notes = ""
     obj.mode = "ongoing"
     obj.total = total
     obj.type = 'Service';
     anonymusPath = 'anonymusServices'
-    loggedInPath = 'services'
+    adminPath = 'allServices'
     navToScreen = "Services"
-    
   } 
-  AsyncStorage.getItem('userStatus').then((status) => {
-    if(status === 'loggedOut') {
-      if(clearCart) { 
-        AsyncStorage.setItem("cartItems", "[]")
+  if(status === 'loggedOut') {
+    obj.userStatus = "loggedOut"
+    obj.phoneNo = defaltAddress.phoneNo
+    if(clearCart) { 
+      AsyncStorage.setItem("cartItems", "[]")
+    }
+    AsyncStorage.getItem(anonymusPath).then((data) => {
+      obj.userStatus = "loggedOut"
+      if(data && JSON.parse(data).length > 0) {
+        ar = JSON.parse(data)
+        ar.push(obj)
+      } else {
+        ar.push(obj);
       }
-      AsyncStorage.getItem(anonymusPath).then((data) => {
-        obj.userStatus = "loggedOut"
-        if(data && JSON.parse(data).length > 0) {
-          ar = JSON.parse(data)
+      AsyncStorage.setItem(anonymusPath, JSON.stringify(ar))
+    });
+  } else {
+    obj.phoneNo = phoneNo
+    obj.userStatus = "loggedIn"
+    if(clearCart) { 
+      database().ref('/users/' + phoneNo + "/cartItems").set(null)
+    }
+  }
+  database()
+    .ref('/' + adminPath)
+    .once("value")
+    .then(snapshot => {
+        if (snapshot.val() && snapshot.val().length > 0) {
+          ar = snapshot.val()
           ar.push(obj)
         } else {
           ar.push(obj);
         }
-        AsyncStorage.setItem(anonymusPath, JSON.stringify(ar))
+        database().ref('/' + adminPath).set(ar)
         navigation.navigate("PaymentStatus", {details: obj})
-        // navigation.navigate("ServicesBottomTabBar", {screen: navToScreen, status: obj.userStatus})
-      });
-    } else {
-      AsyncStorage
-        .getItem('phoneNo')
-        .then((phoneNo, msg) => {
-          if (phoneNo) {
-            database()
-              .ref('/users/' + phoneNo + "/" + loggedInPath)
-              .once("value")
-              .then(snapshot => {
-                  if(clearCart) { 
-                    database().ref('/users/' + phoneNo + "/cartItems").set(null)
-                  }
-                  obj.phoneNo = phoneNo
-                  obj.userStatus = "loggedIn"
-                  if (snapshot.val() && snapshot.val().length > 0) {
-                    ar = snapshot.val()
-                    ar.push(obj)
-                  } else {
-                    ar.push(obj);
-                  }
-                  database().ref('/users/' + phoneNo + "/" + loggedInPath).set(ar)
-                  navigation.navigate("PaymentStatus", {details: obj})
-                  // navigation.navigate("ServicesBottomTabBar", {screen: navToScreen, status: obj.userStatus})
-              })
-          }
-      })
-    }
-  });
+    })
 }
 
   const _initializePayment = (desc, image, name) => {
@@ -167,7 +158,7 @@ const _updateUiBasedOnServiceType = (txnId) => {
       // console.log(data);
       _updateUiBasedOnServiceType(data.razorpay_payment_id)
     }).catch((error) => {
-      // console.log(error.description)
+      console.log(error.description.error.reason)
       if(error.description.error.reason === "payment_cancelled") {
         Toast.show({
           type: 'customToast',
@@ -189,7 +180,6 @@ const _updateUiBasedOnServiceType = (txnId) => {
   }
 
   const onPressMakePayment = () => {
-    // console.log(defaltAddress)
     if(defaltAddress) {
       if (route.params.details.serviceType === "None" ) {
         _initializePayment("", "", "Item Total");
@@ -230,6 +220,16 @@ const _updateUiBasedOnServiceType = (txnId) => {
   }
 
   useEffect(() => {
+    AsyncStorage.getItem('userStatus').then((status) => {
+      setStatus(status)
+    })
+    AsyncStorage
+    .getItem('phoneNo')
+    .then((phoneNo, msg) => {
+      if(phoneNo){
+        setPhoneNo(phoneNo)
+      }
+    })
     if (route.params.details.serviceType === "None" ) {
       setCartItems(route.params.details.cartItems);
       setTotal(route.params.details.total);

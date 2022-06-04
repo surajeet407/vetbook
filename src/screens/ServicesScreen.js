@@ -74,14 +74,19 @@ const ServicesScreen = ({navigation, route}) => {
     }
     const getDataFromDatabase = (phoneNo, filter) => {
         database()
-            .ref("/users/" + phoneNo + "/services")
+            .ref("/allServices")
             .once('value')
             .then(snapshot => {
                 setLoading(false)
                 setRefreshing(false)
                 if (snapshot.val()) {
-                    let items = snapshot.val().filter(item => item.mode === filter)
-                    setPastServices(items);
+                    let array = []
+                    for(let i = 0; i < snapshot.val().length; i++) {
+                        if(snapshot.val()[i].phoneNo === phoneNo && snapshot.val()[i].mode === filter) {
+                            array.push(snapshot.val()[i])
+                        } 
+                    }
+                    setPastServices(array);
                 }
             })
     }
